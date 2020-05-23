@@ -41,7 +41,7 @@ public class Solinia3CoreVehicleListener implements Listener {
 							if (entity == null)
 								return;
 							
-							Utils.RemoveEntity(entity,"on vehicle dismount event");
+							EntityUtils.RemoveEntity(entity,"on vehicle dismount event");
 						}
 					});
 					
@@ -60,14 +60,14 @@ public class Solinia3CoreVehicleListener implements Listener {
 				if (solEntity != null)
 				{
 					if (solEntity.getNpcid() > 0)
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 					
 					if (solEntity.isPlayer())
 					{
 						if (solEntity.getBukkitLivingEntity().hasPotionEffect(PotionEffectType.SPEED))
 						{
 							solEntity.getBukkitLivingEntity().sendMessage("You cannot use boats when a runspeed buff is active (it would kick you) - Cancel it with /effects");
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 						}
 						
 					}

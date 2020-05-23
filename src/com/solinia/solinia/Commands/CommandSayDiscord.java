@@ -12,6 +12,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.HINT;
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandSayDiscord implements CommandExecutor {
@@ -36,7 +37,7 @@ public class CommandSayDiscord implements CommandExecutor {
 					if (solPlayer == null)
 						continue;
 					
-					Utils.SendHint(player, HINT.DISCORD_MESSAGE,"[Discord]~" + message, false);
+					ChatUtils.SendHint(player, HINT.DISCORD_MESSAGE,"[Discord]~" + message, false);
 				}
 			}
         } catch (CoreStateInitException e)

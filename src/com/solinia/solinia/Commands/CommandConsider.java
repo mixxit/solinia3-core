@@ -17,7 +17,7 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.PlayerFactionEntry;
 import com.solinia.solinia.Utils.Utils;
-
+import com.solinia.solinia.Utils.EntityUtils;
 public class CommandConsider implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -38,7 +38,7 @@ public class CommandConsider implements CommandExecutor {
 
 			
 			ISoliniaLivingEntity solPlayerEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)sender);
-			ChatColor difficultyColor = Utils.getLevelCon(solPlayerEntity.getMentorLevel(),solEntity);
+			ChatColor difficultyColor = EntityUtils.getLevelCon(solPlayerEntity.getMentorLevel(),solEntity);
 			
 			String difficultyMessage = "Looks like an even fight.";
 			switch (difficultyColor)
@@ -87,7 +87,7 @@ public class CommandConsider implements CommandExecutor {
 			PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
 			
 			int value = factionEntry.getValueWithEffectsOnEntityAndBase(le, (Player)sender);
-			FactionStandingType standing = Utils.getFactionStandingType(value);
+			FactionStandingType standing = EntityUtils.getFactionStandingType(value);
 			switch (standing)
 			{
 				case FACTION_ALLY:

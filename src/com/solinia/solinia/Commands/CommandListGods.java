@@ -9,6 +9,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaGod;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaGod;
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -43,7 +44,7 @@ public class CommandListGods implements CommandExecutor {
 		if (args.length > 0 && args[0].equals(".criteria"))
 		{
 			try {
-				Utils.sendFilterByCriteria(StateManager.getInstance().getConfigurationManager().getGods(), sender, args,SoliniaGod.class);
+				ChatUtils.sendFilterByCriteria(StateManager.getInstance().getConfigurationManager().getGods(), sender, args,SoliniaGod.class);
 			return true;
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block

@@ -16,8 +16,55 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.HINT;
+import com.solinia.solinia.Models.SoliniaSpellClass;
 
 public class DropUtils {
+	public static void disableLootOverLevel110() {
+		int fixed = 0;
+		try {
+			for (ISoliniaLootDrop lootDrop : StateManager.getInstance().getConfigurationManager().getLootDrops()) {
+				for (ISoliniaLootDropEntry lootentry : lootDrop.getEntries()) {
+					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+							.getItem(lootentry.getItemid());
+
+					if (item == null)
+						continue;
+
+					if (!item.isSpellscroll())
+						continue;
+
+					if (item.getAbilityid() <= 0)
+						continue;
+
+					ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
+							.getSpell(item.getAbilityid());
+
+					boolean found = false;
+
+					for (SoliniaSpellClass spellClass : spell.getAllowedClasses()) {
+
+						if (spellClass.getMinlevel() > 110) {
+							found = true;
+							break;
+						}
+					}
+
+					if (found == false)
+						continue;
+
+					// We found an entry to remove
+
+					item.setNeverDrop(true);
+					fixed++;
+				}
+			}
+		} catch (CoreStateInitException e) {
+
+		}
+		System.out.println("Disabled loot: " + fixed);
+	}
+
+	
 	public static void DropLoot(int lootTableId, World world, Location location, String className, int levelLimit) {
 		try {
 			ISoliniaLootTable table = StateManager.getInstance().getConfigurationManager().getLootTable(lootTableId);
@@ -120,7 +167,7 @@ public class DropUtils {
 						}
 
 						if (item.isArtifact() == true) {
-							Utils.SendHintToServer(HINT.ARTIFACT_DISCOVERED, Integer.toString(item.getId()));
+							ChatUtils.SendHintToServer(HINT.ARTIFACT_DISCOVERED, Integer.toString(item.getId()));
 						}
 						
 						world.dropItemNaturally(location, item.asItemStack());
@@ -148,7 +195,7 @@ public class DropUtils {
 
 						if (randomInt <= alwaysrollitems.get(i).getChance()) {
 							if (item.isArtifact() == true) {
-								Utils.SendHintToServer(HINT.ARTIFACT_DISCOVERED, Integer.toString(item.getId()));
+								ChatUtils.SendHintToServer(HINT.ARTIFACT_DISCOVERED, Integer.toString(item.getId()));
 							}
 							
 							world.dropItemNaturally(location, item.asItemStack());
@@ -190,7 +237,7 @@ public class DropUtils {
 
 						if (randomInt <= alwaysrollspells.get(i).getChance()) {
 							if (item.isArtifact() == true) {
-								Utils.SendHintToServer(HINT.ARTIFACT_DISCOVERED, Integer.toString(item.getId()));
+								ChatUtils.SendHintToServer(HINT.ARTIFACT_DISCOVERED, Integer.toString(item.getId()));
 							}
 							
 							world.dropItemNaturally(location, item.asItemStack());
@@ -227,7 +274,7 @@ public class DropUtils {
 							continue;
 
 						if (item.isArtifact() == true) {
-							Utils.SendHintToServer(HINT.ARTIFACT_DISCOVERED, Integer.toString(item.getId()));
+							ChatUtils.SendHintToServer(HINT.ARTIFACT_DISCOVERED, Integer.toString(item.getId()));
 						}
 						
 						world.dropItemNaturally(location, item.asItemStack());

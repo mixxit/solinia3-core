@@ -11,7 +11,7 @@ import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffect;
 import com.solinia.solinia.Models.SpellEffectType;
-import com.solinia.solinia.Utils.SpellTargetType;
+import com.solinia.solinia.Models.SpellTargetType;
 
 public interface ISoliniaSpell extends IPersistable {
 

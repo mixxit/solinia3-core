@@ -27,6 +27,7 @@ import com.solinia.solinia.Models.DebuggerSettings;
 import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.Personality;
 import com.solinia.solinia.Models.PlayerState;
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
@@ -390,7 +391,7 @@ public class PlayerManager implements IPlayerManager {
 				
 				if (solPlayer.getPendingXp() >= PlayerUtils.getMaxClaimXP())
 				{
-					Utils.SendHint(player, HINT.EXCEEDED_CLAIMXP, Long.toString(solPlayer.getPendingXp().longValue()), false);
+					ChatUtils.SendHint(player, HINT.EXCEEDED_CLAIMXP, Long.toString(solPlayer.getPendingXp().longValue()), false);
 				} else {
 					Double xpReward = PlayerUtils.getExperienceRewardAverageForLevel(solPlayer.getMentorLevel(),solPlayer.getMentorLevel()) / 30d;
 					if (xpReward < 0)

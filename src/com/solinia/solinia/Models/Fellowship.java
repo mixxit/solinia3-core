@@ -13,6 +13,7 @@ import com.solinia.solinia.Exceptions.FellowshipMemberNotFoundException;
 import com.solinia.solinia.Interfaces.IPersistable;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -94,7 +95,7 @@ public class Fellowship implements IPersistable {
 				{
 					Player player = Bukkit.getPlayer(character.getOwnerUUID());
 					if (player != null)
-						Utils.SendHint(player, HINT.EXCEEDED_CLAIMXP, Long.toString(character.getPendingXp().longValue()), false);
+						ChatUtils.SendHint(player, HINT.EXCEEDED_CLAIMXP, Long.toString(character.getPendingXp().longValue()), false);
 				} else {
 					if (experience < 0)
 						experience = 1d;

@@ -16,6 +16,7 @@ import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
+import com.solinia.solinia.Utils.TimeUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -58,7 +59,7 @@ public class CommandEffects implements CommandExecutor {
 	        			{
 	        				if (!nowtimestamp.after(expiretimestamp))
 	        				{
-	        					int secondsleft = (int)Math.floor(Utils.compareTwoTimeStamps(expiretimestamp,nowtimestamp));
+	        					int secondsleft = (int)Math.floor(TimeUtils.compareTwoTimeStamps(expiretimestamp,nowtimestamp));
 	        					TextComponent tc = new TextComponent();
 	        					tc.setText("- " + ChatColor.GREEN + "100% Experience Potion" + ChatColor.RESET + " " + secondsleft + " seconds");
 	        					sender.spigot().sendMessage(tc);

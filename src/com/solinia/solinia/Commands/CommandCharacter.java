@@ -78,7 +78,7 @@ public class CommandCharacter implements CommandExecutor {
 					TextComponent tc2 = new TextComponent();
 					String changetext = "/character load " + character.getId();
 					
-					if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && !Utils.canChangeCharacter(player))
+					if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && !PlayerUtils.canChangeCharacter(player))
 					{
 						tc2.setText(ChatColor.RED + "Wait 10 mins to change char" + ChatColor.RESET);
 					} else {
@@ -132,7 +132,7 @@ public class CommandCharacter implements CommandExecutor {
 								resetLocation2 = false;
 						}
 						
-						if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && !Utils.canChangeCharacter(player))
+						if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && !PlayerUtils.canChangeCharacter(player))
 						{
 							player.sendMessage("You can only change your character every 10 minutes");
 							return true;

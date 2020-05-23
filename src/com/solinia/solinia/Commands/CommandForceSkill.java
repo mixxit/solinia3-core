@@ -10,6 +10,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
+import com.solinia.solinia.Utils.SkillUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandForceSkill implements CommandExecutor {
@@ -54,7 +55,7 @@ public class CommandForceSkill implements CommandExecutor {
 	    			boolean foundSkill = false;
 	    			for(SoliniaPlayerSkill skillEntry : solplayer.getSkills())
 	    			{
-	    				if (skillEntry.getSkillType().equals(Utils.getSkillType2(skill.toUpperCase())))
+	    				if (skillEntry.getSkillType().equals(SkillUtils.getSkillType2(skill.toUpperCase())))
 	    					foundSkill = true;
 	    			}
 	    			
@@ -64,7 +65,7 @@ public class CommandForceSkill implements CommandExecutor {
 	    				return true;
 	    			}
 	    			
-	    			solplayer.setSkill(Utils.getSkillType2(skill.toUpperCase()), level);
+	    			solplayer.setSkill(SkillUtils.getSkillType2(skill.toUpperCase()), level);
 	    			sender.sendMessage("* Player "+name+" set skill "+skill.toUpperCase()+" to " + level);
 	            	return true;
 	            } else {

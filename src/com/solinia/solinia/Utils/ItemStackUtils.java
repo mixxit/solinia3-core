@@ -11,8 +11,10 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.bukkit.inventory.meta.tags.ItemTagType;
 
@@ -20,11 +22,13 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.AugmentationSlotType;
 import com.solinia.solinia.Models.ItemType;
 import com.solinia.solinia.Models.SkillReward;
 import com.solinia.solinia.Models.SkillType;
@@ -37,6 +41,308 @@ import net.minecraft.server.v1_14_R1.GenericAttributes;
 import net.minecraft.server.v1_14_R1.NBTTagCompound;
 
 public class ItemStackUtils {
+
+	public static boolean IsDisplayItem(ItemStack itemStack) {
+		// Also check nbttag
+		if (itemStack == null)
+			return false;
+		
+		boolean isDisplayItem = itemStack.getItemMeta().getDisplayName().startsWith("Display Item: ");
+		if (isDisplayItem)
+			return isDisplayItem;
+
+		// Classic method
+		net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
+
+		String isMerchant = compound.getString("merchant");
+		return Boolean.parseBoolean(isMerchant);
+	}
+
+	
+	public static AugmentationSlotType getItemStackAugSlotType(String basename, boolean isAugmentation) {
+		if (isAugmentation)
+			return AugmentationSlotType.NONE;
+
+		switch (basename.toUpperCase()) {
+		case "TRIDENT":
+			return AugmentationSlotType.WEAPON;
+		case "BOW":
+			return AugmentationSlotType.WEAPON;
+		case "CROSSBOW":
+			return AugmentationSlotType.WEAPON;
+		case "WOODEN_SWORD":
+			return AugmentationSlotType.WEAPON;
+		case "WOOD_SWORD":
+			return AugmentationSlotType.WEAPON;
+		case "STONE_SWORD":
+			return AugmentationSlotType.WEAPON;
+		case "IRON_SWORD":
+			return AugmentationSlotType.WEAPON;
+		case "GOLD_SWORD":
+			return AugmentationSlotType.WEAPON;
+		case "GOLDEN_SWORD":
+			return AugmentationSlotType.WEAPON;
+		case "DIAMOND_SWORD":
+			return AugmentationSlotType.WEAPON;
+		case "WOODEN_AXE":
+			return AugmentationSlotType.WEAPON;
+		case "WOOD_AXE":
+			return AugmentationSlotType.WEAPON;
+		case "STONE_AXE":
+			return AugmentationSlotType.WEAPON;
+		case "IRON_AXE":
+			return AugmentationSlotType.WEAPON;
+		case "GOLD_AXE":
+			return AugmentationSlotType.WEAPON;
+		case "GOLDEN_AXE":
+			return AugmentationSlotType.WEAPON;
+		case "DIAMOND_AXE":
+			return AugmentationSlotType.WEAPON;
+		case "WOODEN_SPADE":
+			return AugmentationSlotType.WEAPON;
+		case "WOOD_SPADE":
+			return AugmentationSlotType.WEAPON;
+		case "STONE_SPADE":
+			return AugmentationSlotType.WEAPON;
+		case "IRON_SPADE":
+			return AugmentationSlotType.WEAPON;
+		case "GOLD_SPADE":
+			return AugmentationSlotType.WEAPON;
+		case "GOLDEN_SPADE":
+			return AugmentationSlotType.WEAPON;
+		case "DIAMOND_SPADE":
+			return AugmentationSlotType.WEAPON;
+		case "WOODEN_HOE":
+			return AugmentationSlotType.WEAPON;
+		case "WOOD_HOE":
+			return AugmentationSlotType.WEAPON;
+		case "STONE_HOE":
+			return AugmentationSlotType.WEAPON;
+		case "IRON_HOE":
+			return AugmentationSlotType.WEAPON;
+		case "GOLDEN_HOE":
+			return AugmentationSlotType.WEAPON;
+		case "GOLD_HOE":
+			return AugmentationSlotType.WEAPON;
+		case "DIAMOND_HOE":
+			return AugmentationSlotType.WEAPON;
+		case "WOODEN_PICKAXE":
+			return AugmentationSlotType.WEAPON;
+		case "WOOD_PICKAXE":
+			return AugmentationSlotType.WEAPON;
+		case "STONE_PICKAXE":
+			return AugmentationSlotType.WEAPON;
+		case "IRON_PICKAXE":
+			return AugmentationSlotType.WEAPON;
+		case "GOLDEN_PICKAXE":
+			return AugmentationSlotType.WEAPON;
+		case "GOLD_PICKAXE":
+			return AugmentationSlotType.WEAPON;
+		case "DIAMOND_PICKAXE":
+			return AugmentationSlotType.WEAPON;
+		case "LEATHER_HELMET":
+			return AugmentationSlotType.HELMET;
+		case "LEATHER_CHESTPLATE":
+			return AugmentationSlotType.CHESTPLATE;
+		case "LEATHER_LEGGINGS":
+			return AugmentationSlotType.LEGGINGS;
+		case "LEATHER_BOOTS":
+			return AugmentationSlotType.BOOTS;
+		case "CHAINMAIL_HELMET":
+			return AugmentationSlotType.HELMET;
+		case "CHAINMAIL_CHESTPLATE":
+			return AugmentationSlotType.CHESTPLATE;
+		case "CHAINMAIL_LEGGINGS":
+			return AugmentationSlotType.LEGGINGS;
+		case "CHAINMAIL_BOOTS":
+			return AugmentationSlotType.BOOTS;
+		case "IRON_HELMET":
+			return AugmentationSlotType.HELMET;
+		case "IRON_CHESTPLATE":
+			return AugmentationSlotType.CHESTPLATE;
+		case "IRON_LEGGINGS":
+			return AugmentationSlotType.LEGGINGS;
+		case "IRON_BOOTS":
+			return AugmentationSlotType.BOOTS;
+		case "DIAMOND_HELMET":
+			return AugmentationSlotType.HELMET;
+		case "DIAMOND_CHESTPLATE":
+			return AugmentationSlotType.CHESTPLATE;
+		case "DIAMOND_LEGGINGS":
+			return AugmentationSlotType.LEGGINGS;
+		case "DIAMOND_BOOTS":
+			return AugmentationSlotType.BOOTS;
+		case "GOLD_HELMET":
+			return AugmentationSlotType.HELMET;
+		case "GOLD_CHESTPLATE":
+			return AugmentationSlotType.CHESTPLATE;
+		case "GOLD_LEGGINGS":
+			return AugmentationSlotType.LEGGINGS;
+		case "GOLD_BOOTS":
+			return AugmentationSlotType.BOOTS;
+		case "GOLDEN_HELMET":
+			return AugmentationSlotType.HELMET;
+		case "GOLDEN_CHESTPLATE":
+			return AugmentationSlotType.CHESTPLATE;
+		case "GOLDEN_LEGGINGS":
+			return AugmentationSlotType.LEGGINGS;
+		case "GOLDEN_BOOTS":
+			return AugmentationSlotType.BOOTS;
+		case "SHIELD":
+			return AugmentationSlotType.SHIELD;
+		default:
+			return AugmentationSlotType.NONE;
+		}
+	}
+
+
+	public static ItemStack getTargetingItemStack() {
+		ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD);
+		itemStack.setItemMeta(ItemStackAdapter.buildSkull((SkullMeta) itemStack.getItemMeta(),
+				UUID.fromString("9c3bb224-bc6e-4da8-8b15-a35c97bc3b16"),
+				"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmFlNDI1YzViYTlmM2MyOTYyYjM4MTc4Y2JjMjMxNzJhNmM2MjE1YTExYWNjYjkyNzc0YTQ3MTZlOTZjYWRhIn19fQ==",
+				null));
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		List<String> lore = new ArrayList<String>();
+		lore.add("This is a targetting tool");
+		lore.add("Right click on an entity with this");
+		lore.add("Left click to target self");
+		lore.add("To clear, right click on nothing");
+
+		itemMeta.setLore(lore);
+		itemStack.setDurability((short) 3);
+		itemMeta.setDisplayName("Targetting Tool");
+		itemStack.setItemMeta(itemMeta);
+		itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 997);
+		return itemStack;
+	}
+	public static String getDefaultSkillForMaterial(Material material) {
+		String materialstring = material.name().toUpperCase();
+		
+		switch (materialstring) {
+		case "WOODEN_SWORD":
+			return "SLASHING";
+		case "STONE_SWORD":
+			return "SLASHING";
+		case "IRON_SWORD":
+			return "SLASHING";
+		case "GOLDEN_SWORD":
+			return "SLASHING";
+		case "DIAMOND_SWORD":
+			return "SLASHING";
+		case "WOODEN_AXE":
+			return "SLASHING";
+		case "STONE_AXE":
+			return "SLASHING";
+		case "IRON_AXE":
+			return "SLASHING";
+		case "GOLDEN_AXE":
+			return "SLASHING";
+		case "DIAMOND_AXE":
+			return "SLASHING";
+		case "AIR":
+			return "CRUSHING";
+		case "STICK":
+			return "CRUSHING";
+		case "WOODEN_SHOVEL":
+			return "CRUSHING";
+		case "STONE_SHOVEL":
+			return "CRUSHING";
+		case "IRON_SHOVEL":
+			return "CRUSHING";
+		case "GOLDEN_SHOVEL":
+			return "CRUSHING";
+		case "DIAMOND_SHOVEL":
+			return "CRUSHING";
+		case "WOODEN_HOE":
+			return "CRUSHING";
+		case "STONE_HOE":
+			return "CRUSHING";
+		case "IRON_HOE":
+			return "CRUSHING";
+		case "GOLDEN_HOE":
+			return "CRUSHING";
+		case "DIAMOND_HOE":
+			return "CRUSHING";
+		case "WOODEN_PICKAXE":
+			return "CRUSHING";
+		case "STONE_PICKAXE":
+			return "CRUSHING";
+		case "IRON_PICKAXE":
+			return "CRUSHING";
+		case "GOLDEN_PICKAXE":
+			return "CRUSHING";
+		case "DIAMOND_PICKAXE":
+			return "CRUSHING";
+		case "BOW":
+			return "ARCHERY";
+		case "CROSSBOW":
+			return "ARCHERY";
+		default:
+			return "CRUSHING";
+		}
+	}
+
+
+	public static Enchantment getEnchantmentFromEnchantmentName(String name) throws Exception {
+		switch (name) {
+		case "ARROW_DAMAGE":
+			return Enchantment.ARROW_DAMAGE;
+		case "ARROW_FIRE":
+			return Enchantment.ARROW_FIRE;
+		case "ARROW_INFINITE":
+			return Enchantment.ARROW_INFINITE;
+		case "ARROW_KNOCKBACK":
+			return Enchantment.ARROW_KNOCKBACK;
+		case "DAMAGE_ALL":
+			return Enchantment.DAMAGE_ALL;
+		case "DAMAGE_ARTHROPODS":
+			return Enchantment.DAMAGE_ARTHROPODS;
+		case "DAMAGE_UNDEAD":
+			return Enchantment.DAMAGE_UNDEAD;
+		case "DEPTH_STRIDER":
+			return Enchantment.DEPTH_STRIDER;
+		case "DIG_SPEED":
+			return Enchantment.DIG_SPEED;
+		case "DURABILITY":
+			return Enchantment.DURABILITY;
+		case "FIRE_ASPECT":
+			return Enchantment.FIRE_ASPECT;
+		case "FROST_WALKER":
+			return Enchantment.FROST_WALKER;
+		case "KNOCKBACK":
+			return Enchantment.KNOCKBACK;
+		case "LOOT_BONUS_BLOCKS":
+			return Enchantment.LOOT_BONUS_BLOCKS;
+		case "LOOT_BONUS_MOBS":
+			return Enchantment.LOOT_BONUS_MOBS;
+		case "LUCK":
+			return Enchantment.LUCK;
+		case "LURE":
+			return Enchantment.LURE;
+		case "MENDING":
+			return Enchantment.MENDING;
+		case "PROTECTION_ENVIRONMENTAL":
+			return Enchantment.PROTECTION_ENVIRONMENTAL;
+		case "PROTECTION_EXPLOSIONS":
+			return Enchantment.PROTECTION_EXPLOSIONS;
+		case "PROTECTION_FALL":
+			return Enchantment.PROTECTION_FALL;
+		case "PROTECTION_FIRE":
+			return Enchantment.PROTECTION_FIRE;
+		case "PROTECTION_PROJECTILE":
+			return Enchantment.PROTECTION_PROJECTILE;
+		case "SILK_TOUCH":
+			return Enchantment.SILK_TOUCH;
+		case "THORNS":
+			return Enchantment.THORNS;
+		case "WATER_WORKER":
+			return Enchantment.WATER_WORKER;
+		default:
+			throw new Exception("Unsupported enchantment type for SoliniaItem");
+		}
+	}
 	
 	public static List<Material> getAllowedVanillaItemStacks()
 	{

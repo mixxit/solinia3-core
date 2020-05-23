@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.EntityUtils;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandUnstuck implements CommandExecutor {
@@ -24,7 +25,7 @@ public class CommandUnstuck implements CommandExecutor {
 		}
 		
 		Player player = (Player)sender;
-		if (!player.isOp() && !Utils.canUnstuck(player))
+		if (!player.isOp() && !PlayerUtils.canUnstuck(player))
 		{
 			return true;
 		}

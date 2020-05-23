@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandGodInfo implements CommandExecutor {
@@ -17,7 +18,7 @@ public class CommandGodInfo implements CommandExecutor {
 		
 		try
 		{
-			Utils.sendGodInfo(sender);
+			ChatUtils.sendGodInfo(sender);
 		
 		} catch (Exception e)
 		{

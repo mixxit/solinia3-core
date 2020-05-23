@@ -21,6 +21,8 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.HINT;
+import com.solinia.solinia.Utils.ChatUtils;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -56,8 +58,8 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	} else {
 	            		// this is an item that is broken       
 	            		e.getPlayer().sendMessage("This item is no longer implemented");
-	            		Utils.CancelEvent(e);
-	            		Utils.RemoveEntity(e.getItem(),"item no longer exists");
+	            		EntityUtils.CancelEvent(e);
+	            		EntityUtils.RemoveEntity(e.getItem(),"item no longer exists");
 	            	}
 	            }
         	} catch (CoreStateInitException eOxy)
@@ -82,7 +84,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	} else {
 	            		// this is an item that is broken       
 	            		e.getPlayer().sendMessage("This item is no longer implemented");
-	            		Utils.CancelEvent(e);
+	            		EntityUtils.CancelEvent(e);
 	            		e.getItem().remove();
 	            	}
 	            }
@@ -106,7 +108,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	{
 	            		if (latestitem.isSpellscroll())
 	            		{
-	            			Utils.SendHint(e.getPlayer(), HINT.PICKEDUP_SPELL, "PickedUpSpell", false);
+	            			ChatUtils.SendHint(e.getPlayer(), HINT.PICKEDUP_SPELL, "PickedUpSpell", false);
 	            		}
 	            		
 	            		ItemStack latestitemstack = latestitem.asItemStack();
@@ -114,7 +116,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	} else {
 	            		// this is an item that is broken       
 	            		e.getPlayer().sendMessage("This item is no longer implemented");
-	            		Utils.CancelEvent(e);
+	            		EntityUtils.CancelEvent(e);
 	            		e.getItem().remove();
 	            	}
 	            }
@@ -124,7 +126,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(e.getPlayer());
 	            	latestitem.setDiscoverer(solPlayer.getFullName());
 					StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
-					Utils.SendHintToServer(HINT.ITEM_DISCOVERED, latestitem.getId()+"^"+solPlayer.getFullName());
+					ChatUtils.SendHintToServer(HINT.ITEM_DISCOVERED, latestitem.getId()+"^"+solPlayer.getFullName());
 	            }
 		    }
 	        if (ItemStackUtils.IsSoliniaItem(pickedUpItemStack) && !(pickedUpItemStack.getType().equals(Material.ENCHANTED_BOOK)))
@@ -137,7 +139,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
 	            	ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(e.getPlayer());
 	            	latestitem.setDiscoverer(e.getPlayer().getCustomName());
 					StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
-					Utils.SendHintToServer(HINT.ITEM_DISCOVERED, latestitem.getId()+"^"+solPlayer.getFullName());
+					ChatUtils.SendHintToServer(HINT.ITEM_DISCOVERED, latestitem.getId()+"^"+solPlayer.getFullName());
 	            }
 	        	
 	            if (pickedUpItemStack != null)

@@ -5,6 +5,7 @@ import org.junit.Test;
 import com.solinia.solinia.Interfaces.ISoliniaNPCEventHandler;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SoliniaNPCEventHandler;
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.QuestUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -36,7 +37,7 @@ public class ChatTextTests {
 	@Test
 	public void garbleText100PercentReturnsAll() {
 		String test = "This is my test messageThis is my test messageThis is my test messageThis is my test message This is";
-		String message = Utils.garbleText(test, 100);
+		String message = ChatUtils.garbleText(test, 100);
 
         assertEquals(test,message);
     }
@@ -44,7 +45,7 @@ public class ChatTextTests {
 	@Test
 	public void garbleText90PercentReturns90() {
 		String test = "This is my test";
-		String message = Utils.garbleText(test, 100);
+		String message = ChatUtils.garbleText(test, 100);
 
         assertEquals(test,message);
     }

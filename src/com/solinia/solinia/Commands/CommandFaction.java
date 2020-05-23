@@ -9,6 +9,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.PlayerFactionEntry;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -24,7 +25,7 @@ public class CommandFaction implements CommandExecutor {
 			
 			for (PlayerFactionEntry factionEntry : solPlayer.getFactionEntries())
 			{
-				sender.sendMessage(" * " + ChatColor.GOLD + factionEntry.getFaction().getName() + ChatColor.RESET + " - " + Utils.getFactionStandingType(factionEntry.getValueAndBaseNoSpellCheck()).name());
+				sender.sendMessage(" * " + ChatColor.GOLD + factionEntry.getFaction().getName() + ChatColor.RESET + " - " + EntityUtils.getFactionStandingType(factionEntry.getValueAndBaseNoSpellCheck()).name());
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block

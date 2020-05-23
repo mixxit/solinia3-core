@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.NPCUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandCommit implements CommandExecutor {
@@ -42,8 +43,8 @@ public class CommandCommit implements CommandExecutor {
 						sender.isOp() || sender instanceof ConsoleCommandSender 
 				)) {
 			if (args[0].equals("provider")) {
-				Utils.RecommitNpcs();
-				Utils.RecommitSpawnGroups();
+				NPCUtils.RecommitNpcs();
+				NPCUtils.RecommitSpawnGroups();
 				
 			}
 		}

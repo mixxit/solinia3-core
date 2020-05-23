@@ -34,6 +34,8 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.MathUtils;
+import com.solinia.solinia.Utils.NPCUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.QuestUtils;
 import com.solinia.solinia.Utils.Utils;
@@ -690,7 +692,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			break;
 		case "customheaddata":
 			// fetches custom head texture by a player name
-			setCustomheaddata(Utils.getTextureFromName(value));
+			setCustomheaddata(PlayerUtils.getTextureFromName(value));
 			break;
 		case "customheaddatafromnpc":
 			int npcid = Integer.parseInt(value);
@@ -974,7 +976,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 							ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player) triggerentity);
 							PlayerFactionEntry factionEntry = solPlayer.getFactionEntry(npc.getFactionid());
 							if (factionEntry != null) {
-								switch (Utils.getFactionStandingType(factionEntry.getValueWithEffectsOnEntityAndBase(solentity.getBukkitLivingEntity(),
+								switch (EntityUtils.getFactionStandingType(factionEntry.getValueWithEffectsOnEntityAndBase(solentity.getBukkitLivingEntity(),
 												solPlayer.getBukkitPlayer()))) {
 								case FACTION_THREATENLY:
 								case FACTION_SCOWLS:
@@ -1311,7 +1313,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		chance += 100;
 		chance /= 45;
 
-		return Utils.RandomBetween(1, 500) <= chance;
+		return MathUtils.RandomBetween(1, 500) <= chance;
 	}
 
 	@Override
@@ -1323,7 +1325,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		chance += 100;
 		chance /= 50;
 
-		return Utils.RandomBetween(1, 500) <= chance;
+		return MathUtils.RandomBetween(1, 500) <= chance;
 	}
 
 	@Override
@@ -1338,7 +1340,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		}
 		chance /= 5;
 
-		return Utils.RandomBetween(1, 500) <= chance;
+		return MathUtils.RandomBetween(1, 500) <= chance;
 	}
 
 	@Override
@@ -1903,19 +1905,19 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			mindmg = calcNPCDamage().a();
 			
 			if (isBoss()) {
-				mindmg += (Utils.getBossHPMultiplier(isHeroic()) * mindmg);
+				mindmg += (NPCUtils.getBossHPMultiplier(isHeroic()) * mindmg);
 			}
 
 			if (isHeroic()) {
-				mindmg += (Utils.getHeroicHPMultiplier() * mindmg);
+				mindmg += (NPCUtils.getHeroicHPMultiplier() * mindmg);
 			}
 
 			if (isRaidboss()) {
-				mindmg += (Utils.getRaidBossHPMultiplier() * mindmg);
+				mindmg += (NPCUtils.getRaidBossHPMultiplier() * mindmg);
 			}
 
 			if (isRaidheroic()) {
-				mindmg += (Utils.getRaidHeroicHPMultiplier() * mindmg);
+				mindmg += (NPCUtils.getRaidHeroicHPMultiplier() * mindmg);
 			}
 		}
 		
@@ -1982,19 +1984,19 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			int maxDamage = calcNPCDamage().b();
 			
 			if (isBoss()) {
-				maxDamage += (Utils.getBossHPMultiplier(isHeroic()) * maxDamage);
+				maxDamage += (NPCUtils.getBossHPMultiplier(isHeroic()) * maxDamage);
 			}
 
 			if (isHeroic()) {
-				maxDamage += (Utils.getHeroicHPMultiplier() * maxDamage);
+				maxDamage += (NPCUtils.getHeroicHPMultiplier() * maxDamage);
 			}
 
 			if (isRaidboss()) {
-				maxDamage += (Utils.getRaidBossHPMultiplier() * maxDamage);
+				maxDamage += (NPCUtils.getRaidBossHPMultiplier() * maxDamage);
 			}
 
 			if (isRaidheroic()) {
-				maxDamage += (Utils.getRaidHeroicHPMultiplier() * maxDamage);
+				maxDamage += (NPCUtils.getRaidHeroicHPMultiplier() * maxDamage);
 			}
 			
 			return maxDamage;
@@ -2009,19 +2011,19 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			mindmg = calcNPCDamage().a();
 			
 			if (isBoss()) {
-				mindmg += (Utils.getBossHPMultiplier(isHeroic()) * mindmg);
+				mindmg += (NPCUtils.getBossHPMultiplier(isHeroic()) * mindmg);
 			}
 
 			if (isHeroic()) {
-				mindmg += (Utils.getHeroicHPMultiplier() * mindmg);
+				mindmg += (NPCUtils.getHeroicHPMultiplier() * mindmg);
 			}
 
 			if (isRaidboss()) {
-				mindmg += (Utils.getRaidBossHPMultiplier() * mindmg);
+				mindmg += (NPCUtils.getRaidBossHPMultiplier() * mindmg);
 			}
 
 			if (isRaidheroic()) {
-				mindmg += (Utils.getRaidHeroicHPMultiplier() * mindmg);
+				mindmg += (NPCUtils.getRaidHeroicHPMultiplier() * mindmg);
 			}
 		}
 
@@ -2060,21 +2062,21 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	public int getNPCHPRegen() {
 		if(this.getManaRegenRate() > 0)
 			return this.getHpRegenRate();
-		return Utils.getDefaultNPCHPRegen(this);
+		return NPCUtils.getDefaultNPCHPRegen(this);
 	}
 	
 	@Override
 	public int getNPCMPRegen() {
 		if(this.getManaRegenRate() > 0)
 			return this.getManaRegenRate();
-		return Utils.getDefaultNPCManaRegen(this);
+		return NPCUtils.getDefaultNPCManaRegen(this);
 	}
 	
 	@Override
 	public int getNPCMana() {
 		if(this.getMana() > 0)
 			return this.getMana();
-		return Utils.getDefaultNPCMana(this);
+		return NPCUtils.getDefaultNPCMana(this);
 	}
 	
 	private int getHpRegenRate() {
@@ -2161,30 +2163,30 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	public int getFR() {
 		if(this.getFireresist() > 0)
 			return this.getFireresist();
-		return Utils.getDefaultNPCResist(this);
+		return NPCUtils.getDefaultNPCResist(this);
 	}
 	@Override
 	public int getCR() {
 		if(this.getColdresist() > 0)
 			return this.getColdresist();
-		return Utils.getDefaultNPCResist(this);
+		return NPCUtils.getDefaultNPCResist(this);
 	}
 	@Override
 	public int getMR() {
 		if(this.getMagicresist() > 0)
 			return this.getMagicresist();
-		return Utils.getDefaultNPCResist(this);
+		return NPCUtils.getDefaultNPCResist(this);
 	}
 	@Override
 	public int getDR() {
 		if(this.getDiseaseresist() > 0)
 			return this.getDiseaseresist();
-		return Utils.getDefaultNPCResist(this);
+		return NPCUtils.getDefaultNPCResist(this);
 	}
 	@Override
 	public int getPR() {
 		if(this.getPoisonresist() > 0)
 			return this.getPoisonresist();
-		return Utils.getDefaultNPCResist(this);
+		return NPCUtils.getDefaultNPCResist(this);
 	}
 }

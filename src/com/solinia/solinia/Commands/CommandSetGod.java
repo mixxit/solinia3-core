@@ -14,6 +14,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaGod;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -46,7 +47,7 @@ public class CommandSetGod implements CommandExecutor {
 
 		{
 			try {
-				Utils.sendGodInfo(sender);
+				ChatUtils.sendGodInfo(sender);
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -72,7 +73,7 @@ public class CommandSetGod implements CommandExecutor {
         if (args.length == 0)
         {
         	try {
-				Utils.sendGodInfo(sender);
+				ChatUtils.sendGodInfo(sender);
 			} catch (CoreStateInitException e1) {
 				
 			}
@@ -109,7 +110,7 @@ public class CommandSetGod implements CommandExecutor {
         if (found == false)
         {
         	try {
-				Utils.sendGodInfo(sender);
+				ChatUtils.sendGodInfo(sender);
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -129,7 +130,7 @@ public class CommandSetGod implements CommandExecutor {
 				
 				return true;
 			} else {
-				Utils.sendGodInfo(sender);
+				ChatUtils.sendGodInfo(sender);
 				player.sendMessage("Insufficient arguments. Please provide correct god name");
 				return false;
 			}

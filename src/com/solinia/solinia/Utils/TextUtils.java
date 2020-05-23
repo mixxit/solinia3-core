@@ -9,6 +9,17 @@ import java.util.List;
 import org.apache.commons.lang.WordUtils;
 
 public class TextUtils {
+	public static String[] splitStringIntoBlocksOfSize(String string, int size)
+	{
+		return string.split("(?<=\\G.{"+size+"})");
+	}
+	
+	public static String replaceChar(String str, char ch, int index) {
+	    StringBuilder myString = new StringBuilder(str);
+	    myString.setCharAt(index, ch);
+	    return myString.toString();
+	}
+	
 	public static List<String> breakStringOfWordsIntoLines(String input, int maxLineLength) {
 		List<String> lines = new ArrayList<String>();
 		lines = Arrays.asList(addLinebreaks(input,maxLineLength).split(System.lineSeparator()));

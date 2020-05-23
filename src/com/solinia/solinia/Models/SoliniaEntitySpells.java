@@ -21,8 +21,10 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.EntityUtils;
+import com.solinia.solinia.Utils.SpellUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import me.libraryaddict.disguise.DisguiseAPI;
@@ -265,7 +267,7 @@ public class SoliniaEntitySpells {
 			try {
 				if (solSourceEntity != null)
 				{
-					Utils.SendHint(solSourceEntity.getBukkitLivingEntity(), HINT.STARTS_TO_SING, sourceEntity.getCustomName()+"^"+soliniaSpell.getName(), true);
+					ChatUtils.SendHint(solSourceEntity.getBukkitLivingEntity(), HINT.STARTS_TO_SING, sourceEntity.getCustomName()+"^"+soliniaSpell.getName(), true);
 					StateManager.getInstance().getEntityManager().setEntitySinging(sourceEntity.getUniqueId(), soliniaSpell.getId());
 				}
 			} catch (CoreStateInitException e) {
@@ -276,7 +278,7 @@ public class SoliniaEntitySpells {
 		// Initial run
 		activeSpell.apply(plugin, sendMessages);
 		if (!activeSpell.isRacialPassive())
-			Utils.playSpecialEffect(getLivingEntity(), activeSpell);
+			SpellUtils.playSpecialEffect(getLivingEntity(), activeSpell);
 		
 		try
 		{
@@ -552,7 +554,7 @@ public class SoliniaEntitySpells {
 						{
 							String spellname =activeSpell.getSpell().getName();
 							String entityName = this.getSoliniaLivingEntity().getName();
-							Utils.SendHint(notify.getBukkitLivingEntity(), HINT.SPELL_WORN_OFF_OF,  spellname+ "^" +entityName, false);
+							ChatUtils.SendHint(notify.getBukkitLivingEntity(), HINT.SPELL_WORN_OFF_OF,  spellname+ "^" +entityName, false);
 						}
 					}
 				}
@@ -590,7 +592,7 @@ public class SoliniaEntitySpells {
 					boolean isLastSongSinging = StateManager.getInstance().getEntityManager().getEntitySinging(activeSpell.getSourceUuid()).isLastSongSinging(activeSpell.getSpellId());
 					if (!isLastSongSinging || activeSpell.getSpell().getRecastTime() > 0 && Bukkit.getEntity(activeSpell.getSourceUuid()) != null && Bukkit.getEntity(activeSpell.getSourceUuid()) instanceof LivingEntity) {
 						ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)Bukkit.getEntity(activeSpell.getSourceUuid()));
-						Utils.SendHint(solEntity.getBukkitLivingEntity(), HINT.STOPS_SINGING, solEntity.getName()+"^"+activeSpell.getSpell().getName(), true);
+						ChatUtils.SendHint(solEntity.getBukkitLivingEntity(), HINT.STOPS_SINGING, solEntity.getName()+"^"+activeSpell.getSpell().getName(), true);
 
 						if (removeNonCombatEffects == true)
 							tryRemoveNonCombatEffects(activeSpell);
@@ -678,7 +680,7 @@ public class SoliniaEntitySpells {
 				if (StateManager.getInstance().getEntityManager().getMezzed(this.getBukkitLivingEntity()) != null) {
 					StateManager.getInstance().getEntityManager().removeMezzed(this.getBukkitLivingEntity());
 					this.getBukkitLivingEntity().sendMessage("You are not longer mezzed (removed)");
-					Utils.RemovePotionEffect(getLivingEntity(), PotionEffectType.CONFUSION);
+					SpellUtils.RemovePotionEffect(getLivingEntity(), PotionEffectType.CONFUSION);
 				}
 			}
 
@@ -701,7 +703,7 @@ public class SoliniaEntitySpells {
 				if (StateManager.getInstance().getEntityManager().getStunned(this.getBukkitLivingEntity()) != null) {
 					StateManager.getInstance().getEntityManager().removeStunned(this.getBukkitLivingEntity());
 					this.getBukkitLivingEntity().sendMessage("You are not longer stunned (NegateIfCombat)");
-					Utils.RemovePotionEffect(getLivingEntity(), PotionEffectType.CONFUSION);
+					SpellUtils.RemovePotionEffect(getLivingEntity(), PotionEffectType.CONFUSION);
 				}
 			}
 		} catch (CoreStateInitException e) {

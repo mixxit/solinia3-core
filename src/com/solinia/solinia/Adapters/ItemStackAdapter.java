@@ -39,6 +39,9 @@ import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaSpellClass;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Utils.ColorUtil;
+import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.SkillUtils;
+import com.solinia.solinia.Utils.SpellUtils;
 import com.solinia.solinia.Utils.TextUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -515,7 +518,7 @@ public class ItemStackAdapter {
 		if (soliniaItem.getEnchantment1() != null) {
 			if (soliniaItem.getEnchantment1val() > 0) {
 				try {
-					Enchantment enchantment = Utils.getEnchantmentFromEnchantmentName(soliniaItem.getEnchantment1());
+					Enchantment enchantment = ItemStackUtils.getEnchantmentFromEnchantmentName(soliniaItem.getEnchantment1());
 					stack.addUnsafeEnchantment(enchantment, soliniaItem.getEnchantment1val());
 				} catch (Exception e) {
 					System.out.println("WARNING: Invalid Enchantment Item on SoliniaItem: " + soliniaItem.getId());
@@ -526,7 +529,7 @@ public class ItemStackAdapter {
 		if (soliniaItem.getEnchantment2() != null) {
 			if (soliniaItem.getEnchantment2val() > 0) {
 				try {
-					Enchantment enchantment = Utils.getEnchantmentFromEnchantmentName(soliniaItem.getEnchantment2());
+					Enchantment enchantment = ItemStackUtils.getEnchantmentFromEnchantmentName(soliniaItem.getEnchantment2());
 					stack.addUnsafeEnchantment(enchantment, soliniaItem.getEnchantment2val());
 				} catch (Exception e) {
 					System.out.println("WARNING: Invalid Enchantment Item on SoliniaItem: " + soliniaItem.getId());
@@ -537,7 +540,7 @@ public class ItemStackAdapter {
 		if (soliniaItem.getEnchantment3() != null) {
 			if (soliniaItem.getEnchantment3val() > 0) {
 				try {
-					Enchantment enchantment = Utils.getEnchantmentFromEnchantmentName(soliniaItem.getEnchantment3());
+					Enchantment enchantment = ItemStackUtils.getEnchantmentFromEnchantmentName(soliniaItem.getEnchantment3());
 					stack.addUnsafeEnchantment(enchantment, soliniaItem.getEnchantment3val());
 				} catch (Exception e) {
 					System.out.println("WARNING: Invalid Enchantment Item on SoliniaItem: " + soliniaItem.getId());
@@ -548,7 +551,7 @@ public class ItemStackAdapter {
 		if (soliniaItem.getEnchantment4() != null) {
 			if (soliniaItem.getEnchantment4val() > 0) {
 				try {
-					Enchantment enchantment = Utils.getEnchantmentFromEnchantmentName(soliniaItem.getEnchantment4());
+					Enchantment enchantment = ItemStackUtils.getEnchantmentFromEnchantmentName(soliniaItem.getEnchantment4());
 					stack.addUnsafeEnchantment(enchantment, soliniaItem.getEnchantment4val());
 				} catch (Exception e) {
 					System.out.println("WARNING: Invalid Enchantment Item on SoliniaItem: " + soliniaItem.getId());
@@ -618,89 +621,89 @@ public class ItemStackAdapter {
 		ISoliniaSpell spell;
 		try {
 			spell = StateManager.getInstance().getConfigurationManager().getSpell(soliniaItem.getAbilityid());
-			if (spell.getEffectid1() != 254 && !Utils.getSpellEffectType(spell.getEffectid1()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid1()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue1() == 0) && !Utils.getSpellEffectType(spell.getEffectid1()).name().contains("StackingCommand_"))
+			if (spell.getEffectid1() != 254 && !SpellUtils.getSpellEffectType(spell.getEffectid1()).name().contains("LIMIT_") && !(SpellUtils.getSpellEffectType(spell.getEffectid1()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue1() == 0) && !SpellUtils.getSpellEffectType(spell.getEffectid1()).name().contains("StackingCommand_"))
 			{
 				String pos = "+";
 				if (spell.getEffectBaseValue1() < 0)
 					pos = "-";
-				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid1()).name() + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+SpellUtils.getSpellEffectType(spell.getEffectid1()).name() + ChatColor.RESET);
 			}
-			if (spell.getEffectid2() != 254 && !Utils.getSpellEffectType(spell.getEffectid2()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid2()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue2() == 0) && !Utils.getSpellEffectType(spell.getEffectid2()).name().contains("StackingCommand_"))
+			if (spell.getEffectid2() != 254 && !SpellUtils.getSpellEffectType(spell.getEffectid2()).name().contains("LIMIT_") && !(SpellUtils.getSpellEffectType(spell.getEffectid2()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue2() == 0) && !SpellUtils.getSpellEffectType(spell.getEffectid2()).name().contains("StackingCommand_"))
 			{
 				String pos = "+";
 				if (spell.getEffectBaseValue2() < 0)
 					pos = "-";
-				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid2()).name() + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+SpellUtils.getSpellEffectType(spell.getEffectid2()).name() + ChatColor.RESET);
 			}
-			if (spell.getEffectid3() != 254 && !Utils.getSpellEffectType(spell.getEffectid3()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid3()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue3() == 0) && !Utils.getSpellEffectType(spell.getEffectid3()).name().contains("StackingCommand_"))
+			if (spell.getEffectid3() != 254 && !SpellUtils.getSpellEffectType(spell.getEffectid3()).name().contains("LIMIT_") && !(SpellUtils.getSpellEffectType(spell.getEffectid3()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue3() == 0) && !SpellUtils.getSpellEffectType(spell.getEffectid3()).name().contains("StackingCommand_"))
 			{
 				String pos = "+";
 				if (spell.getEffectBaseValue3() < 0)
 					pos = "-";
-				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid3()).name() + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+SpellUtils.getSpellEffectType(spell.getEffectid3()).name() + ChatColor.RESET);
 			}
-			if (spell.getEffectid4() != 254 && !Utils.getSpellEffectType(spell.getEffectid4()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid4()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue4() == 0) && !Utils.getSpellEffectType(spell.getEffectid4()).name().contains("StackingCommand_"))
+			if (spell.getEffectid4() != 254 && !SpellUtils.getSpellEffectType(spell.getEffectid4()).name().contains("LIMIT_") && !(SpellUtils.getSpellEffectType(spell.getEffectid4()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue4() == 0) && !SpellUtils.getSpellEffectType(spell.getEffectid4()).name().contains("StackingCommand_"))
 			{
 				String pos = "+";
 				if (spell.getEffectBaseValue4() < 0)
 					pos = "-";
-				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid4()).name() + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+SpellUtils.getSpellEffectType(spell.getEffectid4()).name() + ChatColor.RESET);
 			}
-			if (spell.getEffectid5() != 254 && !Utils.getSpellEffectType(spell.getEffectid5()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid5()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue5() == 0) && !Utils.getSpellEffectType(spell.getEffectid5()).name().contains("StackingCommand_"))
+			if (spell.getEffectid5() != 254 && !SpellUtils.getSpellEffectType(spell.getEffectid5()).name().contains("LIMIT_") && !(SpellUtils.getSpellEffectType(spell.getEffectid5()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue5() == 0) && !SpellUtils.getSpellEffectType(spell.getEffectid5()).name().contains("StackingCommand_"))
 			{
 				String pos = "+";
 				if (spell.getEffectBaseValue5() < 0)
 					pos = "-";
-				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid5()).name() + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+SpellUtils.getSpellEffectType(spell.getEffectid5()).name() + ChatColor.RESET);
 			}
-			if (spell.getEffectid6() != 254 && !Utils.getSpellEffectType(spell.getEffectid6()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid6()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue6() == 0) && !Utils.getSpellEffectType(spell.getEffectid6()).name().contains("StackingCommand_"))
+			if (spell.getEffectid6() != 254 && !SpellUtils.getSpellEffectType(spell.getEffectid6()).name().contains("LIMIT_") && !(SpellUtils.getSpellEffectType(spell.getEffectid6()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue6() == 0) && !SpellUtils.getSpellEffectType(spell.getEffectid6()).name().contains("StackingCommand_"))
 			{
 				String pos = "+";
 				if (spell.getEffectBaseValue6() < 0)
 					pos = "-";
-				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid6()).name() + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+SpellUtils.getSpellEffectType(spell.getEffectid6()).name() + ChatColor.RESET);
 			}
-			if (spell.getEffectid7() != 254 && !Utils.getSpellEffectType(spell.getEffectid7()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid7()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue7() == 0) && !Utils.getSpellEffectType(spell.getEffectid7()).name().contains("StackingCommand_"))
+			if (spell.getEffectid7() != 254 && !SpellUtils.getSpellEffectType(spell.getEffectid7()).name().contains("LIMIT_") && !(SpellUtils.getSpellEffectType(spell.getEffectid7()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue7() == 0) && !SpellUtils.getSpellEffectType(spell.getEffectid7()).name().contains("StackingCommand_"))
 			{
 				String pos = "+";
 				if (spell.getEffectBaseValue7() < 0)
 					pos = "-";
-				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid7()).name() + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+SpellUtils.getSpellEffectType(spell.getEffectid7()).name() + ChatColor.RESET);
 			}
-			if (spell.getEffectid8() != 254 && !Utils.getSpellEffectType(spell.getEffectid8()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid8()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue8() == 0) && !Utils.getSpellEffectType(spell.getEffectid8()).name().contains("StackingCommand_"))
+			if (spell.getEffectid8() != 254 && !SpellUtils.getSpellEffectType(spell.getEffectid8()).name().contains("LIMIT_") && !(SpellUtils.getSpellEffectType(spell.getEffectid8()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue8() == 0) && !SpellUtils.getSpellEffectType(spell.getEffectid8()).name().contains("StackingCommand_"))
 			{
 				String pos = "+";
 				if (spell.getEffectBaseValue8() < 0)
 					pos = "-";
-				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid8()).name() + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+SpellUtils.getSpellEffectType(spell.getEffectid8()).name() + ChatColor.RESET);
 			}
-			if (spell.getEffectid9() != 254 && !Utils.getSpellEffectType(spell.getEffectid9()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid9()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue9() == 0) && !Utils.getSpellEffectType(spell.getEffectid9()).name().contains("StackingCommand_"))
+			if (spell.getEffectid9() != 254 && !SpellUtils.getSpellEffectType(spell.getEffectid9()).name().contains("LIMIT_") && !(SpellUtils.getSpellEffectType(spell.getEffectid9()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue9() == 0) && !SpellUtils.getSpellEffectType(spell.getEffectid9()).name().contains("StackingCommand_"))
 			{
 				String pos = "+";
 				if (spell.getEffectBaseValue9() < 0)
 					pos = "-";
-				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid9()).name() + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+SpellUtils.getSpellEffectType(spell.getEffectid9()).name() + ChatColor.RESET);
 			}
-			if (spell.getEffectid10() != 254 && !Utils.getSpellEffectType(spell.getEffectid10()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid10()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue10() == 0) && !Utils.getSpellEffectType(spell.getEffectid10()).name().contains("StackingCommand_"))
+			if (spell.getEffectid10() != 254 && !SpellUtils.getSpellEffectType(spell.getEffectid10()).name().contains("LIMIT_") && !(SpellUtils.getSpellEffectType(spell.getEffectid10()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue10() == 0) && !SpellUtils.getSpellEffectType(spell.getEffectid10()).name().contains("StackingCommand_"))
 			{
 				String pos = "+";
 				if (spell.getEffectBaseValue10() < 0)
 					pos = "-";
-				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid10()).name() + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+SpellUtils.getSpellEffectType(spell.getEffectid10()).name() + ChatColor.RESET);
 			}
-			if (spell.getEffectid11() != 254 && !Utils.getSpellEffectType(spell.getEffectid11()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid11()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue11() == 0) && !Utils.getSpellEffectType(spell.getEffectid11()).name().contains("StackingCommand_"))
+			if (spell.getEffectid11() != 254 && !SpellUtils.getSpellEffectType(spell.getEffectid11()).name().contains("LIMIT_") && !(SpellUtils.getSpellEffectType(spell.getEffectid11()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue11() == 0) && !SpellUtils.getSpellEffectType(spell.getEffectid11()).name().contains("StackingCommand_"))
 			{
 				String pos = "+";
 				if (spell.getEffectBaseValue11() < 0)
 					pos = "-";
-				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid11()).name() + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+SpellUtils.getSpellEffectType(spell.getEffectid11()).name() + ChatColor.RESET);
 			}
-			if (spell.getEffectid12() != 254 && !Utils.getSpellEffectType(spell.getEffectid12()).name().contains("LIMIT_") && !(Utils.getSpellEffectType(spell.getEffectid12()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue12() == 0) && !Utils.getSpellEffectType(spell.getEffectid12()).name().contains("StackingCommand_"))
+			if (spell.getEffectid12() != 254 && !SpellUtils.getSpellEffectType(spell.getEffectid12()).name().contains("LIMIT_") && !(SpellUtils.getSpellEffectType(spell.getEffectid12()).equals(SpellEffectType.CHA) && spell.getEffectBaseValue12() == 0) && !SpellUtils.getSpellEffectType(spell.getEffectid12()).name().contains("StackingCommand_"))
 			{
 				String pos = "+";
 				if (spell.getEffectBaseValue12() < 0)
 					pos = "-";
-				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+Utils.getSpellEffectType(spell.getEffectid12()).name() + ChatColor.RESET);
+				loreTxt.add(ChatColor.WHITE + "Effect: " + ChatColor.YELLOW+pos+SpellUtils.getSpellEffectType(spell.getEffectid12()).name() + ChatColor.RESET);
 			}
 			
 			if (!spell.isBardSong())
@@ -751,7 +754,7 @@ public class ItemStackAdapter {
 			}
 
 			loreTxt.add(ChatColor.WHITE + "Mana/Power: " + ChatColor.YELLOW+spell.getMana() + ChatColor.RESET);
-			loreTxt.add(ChatColor.WHITE + "Spell Skill: " + ChatColor.YELLOW+Utils.getSkillType(spell.getSkill()).name().toUpperCase() + ChatColor.RESET);
+			loreTxt.add(ChatColor.WHITE + "Spell Skill: " + ChatColor.YELLOW+SkillUtils.getSkillType(spell.getSkill()).name().toUpperCase() + ChatColor.RESET);
 			loreTxt.add(ChatColor.WHITE + "Range: " + ChatColor.YELLOW+spell.getRange() + ChatColor.RESET);
 			loreTxt.add(ChatColor.WHITE + "Casting Time: " + ChatColor.YELLOW+(spell.getCastTime()/1000) + " seconds" + ChatColor.RESET);
 			
@@ -764,7 +767,7 @@ public class ItemStackAdapter {
 			{
 				loreTxt.add(ChatColor.WHITE + "Buff Duration: " + ChatColor.YELLOW + (spell.getBuffduration() * 6) + " seconds" + ChatColor.RESET);
 			}
-			loreTxt.add(ChatColor.WHITE + "Target Type: " + ChatColor.YELLOW + Utils.getSpellTargetType(spell.getTargettype()).name() + ChatColor.RESET);
+			loreTxt.add(ChatColor.WHITE + "Target Type: " + ChatColor.YELLOW + SpellUtils.getSpellTargetType(spell.getTargettype()).name() + ChatColor.RESET);
 			
 			List<String> classInfo = generateClassesText(spell);
 			

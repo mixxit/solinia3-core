@@ -23,6 +23,8 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.EntityUtils;
+import com.solinia.solinia.Utils.NPCUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
@@ -275,40 +277,40 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			mob = mob + "  Display: " + npc.getName() + "\r" + System.lineSeparator();
 		}
 
-		double hp = Utils.getStatMaxHP(npc.getClassObj(), npc.getLevel(), 75);
+		double hp = EntityUtils.getStatMaxHP(npc.getClassObj(), npc.getLevel(), 75);
 		double damage = npc.getMaxDamage();
 
 		if (npc.isHeroic()) {
-			hp += (Utils.getHeroicHPMultiplier() * npc.getLevel());
+			hp += (NPCUtils.getHeroicHPMultiplier() * npc.getLevel());
 		}
 
 		if (npc.isBoss()) {
-			hp += (Utils.getBossHPMultiplier(npc.isHeroic()) * npc.getLevel());
+			hp += (NPCUtils.getBossHPMultiplier(npc.isHeroic()) * npc.getLevel());
 		}
 
 		if (npc.isRaidheroic()) {
-			hp += (Utils.getRaidHeroicHPMultiplier() * npc.getLevel());
+			hp += (NPCUtils.getRaidHeroicHPMultiplier() * npc.getLevel());
 		}
 
 		if (npc.isRaidboss()) {
-			hp += (Utils.getRaidBossHPMultiplier() * npc.getLevel());
+			hp += (NPCUtils.getRaidBossHPMultiplier() * npc.getLevel());
 		}
 
 		float movementSpeed = 0.3f;
 		if (npc.isHeroic()) {
-			movementSpeed = Utils.getHeroicRunSpeed();
+			movementSpeed = NPCUtils.getHeroicRunSpeed();
 		}
 
 		if (npc.isBoss()) {
-			movementSpeed = Utils.getBossRunSpeed();
+			movementSpeed = NPCUtils.getBossRunSpeed();
 		}
 
 		if (npc.isRaidheroic()) {
-			movementSpeed = Utils.getRaidHeroicRunSpeed();
+			movementSpeed = NPCUtils.getRaidHeroicRunSpeed();
 		}
 
 		if (npc.isRaidboss()) {
-			movementSpeed = Utils.getRaidBossRunSpeed();
+			movementSpeed = NPCUtils.getRaidBossRunSpeed();
 		}
 		
 		if (npc.getForcedMaxHp() > 0)

@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandRaceInfo implements CommandExecutor {
@@ -17,7 +18,7 @@ public class CommandRaceInfo implements CommandExecutor {
 		
 		try
 		{
-			Utils.sendRaceInfo(sender);
+			ChatUtils.sendRaceInfo(sender);
 		
 		} catch (Exception e)
 		{

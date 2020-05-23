@@ -59,11 +59,13 @@ import com.solinia.solinia.Models.UniversalMerchant;
 import com.solinia.solinia.Models.UniversalMerchantEntry;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellType;
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.RaycastUtils;
 import com.solinia.solinia.Utils.SpecialEffectUtils;
+import com.solinia.solinia.Utils.SpellUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import io.lumine.xikage.mythicmobs.MythicMobs;
@@ -501,7 +503,7 @@ public class EntityManager implements IEntityManager {
 		
 			ISoliniaLivingEntity solLivingSourceEntity = SoliniaLivingEntityAdapter.Adapt(sourceEntity);
 			ISoliniaLivingEntity solLivingTargetEntity = SoliniaLivingEntityAdapter.Adapt(targetEntity);
-			int duration = Utils.getDurationFromSpell(solLivingSourceEntity, solLivingTargetEntity, soliniaSpell);
+			int duration = SpellUtils.getDurationFromSpell(solLivingSourceEntity, solLivingTargetEntity, soliniaSpell);
 			if (soliniaSpell.isBardSong() && duration == 0)
 			{
 				duration = 18;
@@ -626,7 +628,7 @@ public class EntityManager implements IEntityManager {
 					continue;
 				
 				LivingEntity le = (LivingEntity)entity;
-				if (!Utils.isLivingEntityNPC(le))
+				if (!EntityUtils.isLivingEntityNPC(le))
 					continue;
 				
 				try {
@@ -662,14 +664,14 @@ public class EntityManager implements IEntityManager {
 					
 					if (entity instanceof Boat)
 					{
-						Utils.despawnBoatIfNotNearWater((Boat)entity);
+						EntityUtils.despawnBoatIfNotNearWater((Boat)entity);
 					}
 					
 					if (!(entity instanceof LivingEntity))
 						continue;
 					
 					LivingEntity le = (LivingEntity)entity;
-					if (!Utils.isLivingEntityNPC(le))
+					if (!EntityUtils.isLivingEntityNPC(le))
 					{
 						// all skeletons should be npcs
 						// probably left around from the reboot and lost their tag?
@@ -681,7 +683,7 @@ public class EntityManager implements IEntityManager {
 						continue;
 					}
 					
-					if(!Utils.ValidatePet(le))
+					if(!EntityUtils.ValidatePet(le))
 					{
 						continue;
 					}
@@ -718,7 +720,7 @@ public class EntityManager implements IEntityManager {
 					continue;
 				
 				if (ent != null)
-					Utils.RemoveEntity(ent,"doNPCCheckForEnemies");
+					EntityUtils.RemoveEntity(ent,"doNPCCheckForEnemies");
 			} catch (Exception e)
 			{
 				
@@ -726,7 +728,7 @@ public class EntityManager implements IEntityManager {
 		}
 		
 		// Clear and reset all entities that are not near players
-		Utils.ClearHateAndResetNpcsNotInList(entitiesNearPlayers);
+		EntityUtils.ClearHateAndResetNpcsNotInList(entitiesNearPlayers);
 	}
 	
 	@Override
@@ -764,7 +766,7 @@ public class EntityManager implements IEntityManager {
 					continue;
 				}
 				
-				if (!Utils.isLivingEntityNPC(livingEntityThatWillCast))
+				if (!EntityUtils.isLivingEntityNPC(livingEntityThatWillCast))
 				{
 					DebugUtils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast, "I am not an NPC");
 					continue;
@@ -903,7 +905,7 @@ public class EntityManager implements IEntityManager {
 		LivingEntity entity = (LivingEntity)Bukkit.getEntity(entityuuid);
 		if (entity != null)
 		{
-			if(!Utils.ValidatePet(entity))
+			if(!EntityUtils.ValidatePet(entity))
 			{
 				this.petownerdata.remove(ownerUuid);
 				if (Bukkit.getEntity(ownerUuid) != null)
@@ -967,7 +969,7 @@ public class EntityManager implements IEntityManager {
 								if (kill == true)
 								{
 									System.out.println("Killing pet " + entity.getName());
-									Utils.RemoveEntity(entity,"KILLPET", true);
+									EntityUtils.RemoveEntity(entity,"KILLPET", true);
 								}
 							}
 								
@@ -1132,7 +1134,7 @@ public class EntityManager implements IEntityManager {
 			if (livingEntityPet != null)
 			{
 				System.out.println("Cleaning Up pet: " + livingEntityPet.getName());
-				Utils.RemoveEntity(livingEntityPet,"removeAllPets", runImmediately);
+				EntityUtils.RemoveEntity(livingEntityPet,"removeAllPets", runImmediately);
 			}
 			this.removePet(key, true);
 		}
@@ -1314,7 +1316,7 @@ public class EntityManager implements IEntityManager {
 				if (creatureThatWillSummon.getTarget() == null)
 					continue;
 				
-				if (!Utils.isLivingEntityNPC(livingEntityThatWillSummon))
+				if (!EntityUtils.isLivingEntityNPC(livingEntityThatWillSummon))
 					continue;
 				
 				try {
@@ -1359,7 +1361,7 @@ public class EntityManager implements IEntityManager {
 				if (creatureThatWillTeleportAttack.getTarget() == null)
 					continue;
 				
-				if (!Utils.isLivingEntityNPC(livingEntityThatWillTeleportAttack))
+				if (!EntityUtils.isLivingEntityNPC(livingEntityThatWillTeleportAttack))
 					continue;
 				
 				try {
@@ -1639,7 +1641,7 @@ public class EntityManager implements IEntityManager {
 					return;
 				}
 
-				Utils.SendHint(livingEntity, HINT.OTHER_BEGIN_ABILITY, solLivingEntity.getName()+"^"+castingSpell.getSpell().getName(),true);
+				ChatUtils.SendHint(livingEntity, HINT.OTHER_BEGIN_ABILITY, solLivingEntity.getName()+"^"+castingSpell.getSpell().getName(),true);
 
 				playSpellCastingSoundEffect(livingEntity, castingSpell.getSpell());
 				playSpellCastingSpellEffect(livingEntity, castingSpell.getSpell());
@@ -1647,7 +1649,7 @@ public class EntityManager implements IEntityManager {
 				entitySpellCasting.put(livingEntity.getUniqueId(), castingSpell);
 
 			} else {
-				Utils.SendHint(livingEntity, HINT.OTHER_BEGIN_ABILITY, solLivingEntity.getName()+"^"+castingSpell.getSpell().getName(),true);
+				ChatUtils.SendHint(livingEntity, HINT.OTHER_BEGIN_ABILITY, solLivingEntity.getName()+"^"+castingSpell.getSpell().getName(),true);
 
 				playSpellCastingSoundEffect(livingEntity, castingSpell.getSpell());
 				playSpellCastingSpellEffect(livingEntity, castingSpell.getSpell());
@@ -1713,10 +1715,10 @@ public class EntityManager implements IEntityManager {
 		if (spellAffectIndex < 0)
 			return null;
 		
-		if (Utils.getSpellEffectIndex(spellAffectIndex) == null)
+		if (SpellUtils.getSpellEffectIndex(spellAffectIndex) == null)
 			return null;
 		
-		switch(Utils.getSpellEffectIndex(spellAffectIndex))
+		switch(SpellUtils.getSpellEffectIndex(spellAffectIndex))
 		{
 			case AC_Buff:
 				return "solinia3ui:spelgdht"; // done
@@ -1803,10 +1805,10 @@ public class EntityManager implements IEntityManager {
 		if (spellAffectIndex < 0)
 			return null;
 		
-		if (Utils.getSpellEffectIndex(spellAffectIndex) == null)
+		if (SpellUtils.getSpellEffectIndex(spellAffectIndex) == null)
 			return null;
 
-		switch(Utils.getSpellEffectIndex(spellAffectIndex))
+		switch(SpellUtils.getSpellEffectIndex(spellAffectIndex))
 		{
 			case AC_Buff:
 				return "solinia3ui:spelcast"; // done
@@ -1886,7 +1888,7 @@ public class EntityManager implements IEntityManager {
 			String name = livingEntity.getName();
 			if (livingEntity.getCustomName() != null)
 				name = livingEntity.getName();
-			Utils.SendHint(livingEntity, HINT.INTERRUPTED, name, true); 
+			ChatUtils.SendHint(livingEntity, HINT.INTERRUPTED, name, true); 
 			entitySpellCasting.remove(livingEntity.getUniqueId());
 		}
 	}
@@ -1900,7 +1902,7 @@ public class EntityManager implements IEntityManager {
 			{
 				Player player = (Player)entity;
 				// Do casting animation
-				Utils.SendHint(player, HINT.FINISH_ABILITY, "", false);
+				ChatUtils.SendHint(player, HINT.FINISH_ABILITY, "", false);
 				try {
 					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 					solPlayer.castingComplete(entitySpellCasting.get(entityUUID));
@@ -2254,7 +2256,7 @@ public class EntityManager implements IEntityManager {
 				if (creature.getTarget() == null)
 					continue;
 				
-				if (!Utils.isLivingEntityNPC(livingEntity))
+				if (!EntityUtils.isLivingEntityNPC(livingEntity))
 					continue;
 				
 				try {

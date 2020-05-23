@@ -14,6 +14,7 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaAAAbility;
 import com.solinia.solinia.Models.SoliniaAARankEffect;
 import com.solinia.solinia.Models.SpellEffectType;
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -96,7 +97,7 @@ public class CommandListAAs implements CommandExecutor {
 		if (args.length > 0 && args[0].equals(".criteria"))
 		{
 			try {
-				Utils.sendFilterByCriteria(StateManager.getInstance().getConfigurationManager().getAAAbilities(), sender, args,SoliniaAAAbility.class);
+				ChatUtils.sendFilterByCriteria(StateManager.getInstance().getConfigurationManager().getAAAbilities(), sender, args,SoliniaAAAbility.class);
 			return true;
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block

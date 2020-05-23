@@ -49,7 +49,7 @@ public class CommandSolItemInfo implements CommandExecutor {
 		if (ItemStackUtils.getAugmentationItemId(itemStack) != null)
 			player.sendMessage("SoliniaAugmentationItemId (Tag):" + ItemStackUtils.getAugmentationItemId(itemStack));
 
-		player.sendMessage("Is Display Item (Tag):" + Utils.IsDisplayItem(itemStack));
+		player.sendMessage("Is Display Item (Tag):" + ItemStackUtils.IsDisplayItem(itemStack));
 		
 		if (args.length > 0 && args[0].equals("write"))
 		{

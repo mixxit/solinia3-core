@@ -35,12 +35,15 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.DebugUtils;
-import com.solinia.solinia.Utils.SpellTargetType;
+import com.solinia.solinia.Utils.EntityUtils;
+import com.solinia.solinia.Utils.MathUtils;
+import com.solinia.solinia.Models.SpellTargetType;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_14_R1.Tuple;
-
+import com.solinia.solinia.Utils.SkillUtils;
+import com.solinia.solinia.Utils.SpellUtils;
 public class SoliniaSpell implements ISoliniaSpell {
 	private List<SoliniaSpellClass> allowedClasses = new ArrayList<SoliniaSpellClass>();
 	private UUID primaryUUID = UUID.randomUUID();
@@ -2714,21 +2717,21 @@ public class SoliniaSpell implements ISoliniaSpell {
 		sender.sendMessage("- goodeffect: " + ChatColor.GOLD + this.getGoodEffect() + ChatColor.RESET + " ignoresummonitemtemporarycheck: " + ChatColor.GOLD + this.isIgnoreSummonItemTemporaryCheck() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- targettype: " + ChatColor.GOLD + getTargettype() + "("
-				+ Utils.getSpellTargetType(getTargettype()).name() + ")" + ChatColor.RESET + " teleport_zone: "
+				+ SpellUtils.getSpellTargetType(getTargettype()).name() + ")" + ChatColor.RESET + " teleport_zone: "
 				+ ChatColor.GOLD + getTeleportZone() + ChatColor.RESET);
 		sender.sendMessage("- buffduration: " + ChatColor.GOLD + getBuffduration() + ChatColor.RESET + " - buffdurationformula: "
 				+ ChatColor.GOLD + getBuffdurationformula() + ChatColor.RESET);
 		sender.sendMessage("- recasttime: " + ChatColor.GOLD + getRecastTime() + ChatColor.RESET);
-		sender.sendMessage("- resisttype: " + ChatColor.GOLD + Utils.getSpellResistType(getResisttype()).name() + " ["
+		sender.sendMessage("- resisttype: " + ChatColor.GOLD + SpellUtils.getSpellResistType(getResisttype()).name() + " ["
 				+ getResisttype() + "]" + ChatColor.RESET);
-		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + " (" + Utils.getSkillType(getSkill()).name()
+		sender.sendMessage("- skill: " + ChatColor.GOLD + getSkill() + " (" + SkillUtils.getSkillType(getSkill()).name()
 				+ ")" + ChatColor.RESET);
 		sender.sendMessage("- icon: " + ChatColor.GOLD + getIcon() + ChatColor.RESET + " " + " memicon: " + ChatColor.GOLD + getMemicon() + ChatColor.RESET);
 		sender.sendMessage("- new_icon: " + ChatColor.GOLD + getNewIcon() + ChatColor.RESET + " " + "- recourselink: " + ChatColor.GOLD + getRecourseLink() + ChatColor.RESET);
 		sender.sendMessage("- numbuseffect: " + ChatColor.GOLD + this.getNimbuseffect() + ChatColor.RESET + " canbememorised: " + ChatColor.GOLD + this.isCanBeMemorised() + ChatColor.RESET);
 		sender.sendMessage(
 				"- requirespermissionnode: " + ChatColor.GOLD + getRequiresPermissionNode() + ChatColor.RESET);
-		SpellEffectIndex sei = Utils.getSpellEffectIndex(getSpellAffectIndex());
+		SpellEffectIndex sei = SpellUtils.getSpellEffectIndex(getSpellAffectIndex());
 		if (sei != null) {
 			sender.sendMessage("- spellaffectindex: " + ChatColor.GOLD + getSpellAffectIndex() + " (" + sei.name() + ")"
 					+ ChatColor.RESET);
@@ -2772,7 +2775,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		}
 
 		sender.sendMessage("- numhits: " + ChatColor.GOLD + this.getNumhits() + " Type: " + this.getNumhitstype() + " ("
-				+ Utils.getNumHitsType(this.getNumhitstype()) + ") ");
+				+ EntityUtils.getNumHitsType(this.getNumhitstype()) + ") ");
 		sender.sendMessage("- components1: " + ChatColor.GOLD + this.getComponents1() + "(" + component1name + ")"
 				+ ChatColor.RESET + " componentcounts1: " + this.getComponentCounts1() + "NoExpend:("
 				+ getNoexpendReagent1() + ")");
@@ -2897,7 +2900,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			if (Integer.parseInt(value) < 0)
 				throw new InvalidSpellSettingException("Invalid target type");
 			
-			if (Utils.getSpellTargetType(Integer.parseInt(value)).equals(SpellTargetType.Error))
+			if (SpellUtils.getSpellTargetType(Integer.parseInt(value)).equals(SpellTargetType.Error))
 				throw new InvalidSpellSettingException("Invalid target type");
 
 				setTargettype(Integer.parseInt(value));
@@ -2989,7 +2992,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					this.setEffectBaseValue1(effectValue);
 				}
 				if (effectSettingType.toUpperCase().equals("ID")) {
-					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+					if (SpellUtils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
 						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid1(effectValue);
 				}
@@ -3005,7 +3008,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					this.setEffectBaseValue2(effectValue);
 				}
 				if (effectSettingType.toUpperCase().equals("ID")) {
-					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+					if (SpellUtils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
 						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid2(effectValue);
 				}
@@ -3021,7 +3024,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					this.setEffectBaseValue3(effectValue);
 				}
 				if (effectSettingType.toUpperCase().equals("ID")) {
-					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+					if (SpellUtils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
 						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid3(effectValue);
 				}
@@ -3037,7 +3040,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					this.setEffectBaseValue4(effectValue);
 				}
 				if (effectSettingType.toUpperCase().equals("ID")) {
-					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+					if (SpellUtils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
 						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid4(effectValue);
 				}
@@ -3053,7 +3056,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					this.setEffectBaseValue5(effectValue);
 				}
 				if (effectSettingType.toUpperCase().equals("ID")) {
-					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+					if (SpellUtils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
 						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid5(effectValue);
 				}
@@ -3069,7 +3072,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					this.setEffectBaseValue6(effectValue);
 				}
 				if (effectSettingType.toUpperCase().equals("ID")) {
-					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+					if (SpellUtils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
 						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid6(effectValue);
 				}
@@ -3085,7 +3088,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					this.setEffectBaseValue7(effectValue);
 				}
 				if (effectSettingType.toUpperCase().equals("ID")) {
-					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+					if (SpellUtils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
 						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid7(effectValue);
 				}
@@ -3101,7 +3104,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					this.setEffectBaseValue8(effectValue);
 				}
 				if (effectSettingType.toUpperCase().equals("ID")) {
-					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+					if (SpellUtils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
 						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid8(effectValue);
 				}
@@ -3117,7 +3120,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					this.setEffectBaseValue9(effectValue);
 				}
 				if (effectSettingType.toUpperCase().equals("ID")) {
-					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+					if (SpellUtils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
 						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid9(effectValue);
 				}
@@ -3133,7 +3136,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					this.setEffectBaseValue10(effectValue);
 				}
 				if (effectSettingType.toUpperCase().equals("ID")) {
-					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+					if (SpellUtils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
 						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid10(effectValue);
 				}
@@ -3149,7 +3152,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					this.setEffectBaseValue11(effectValue);
 				}
 				if (effectSettingType.toUpperCase().equals("ID")) {
-					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+					if (SpellUtils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
 						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid11(effectValue);
 				}
@@ -3165,7 +3168,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					this.setEffectBaseValue12(effectValue);
 				}
 				if (effectSettingType.toUpperCase().equals("ID")) {
-					if (Utils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
+					if (SpellUtils.getSpellEffectType(effectValue).equals(SpellEffectType.ERROR))
 						throw new InvalidSpellSettingException("Invalid effect Id");
 					this.setEffectid12(effectValue);
 				}
@@ -3271,7 +3274,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		// Entity was targeted for this spell but is that the final location? 
 
 		try {
-			switch (Utils.getSpellTargetType(getTargettype())) {
+			switch (SpellUtils.getSpellTargetType(getTargettype())) {
 			case Self:
 				// racial passives are self only
 				return StateManager.getInstance().getEntityManager().addActiveEntitySpell(sourceEntity, this,
@@ -3560,29 +3563,29 @@ public class SoliniaSpell implements ISoliniaSpell {
 	public List<SpellEffectType> getSpellEffectTypes() {
 		List<SpellEffectType> spellEffects = new ArrayList<SpellEffectType>();
 		if (this.getEffectid1() >= 0)
-			spellEffects.add(Utils.getSpellEffectType(getEffectid1()));
+			spellEffects.add(SpellUtils.getSpellEffectType(getEffectid1()));
 		if (this.getEffectid2() >= 0)
-			spellEffects.add(Utils.getSpellEffectType(getEffectid2()));
+			spellEffects.add(SpellUtils.getSpellEffectType(getEffectid2()));
 		if (this.getEffectid3() >= 0)
-			spellEffects.add(Utils.getSpellEffectType(getEffectid3()));
+			spellEffects.add(SpellUtils.getSpellEffectType(getEffectid3()));
 		if (this.getEffectid4() >= 0)
-			spellEffects.add(Utils.getSpellEffectType(getEffectid4()));
+			spellEffects.add(SpellUtils.getSpellEffectType(getEffectid4()));
 		if (this.getEffectid5() >= 0)
-			spellEffects.add(Utils.getSpellEffectType(getEffectid5()));
+			spellEffects.add(SpellUtils.getSpellEffectType(getEffectid5()));
 		if (this.getEffectid6() >= 0)
-			spellEffects.add(Utils.getSpellEffectType(getEffectid6()));
+			spellEffects.add(SpellUtils.getSpellEffectType(getEffectid6()));
 		if (this.getEffectid7() >= 0)
-			spellEffects.add(Utils.getSpellEffectType(getEffectid7()));
+			spellEffects.add(SpellUtils.getSpellEffectType(getEffectid7()));
 		if (this.getEffectid8() >= 0)
-			spellEffects.add(Utils.getSpellEffectType(getEffectid8()));
+			spellEffects.add(SpellUtils.getSpellEffectType(getEffectid8()));
 		if (this.getEffectid9() >= 0)
-			spellEffects.add(Utils.getSpellEffectType(getEffectid9()));
+			spellEffects.add(SpellUtils.getSpellEffectType(getEffectid9()));
 		if (this.getEffectid10() >= 0)
-			spellEffects.add(Utils.getSpellEffectType(getEffectid10()));
+			spellEffects.add(SpellUtils.getSpellEffectType(getEffectid10()));
 		if (this.getEffectid11() >= 0)
-			spellEffects.add(Utils.getSpellEffectType(getEffectid11()));
+			spellEffects.add(SpellUtils.getSpellEffectType(getEffectid11()));
 		if (this.getEffectid12() >= 0)
-			spellEffects.add(Utils.getSpellEffectType(getEffectid12()));
+			spellEffects.add(SpellUtils.getSpellEffectType(getEffectid12()));
 
 		return spellEffects;
 	}
@@ -3712,7 +3715,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 		SpellEffect spellEffect = new SpellEffect();
 		spellEffect.setSpellEffectId(effectid);
-		spellEffect.setSpellEffectType(Utils.getSpellEffectType(effectid));
+		spellEffect.setSpellEffectType(SpellUtils.getSpellEffectType(effectid));
 		spellEffect.setBase(base);
 		spellEffect.setBase2(base2);
 		spellEffect.setLimit(limit);
@@ -3746,7 +3749,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	}
 
 	private boolean isBardInstrumentSkill(Integer skillid) {
-		switch (Utils.getSkillType(skill)) {
+		switch (SkillUtils.getSkillType(skill)) {
 		case BrassInstruments:
 		case Singing:
 		case StringedInstruments:
@@ -3873,7 +3876,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		for (SpellEffect spellEffect : getBaseSpellEffects()) {
 			if ((spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce)
 					|| spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHP))
-					&& Utils.getSpellTargetType(getTargettype()) != SpellTargetType.Tap && getBuffduration() < 1
+					&& SpellUtils.getSpellTargetType(getTargettype()) != SpellTargetType.Tap && getBuffduration() < 1
 			// && .base < 0
 			)
 				return true;
@@ -3887,7 +3890,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		for (SpellEffect spellEffect : getBaseSpellEffects()) {
 			if ((spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce)
 					|| spellEffect.getSpellEffectType().equals(SpellEffectType.CurrentHP))
-					&& Utils.getSpellTargetType(getTargettype()) != SpellTargetType.Tap && getBuffduration() < 1
+					&& SpellUtils.getSpellTargetType(getTargettype()) != SpellTargetType.Tap && getBuffduration() < 1
 					&& spellEffect.getBase() < 0)
 				return true;
 		}
@@ -3897,62 +3900,62 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public SpellEffectType getEffectType1() {
-		return Utils.getSpellEffectType(this.getEffectid1());
+		return SpellUtils.getSpellEffectType(this.getEffectid1());
 	}
 
 	@Override
 	public SpellEffectType getEffectType2() {
-		return Utils.getSpellEffectType(this.getEffectid2());
+		return SpellUtils.getSpellEffectType(this.getEffectid2());
 	}
 
 	@Override
 	public SpellEffectType getEffectType3() {
-		return Utils.getSpellEffectType(this.getEffectid3());
+		return SpellUtils.getSpellEffectType(this.getEffectid3());
 	}
 
 	@Override
 	public SpellEffectType getEffectType4() {
-		return Utils.getSpellEffectType(this.getEffectid4());
+		return SpellUtils.getSpellEffectType(this.getEffectid4());
 	}
 
 	@Override
 	public SpellEffectType getEffectType5() {
-		return Utils.getSpellEffectType(this.getEffectid5());
+		return SpellUtils.getSpellEffectType(this.getEffectid5());
 	}
 
 	@Override
 	public SpellEffectType getEffectType6() {
-		return Utils.getSpellEffectType(this.getEffectid6());
+		return SpellUtils.getSpellEffectType(this.getEffectid6());
 	}
 
 	@Override
 	public SpellEffectType getEffectType7() {
-		return Utils.getSpellEffectType(this.getEffectid7());
+		return SpellUtils.getSpellEffectType(this.getEffectid7());
 	}
 
 	@Override
 	public SpellEffectType getEffectType8() {
-		return Utils.getSpellEffectType(this.getEffectid8());
+		return SpellUtils.getSpellEffectType(this.getEffectid8());
 	}
 
 	@Override
 	public SpellEffectType getEffectType9() {
-		return Utils.getSpellEffectType(this.getEffectid9());
+		return SpellUtils.getSpellEffectType(this.getEffectid9());
 	}
 
 	@Override
 	public SpellEffectType getEffectType10() {
-		return Utils.getSpellEffectType(this.getEffectid10());
+		return SpellUtils.getSpellEffectType(this.getEffectid10());
 	}
 
 	@Override
 	public SpellEffectType getEffectType11() {
-		return Utils.getSpellEffectType(this.getEffectid11());
+		return SpellUtils.getSpellEffectType(this.getEffectid11());
 	}
 
 	@Override
 	public SpellEffectType getEffectType12() {
-		return Utils.getSpellEffectType(this.getEffectid12());
+		return SpellUtils.getSpellEffectType(this.getEffectid12());
 	}
 
 	@Override
@@ -3973,7 +3976,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if (getGoodEffect() == 1) {
 			// If the target type is Self or Pet and is a CancelMagic spell
 			// it is not Beneficial
-			SpellTargetType tt = Utils.getSpellTargetType(getTargettype());
+			SpellTargetType tt = SpellUtils.getSpellTargetType(getTargettype());
 			if (tt != SpellTargetType.Self && tt != SpellTargetType.Pet && isEffectInSpell(SpellEffectType.CancelMagic))
 				return false;
 
@@ -3985,19 +3988,19 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 				// If the resisttype is magic and SpellAffectIndex is Calm/memblur/dispell sight
 				// it's not beneficial
-				if (Utils.getSpellResistType(getResisttype()) == SpellResistType.RESIST_MAGIC) {
+				if (SpellUtils.getSpellResistType(getResisttype()) == SpellResistType.RESIST_MAGIC) {
 					// checking these SAI cause issues with the rng defensive proc line
 					// So I guess instead of fixing it for real, just a quick hack :P
-					if (Utils.getSpellEffectType(this.getEffectid1()) != SpellEffectType.DefensiveProc
-							&& (Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Calm
-									|| Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Dispell_Sight
-									|| Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Memory_Blur
-									|| Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Calm_Song))
+					if (SpellUtils.getSpellEffectType(this.getEffectid1()) != SpellEffectType.DefensiveProc
+							&& (SpellUtils.getSpellEffectIndex(sai) == SpellEffectIndex.Calm
+									|| SpellUtils.getSpellEffectIndex(sai) == SpellEffectIndex.Dispell_Sight
+									|| SpellUtils.getSpellEffectIndex(sai) == SpellEffectIndex.Memory_Blur
+									|| SpellUtils.getSpellEffectIndex(sai) == SpellEffectIndex.Calm_Song))
 						return false;
 				} else {
 					// If the resisttype is not magic and spell is Bind Sight or Cast Sight
 					// It's not beneficial
-					if (Utils.getSpellEffectIndex(sai) == SpellEffectIndex.Dispell_Sight && getSkill() == 18
+					if (SpellUtils.getSpellEffectIndex(sai) == SpellEffectIndex.Dispell_Sight && getSkill() == 18
 							&& !isEffectInSpell(SpellEffectType.VoiceGraft))
 						return false;
 				}
@@ -4010,10 +4013,10 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public boolean isGroupSpell() {
-		if (Utils.getSpellTargetType(getTargettype()) == SpellTargetType.AEBard
-				|| Utils.getSpellTargetType(getTargettype()) == SpellTargetType.Group
-				|| Utils.getSpellTargetType(getTargettype()) == SpellTargetType.GroupTeleport
-				|| Utils.getSpellTargetType(getTargettype()) == SpellTargetType.GroupClientAndPet)
+		if (SpellUtils.getSpellTargetType(getTargettype()) == SpellTargetType.AEBard
+				|| SpellUtils.getSpellTargetType(getTargettype()) == SpellTargetType.Group
+				|| SpellUtils.getSpellTargetType(getTargettype()) == SpellTargetType.GroupTeleport
+				|| SpellUtils.getSpellTargetType(getTargettype()) == SpellTargetType.GroupClientAndPet)
 			return true;
 
 		return false;
@@ -4049,7 +4052,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	
 			ISoliniaLivingEntity solTarget = SoliniaLivingEntityAdapter.Adapt(target);
 			if (solTarget != null) {
-				switch (Utils.getSpellTargetType(soliniaSpell.getTargettype())) {
+				switch (SpellUtils.getSpellTargetType(soliniaSpell.getTargettype())) {
 				case SummonedAE:
 					if (!solTarget.isUndead()) {
 						return new Tuple<Boolean,String>(false,"Only affects undead");
@@ -4118,7 +4121,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	
 			// Always allow self only spells if the target and source is the self
 			if (source.getUniqueId().equals(target.getUniqueId())
-					&& Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self)) {
+					&& SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self)) {
 				// just be sure to check the item its giving if its an item spell
 				for (SpellEffect effect : soliniaSpell.getBaseSpellEffects()) {
 					if (effect.getSpellEffectType().equals(SpellEffectType.SummonHorse)) {
@@ -4305,7 +4308,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (effect.getSpellEffectType().equals(SpellEffectType.CurrentHP)
 						|| effect.getSpellEffectType().equals(SpellEffectType.CurrentHPOnce)) {
 					// Ignore this rule if the spell is self
-					if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1)) {
+					if (!SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1)) {
 						// If the effect is negative standard nuke and on self, cancel out
 						if (effect.getBase() < 0 && target.equals(source))
 							return new Tuple<Boolean,String>(false,"Target was self");
@@ -4375,7 +4378,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 					}
 				}
 	
-				if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
+				if (!SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
 				if (effect.getSpellEffectType().equals(SpellEffectType.ResistAll)
 						|| effect.getSpellEffectType().equals(SpellEffectType.ResistCold)
 						|| effect.getSpellEffectType().equals(SpellEffectType.ResistFire)
@@ -4388,28 +4391,28 @@ public class SoliniaSpell implements ISoliniaSpell {
 						return new Tuple<Boolean,String>(false,"Target of spell is source");
 				}
 
-				if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
+				if (!SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
 				if (effect.getSpellEffectType().equals(SpellEffectType.Mez)) {
 					// If the effect is a mez, cancel out
 					if (target.equals(source))
 						return new Tuple<Boolean,String>(false,"Target of spell is source");
 				}
 	
-				if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
+				if (!SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
 				if (effect.getSpellEffectType().equals(SpellEffectType.Stun)) {
 					// If the effect is a stun, cancel out
 					if (target.equals(source))
 						return new Tuple<Boolean,String>(false,"Target of spell is source");
 				}
 	
-				if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
+				if (!SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
 				if (effect.getSpellEffectType().equals(SpellEffectType.Root)) {
 					// If the effect is a root, cancel out
 					if (target.equals(source))
 						return new Tuple<Boolean,String>(false,"Target of spell is source");
 				}
 	
-				if (!Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !Utils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
+				if (!SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
 				if (effect.getSpellEffectType().equals(SpellEffectType.Blind)) {
 					// If the effect is a blindness, cancel out
 					if (target.equals(source))
@@ -4484,8 +4487,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public boolean isLifetapSpell() {
-		if (Utils.getSpellTargetType(getTargettype()) == SpellTargetType.Tap
-				|| Utils.getSpellTargetType(getTargettype()) == SpellTargetType.Tap)
+		if (SpellUtils.getSpellTargetType(getTargettype()) == SpellTargetType.Tap
+				|| SpellUtils.getSpellTargetType(getTargettype()) == SpellTargetType.Tap)
 			return true;
 
 		return false;
@@ -4495,7 +4498,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	public boolean isResistable() {
 		if (isDetrimental() 
 				//&& !isResistDebuffSpell() -- this doesnt work as some mezzes have resist debuffers, dont worry as they are marked as RESIST_NONE anyway
-				&& !Utils.getSpellResistType(this.getResisttype()).name().equals("RESIST_NONE"))
+				&& !SpellUtils.getSpellResistType(this.getResisttype()).name().equals("RESIST_NONE"))
 			return true;
 
 		return false;
@@ -4736,13 +4739,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 		if (solEntity.isPlayer()) {
 			try {
-				String skillName = (Utils.getSkillType(getSkill()).name().toUpperCase());
+				String skillName = (SkillUtils.getSkillType(getSkill()).name().toUpperCase());
 				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) solEntity.getBukkitLivingEntity());
 				if (player != null)
-					if (Utils.getSpecialisationSkills().contains(skillName.toUpperCase()))
+					if (SkillUtils.getSpecialisationSkills().contains(skillName.toUpperCase()))
 						if (player.getSpecialisation() != null
 								&& player.getSpecialisation().equals(skillName.toUpperCase()))
-							spec = (float) solEntity.getSkill(Utils.getSkillType2("SPECIALISE" + skillName.toUpperCase()));
+							spec = (float) solEntity.getSkill(SkillUtils.getSkillType2("SPECIALISE" + skillName.toUpperCase()));
 			} catch (CoreStateInitException e) {
 				// skip
 			}
@@ -4771,7 +4774,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 		}
 
-		int SuccessChance = Utils.RandomBetween(0, 100);
+		int SuccessChance = MathUtils.RandomBetween(0, 100);
 
 		double PercentManaReduction = 0d;
 
@@ -4798,7 +4801,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		// in eq
 
 		if (aa != null) {
-			rank = Utils.getRankPositionOfAAAbility(solEntity.getBukkitLivingEntity(), aa);
+			rank = SpellUtils.getRankPositionOfAAAbility(solEntity.getBukkitLivingEntity(), aa);
 			switch (rank) {
 			case 1:
 				PercentManaReduction += 2.0d;
@@ -4823,7 +4826,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		int focus_redux = solEntity.getFocusEffect(FocusEffect.ManaCost, this);
 
 		if (focus_redux > 0)
-			PercentManaReduction += Utils.RandomBetween(1, focus_redux);
+			PercentManaReduction += MathUtils.RandomBetween(1, focus_redux);
 
 		cost -= cost * PercentManaReduction / 100;
 
@@ -5561,7 +5564,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	public boolean isEffectIgnoredInStacking(int spellEffectId)
 	{
 		// this should match RoF2
-		switch (Utils.getSpellEffectType(spellEffectId)) {
+		switch (SpellUtils.getSpellEffectType(spellEffectId)) {
 		case SeeInvis:
 		case DiseaseCounter:
 		case PoisonCounter:
@@ -5675,7 +5678,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 	@Override
 	public String getShortDescription() {
-		String description = "Mana: "  + this.getMana() + " Tgt: " + Utils.getSpellTargetType(getTargettype());
+		String description = "Mana: "  + this.getMana() + " Tgt: " + SpellUtils.getSpellTargetType(getTargettype());
 		description += " Eff: ";
 		for(SpellEffect effect : this.getBaseSpellEffects())
 		{
@@ -5693,7 +5696,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@Override
 	public SpellTargetType getSpellTargetType()
 	{
-		return Utils.getSpellTargetType(getTargettype());
+		return SpellUtils.getSpellTargetType(getTargettype());
 	}
 	
 	@Override
@@ -5824,7 +5827,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				break;
 
 				case 6:
-				if (Utils.getSpellTargetType(this.getTargettype()) == SpellTargetType.Tap || Utils.getSpellTargetType(this.getTargettype()) == SpellTargetType.TargetAETap)
+				if (SpellUtils.getSpellTargetType(this.getTargettype()) == SpellTargetType.Tap || SpellUtils.getSpellTargetType(this.getTargettype()) == SpellTargetType.TargetAETap)
 					return true;
 				break;
 			}
@@ -5895,7 +5898,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 		// System.out.println("Calculated Spell Effect (" +
 		// spellEffect.getSpellEffectType().name() + ") Value: " + effect_value);
 
-		if (Utils.IsBardInstrumentSkill(Utils.getSkillType(getSkill()))
+		if (SkillUtils.IsBardInstrumentSkill(SkillUtils.getSkillType(getSkill()))
 				&& spellEffect.getSpellEffectType() != SpellEffectType.AttackSpeed
 				&& spellEffect.getSpellEffectType() != SpellEffectType.AttackSpeed2
 				&& spellEffect.getSpellEffectType() != SpellEffectType.AttackSpeed3
@@ -6046,7 +6049,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			break;
 		}
 		case 123:
-			result = Utils.RandomBetween(ubase, Math.abs(spellEffect.getMax()));
+			result = MathUtils.RandomBetween(ubase, Math.abs(spellEffect.getMax()));
 			break;
 
 		case 124:

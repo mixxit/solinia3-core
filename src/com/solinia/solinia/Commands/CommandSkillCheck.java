@@ -12,6 +12,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Utils.MathUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -72,11 +73,11 @@ public class CommandSkillCheck implements CommandExecutor {
 	            int bonus = getClassRollBonus(skill,solplayer.getClassObj());
 	            
 
-	            String message = ChatColor.AQUA + "[ROLL!] * " + solplayer.getFullName() + " makes a skill check for " + skill + ". They roll: " + Utils.RandomBetween(0, 20) + "/20" + ChatColor.RESET;
+	            String message = ChatColor.AQUA + "[ROLL!] * " + solplayer.getFullName() + " makes a skill check for " + skill + ". They roll: " + MathUtils.RandomBetween(0, 20) + "/20" + ChatColor.RESET;
 
 	            if (bonus != 0)
 	            {
-	            	int roll = Utils.RandomBetween(0, 20);
+	            	int roll = MathUtils.RandomBetween(0, 20);
 	            	player.sendMessage(ChatColor.YELLOW+"[Silternius] Your roll has been assigned an appropriate class modifier ["+bonus+"]!");
 	            	int bonusroll = roll+bonus;
 	            	message = ChatColor.AQUA + "[ROLL!] * " + solplayer.getFullName() + " makes a skill check for " + skill + ". They roll: " + roll+"+"+bonus+"("+bonusroll+")" + "/20" + ChatColor.RESET;

@@ -3,6 +3,13 @@ package com.solinia.solinia.Utils;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.ByteBuffer;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -13,7 +20,9 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -22,11 +31,18 @@ import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.CharacterCreation;
+import com.solinia.solinia.Models.PacketOpenCharacterCreation;
+import com.solinia.solinia.Models.RaceChoice;
+import com.solinia.solinia.Models.Solinia3UIChannelNames;
+import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaZone;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -34,7 +50,238 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_14_R1.Tuple;
 
 public class PlayerUtils {
+	public static String uuidFromBase64(String str) {
+		byte[] bytes = TextUtils.FromBase64UTF8(str).getBytes();
+		ByteBuffer bb = ByteBuffer.wrap(bytes);
+		UUID uuid = new UUID(bb.getLong(), bb.getLong());
+		return uuid.toString();
+	}
+	
+	public static int getMaxUnspentAAPoints() {
+		// TODO Auto-generated method stub
+		return 1000;
+	}
+	
+	public static void sendCharCreation(Player sender) {
+		try {
+			if (StateManager.getInstance().getPlayerManager().hasValidMod(sender))
+			{
+		    	PacketOpenCharacterCreation packet = new PacketOpenCharacterCreation();
+		    	packet.fromData(StateManager.getInstance().getConfigurationManager().getCharacterCreationChoices());
+			ForgeUtils.QueueSendForgeMessage(((Player)sender),Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.CHARCREATION,packet.toPacketData(), 0);
+			} else {
+				sendCharCreationNoMod(sender);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
+	private static void sendCharCreationNoMod(Player sender) {
+		ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
+		BookMeta bookMeta = (BookMeta) book.getItemMeta();
+		bookMeta.setTitle("Creation");
+		bookMeta.setAuthor("Server");
+		
+		try
+		{
+			CharacterCreation choices = StateManager.getInstance().getConfigurationManager().getCharacterCreationChoices();
+			
+			String pageText = "";
+			BaseComponent[] introPage = new ComponentBuilder(
+							ChatColor.RED + "Race/Class Selection\n" + ChatColor.RESET +
+							"---------------\n" +
+							"\n" +
+							"Please cycle through\n" +
+							"our choice of races\n" +
+							"and classes\n" +
+							"\n" +
+							"When you are ready \n" +
+							"click "+ChatColor.BLUE+"SELECT"+ChatColor.RESET+" on the page\n"
+					
+					).create();
+			bookMeta.spigot().addPage(introPage);
+			for(String choiceKey : choices.raceChoices.keySet())
+			{
+				RaceChoice choice = choices.raceChoices.get(choiceKey);
+				int passiveId = StateManager.getInstance().getConfigurationManager().getRace(choice.RaceId).getPassiveAbilityId();
+				ISoliniaSpell passiveSpell = StateManager.getInstance().getConfigurationManager().getSpell(passiveId);
+				String header = ChatColor.RED + "" +choice.RaceName + " " + choice.ClassName + ChatColor.RESET+"\n";
+				String hover = "["+ChatColor.RED+"Hover for More Info"+ChatColor.RESET+"]\n";
+				String text = "";
+				text += "\n";
+				text += "STR "+ChatColor.BLUE+choice.STR+ChatColor.RESET+" STA "+ChatColor.BLUE+choice.STA+ChatColor.RESET+" AGI " + ChatColor.BLUE+choice.AGI+ChatColor.RESET + "\n";
+				text += "DEX "+ChatColor.BLUE+choice.DEX+ChatColor.RESET+" INT "+ChatColor.BLUE+choice.INT+ChatColor.RESET+" WIS " + ChatColor.BLUE+choice.WIS+ChatColor.RESET + "\n";
+				text += "CHA "+ChatColor.BLUE+choice.CHA+ChatColor.RESET+"\n";
+				text += "\n";
+				text += "Racial Benefit: " + ChatColor.RED+passiveSpell.getName()+ChatColor.RESET +  "\n";
+				text += "\n";
+
+				
+				
+				String details = 
+						ChatColor.GOLD + choice.RaceName + ChatColor.RESET + System.lineSeparator() 
+						+ "Recommended Alignment: " + ChatColor.GOLD + choice.Alignment + ChatColor.RESET + System.lineSeparator() 
+						+ choice.RaceDescription + System.lineSeparator()
+				+ ChatColor.GOLD + choice.ClassName + ChatColor.RESET + System.lineSeparator() + 
+				choice.ClassDescription;
+				
+				String click = "\n["+ChatColor.BLUE+"SELECT"+ChatColor.RESET+"]\n";
+				
+				BaseComponent[] racePage = new ComponentBuilder(header)
+						.append(new ComponentBuilder(hover).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(details).create())).create())
+						.append(new ComponentBuilder(text).create())
+						.append(new ComponentBuilder(click).event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/createcharactershort "+choice.RaceId + " "+ choice.ClassId)).create())
+						.create();
+
+				//						
+				//)
+
+				
+				bookMeta.spigot().addPage(racePage);
+			}
+			
+			/*			        .event(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://spigotmc.org"))
+			        .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Go to the spigot website!").create()))
+			        .create();*/
+
+			
+			book.setItemMeta(bookMeta);
+			sender.openBook(book);
+			
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		
+		
+	}
+
+	
+	public static boolean AddAccountClaim(String mcaccountname, int itemId) {
+		try {
+			SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+			newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+			newclaim.setMcname(mcaccountname);
+			newclaim.setItemid(itemId);
+			newclaim.setClaimed(false);
+
+			StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+			return true;
+		} catch (CoreStateInitException e) {
+
+		}
+		return false;
+	}
+
+	public static boolean canChangeCharacter(Player player) {
+		Timestamp lastChange = null;
+
+		try {
+			lastChange = StateManager.getInstance().getPlayerManager().getPlayerLastChangeChar(player.getUniqueId());
+
+		} catch (CoreStateInitException e) {
+			return false;
+		}
+
+		if (lastChange == null)
+			return true;
+
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+		Timestamp mintimestamp = Timestamp.valueOf(lastChange.toLocalDateTime().plus(10, ChronoUnit.MINUTES));
+
+		if (nowtimestamp.before(mintimestamp))
+			return false;
+
+		return true;
+
+	}
+	
+	public static boolean canUnstuck(Player player) {
+		Timestamp lastChange = null;
+
+		try {
+			lastChange = StateManager.getInstance().getPlayerManager().getPlayerLastUnstuck(player.getUniqueId());
+
+			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+			if (solPlayer == null)
+			{
+				player.sendMessage("You cannot use unstuck as you are not a valid player");
+				return false;
+			}
+			
+			for(SoliniaZone zone : solPlayer.getZones())
+				if (zone.isNoUnstuck())
+				{
+					player.sendMessage("You cannot use unstuck in this zone");
+					return false;
+				}
+				
+		} catch (CoreStateInitException e) {
+			player.sendMessage("You cannot use unstuck at his time");
+			return false;
+		}
+
+		if (lastChange == null)
+			return true;
+
+		LocalDateTime datetime = LocalDateTime.now();
+		Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+		Timestamp mintimestamp = Timestamp.valueOf(lastChange.toLocalDateTime().plus(3, ChronoUnit.HOURS));
+
+		if (nowtimestamp.before(mintimestamp))
+		{
+			player.sendMessage("You can only unstuck your character every 3 hours");
+			return false;
+		}
+
+		return true;
+
+	}
+
+	
+	public static String getTextureFromName(String name) {
+		String texture = "";
+		try {
+			String uuid = PlayerUtils.getUUIDFromPlayerName(name);
+			if (uuid == null)
+				return null;
+
+			URL url_1 = new URL(
+					"https://sessionserver.mojang.com/session/minecraft/profile/" + uuid + "?unsigned=false");
+			InputStreamReader reader_1 = new InputStreamReader(url_1.openStream());
+			JsonObject textureProperty = new JsonParser().parse(reader_1).getAsJsonObject().get("properties")
+					.getAsJsonArray().get(0).getAsJsonObject();
+			texture = textureProperty.get("value").getAsString();
+			String signature = textureProperty.get("signature").getAsString();
+		} catch (IOException e) {
+			System.err.println("Could not get skin data from session servers!");
+			e.printStackTrace();
+			return null;
+		}
+
+		return texture;
+	}
+	
+	public static Tuple<Integer,Integer> GetGroupExpMinAndMaxLevel(List<Integer> levelRanges)
+	{
+		Integer dhighestlevel = 0;
+		Collections.sort(levelRanges);
+
+		// get the highest person in the group
+		dhighestlevel = levelRanges.get(levelRanges.size() - 1);
+
+		int ihighlvl = (int) Math.floor(dhighestlevel);
+		int ilowlvl = EntityUtils.getMinLevelFromLevel(ihighlvl);
+
+		if (ilowlvl < 1) {
+			ilowlvl = 1;
+		}
+		
+		return new Tuple<Integer,Integer>(ilowlvl,ihighlvl);
+	}
+	
 	public static double calculateExpLoss(ISoliniaPlayer player) {
 		double loss = 0;
 		loss = (double) (player.getMentorLevel() * (player.getMentorLevel() / 18.0) * 12000);
@@ -273,7 +520,7 @@ public class PlayerUtils {
 				if (soliniaitem.getAllowedClassNamesUpper().size() > 0)
 				{
 					if (solplayer.getClassObj() == null) {
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						;
 						event.getPlayer().updateInventory();
 						event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
@@ -281,7 +528,7 @@ public class PlayerUtils {
 					}
 	
 					if (!soliniaitem.getAllowedClassNamesUpper().contains(solplayer.getClassObj().getName())) {
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						event.getPlayer().updateInventory();
 						event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 						return;
@@ -291,7 +538,7 @@ public class PlayerUtils {
 				if (soliniaitem.getAllowedRaceNamesUpper().size() > 0)
 				{
 					if (solplayer.getRace() == null) {
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						;
 						event.getPlayer().updateInventory();
 						event.getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
@@ -299,7 +546,7 @@ public class PlayerUtils {
 					}
 	
 					if (!soliniaitem.getAllowedRaceNamesUpper().contains(solplayer.getRace().getName())) {
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						event.getPlayer().updateInventory();
 						event.getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
 						return;
@@ -307,7 +554,7 @@ public class PlayerUtils {
 				}
 
 				if (soliniaitem.getMinLevel() > solplayer.getActualLevel()) {
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					;
 					event.getPlayer().updateInventory();
 					event.getPlayer().sendMessage(ChatColor.GRAY + "Your level cannot wear this armour");

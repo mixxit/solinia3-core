@@ -16,6 +16,7 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Events.SoliniaLivingEntityHPRegenTickEvent;
 import com.solinia.solinia.Events.SoliniaLivingEntityMPRegenTickEvent;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class SoliniaLivingEntityRegenTickTimer extends BukkitRunnable {
@@ -61,7 +62,7 @@ public class SoliniaLivingEntityRegenTickTimer extends BukkitRunnable {
 					if(entityThatWillRegen.isDead())
 						continue;
 					
-					if (!Utils.isLivingEntityNPC(livingEntityThatWillRegen))
+					if (!EntityUtils.isLivingEntityNPC(livingEntityThatWillRegen))
 						continue;
 					
 					if (completedEntities.contains(livingEntityThatWillRegen.getUniqueId().toString()))

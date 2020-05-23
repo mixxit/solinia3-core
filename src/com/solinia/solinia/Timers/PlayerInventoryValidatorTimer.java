@@ -19,6 +19,7 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -114,7 +115,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 							ISoliniaItem augItem = null;
 							if (augmentationId != null && augmentationId != 0) {
 								augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
-								Utils.AddAccountClaim(player.getName(),augItem.getId());
+								PlayerUtils.AddAccountClaim(player.getName(),augItem.getId());
 							}
 						}
 						
@@ -123,7 +124,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 							count = 1;
 						for (int x = 0; x < count; x++)
 						{
-							Utils.AddAccountClaim(player.getName(),i.getId());
+							PlayerUtils.AddAccountClaim(player.getName(),i.getId());
 						}
 						Timestamp lastUpdatedTimeSolItem = i.getLastUpdatedTime();
 						
@@ -158,7 +159,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 							ISoliniaItem augItem = null;
 							if (augmentationId != null && augmentationId != 0) {
 								augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
-								Utils.AddAccountClaim(player.getName(),augItem.getId());
+								PlayerUtils.AddAccountClaim(player.getName(),augItem.getId());
 							}
 						}
 						
@@ -167,7 +168,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 							count = 1;
 						for (int x = 0; x < count; x++)
 						{
-							Utils.AddAccountClaim(player.getName(),i.getId());
+							PlayerUtils.AddAccountClaim(player.getName(),i.getId());
 						}
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
@@ -188,7 +189,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 							ISoliniaItem augItem = null;
 							if (augmentationId != null && augmentationId != 0) {
 								augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
-								Utils.AddAccountClaim(player.getName(),augItem.getId());
+								PlayerUtils.AddAccountClaim(player.getName(),augItem.getId());
 							}
 						}
 						
@@ -197,7 +198,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 							count = 1;
 						for (int x = 0; x < count; x++)
 						{
-							Utils.AddAccountClaim(player.getName(),i.getId());
+							PlayerUtils.AddAccountClaim(player.getName(),i.getId());
 						}
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
@@ -215,7 +216,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 							ISoliniaItem augItem = null;
 							if (augmentationId != null && augmentationId != 0) {
 								augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
-								Utils.AddAccountClaim(player.getName(),augItem.getId());
+								PlayerUtils.AddAccountClaim(player.getName(),augItem.getId());
 							}
 						}
 						
@@ -224,7 +225,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 							count = 1;
 						for (int x = 0; x < count; x++)
 						{
-							Utils.AddAccountClaim(player.getName(),i.getId());
+							PlayerUtils.AddAccountClaim(player.getName(),i.getId());
 						}
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
@@ -292,7 +293,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 				if (i.getMinLevel() > solPlayer.getActualLevel())
 	    		{
 					solPlayer.setEquipSlotItem(slot, 0);
-					Utils.AddAccountClaim(solPlayer.getBukkitPlayer().getName(),i.getId());
+					PlayerUtils.AddAccountClaim(solPlayer.getBukkitPlayer().getName(),i.getId());
 					solPlayer.getBukkitPlayer().sendMessage(ChatColor.GRAY + "You cannot wear equip item " + i.getDisplayname() + " so it has been added to your /claims");
 					DebugUtils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",solPlayer.getBukkitPlayer(),"Moved minlevel item to claims (equip): " + i.getDisplayname());
 	    		}

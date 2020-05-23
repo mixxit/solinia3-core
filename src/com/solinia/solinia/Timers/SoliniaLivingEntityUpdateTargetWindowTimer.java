@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class SoliniaLivingEntityUpdateTargetWindowTimer extends BukkitRunnable {
@@ -40,7 +41,7 @@ public class SoliniaLivingEntityUpdateTargetWindowTimer extends BukkitRunnable {
 					if (entityThatWillAutoAttack.isDead())
 						continue;
 
-					if (!Utils.isLivingEntityNPC(livingEntityThatWillAutoAttack))
+					if (!EntityUtils.isLivingEntityNPC(livingEntityThatWillAutoAttack))
 						continue;
 
 					if (completedEntities.contains(livingEntityThatWillAutoAttack.getUniqueId().toString()))

@@ -17,7 +17,7 @@ import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Utils.SpellTargetType;
+import com.solinia.solinia.Utils.SpellUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -327,7 +327,7 @@ public class SoliniaZone implements IPersistable {
 				if (ability == null)
 					throw new InvalidZoneSettingException("Invalid id");
 				
-				if (!ability.isBuffSpell() || !Utils.getSpellTargetType(ability.getTargettype()).equals(SpellTargetType.Self))
+				if (!ability.isBuffSpell() || !SpellUtils.getSpellTargetType(ability.getTargettype()).equals(SpellTargetType.Self))
 					throw new InvalidZoneSettingException("Only Self only buff type spells can be set as a passive spell");
 				
 			} catch (CoreStateInitException e)

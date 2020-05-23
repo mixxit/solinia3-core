@@ -14,6 +14,7 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.EntityUtils;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandCreateCharacterShort implements CommandExecutor {
@@ -29,7 +30,7 @@ Solinia3CorePlugin plugin;
 			return false;
 
 		Player player = (Player) sender;
-		if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && !Utils.canChangeCharacter(player))
+		if (!player.isOp() && !player.hasPermission("solinia.characternewunlimited") && !PlayerUtils.canChangeCharacter(player))
 		{
 			player.sendMessage("You can only change your character every 10 minutes");
 			return true;

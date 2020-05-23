@@ -6,6 +6,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import io.javalin.http.Context;
@@ -60,7 +61,7 @@ public class ServerApi {
 								if (solPlayer == null)
 									continue;
 								
-								Utils.SendHint(player, HINT.DISCORD_MESSAGE, ChatColor.GRAY + "[Discord]~" + message + ChatColor.RESET, false);
+								ChatUtils.SendHint(player, HINT.DISCORD_MESSAGE, ChatColor.GRAY + "[Discord]~" + message + ChatColor.RESET, false);
 							}
 						}
 			        } catch (CoreStateInitException e)

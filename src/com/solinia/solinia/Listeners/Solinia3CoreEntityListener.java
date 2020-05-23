@@ -46,6 +46,7 @@ import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Utils.EntityUtils;
+import com.solinia.solinia.Utils.MathUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.RaycastUtils;
 import com.solinia.solinia.Utils.Utils;
@@ -65,7 +66,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			return;
 		
 		// No
-		Utils.CancelEvent(event);
+		EntityUtils.CancelEvent(event);
 	}
 	
 	@EventHandler
@@ -139,7 +140,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		
 		if (event.getEntity() instanceof ArmorStand || event.getTarget() instanceof ArmorStand)
 		{
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			return;
 		}
 
@@ -151,7 +152,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			if (!StateManager.getInstance().getEntityManager().hasHate(event.getEntity().getUniqueId())) {
 				//PathfinderGoalTarget
 				// TODO why is this happening? We already cleared their target and last target - why is it setting it back?
-				Utils.CancelEvent(event);
+				EntityUtils.CancelEvent(event);
 				return;
 			}	
 			} catch (CoreStateInitException e)
@@ -165,7 +166,7 @@ public class Solinia3CoreEntityListener implements Listener {
 
 		if (event != null && event.getTarget() != null && event.getTarget().isInvulnerable() || event.getTarget().isDead())
 		{
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			return;
 		}
 
@@ -178,7 +179,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (event.getTarget() instanceof Player)
 			if (((Player)event.getTarget()).getGameMode() != GameMode.SURVIVAL)
 			{
-				Utils.CancelEvent(event);
+				EntityUtils.CancelEvent(event);
 				return;
 			}
 
@@ -192,7 +193,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				if (StateManager.getInstance().getEntityManager().getHateListEntry(event.getEntity().getUniqueId(),event.getTarget().getUniqueId()).a() < 1)
 					if (!RaycastUtils.isEntityInLineOfSightCone((LivingEntity) event.getEntity(), event.getTarget(), 90,
 							Utils.MAX_ENTITY_AGGRORANGE)) {
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						return;
 					}
 			}
@@ -213,20 +214,20 @@ public class Solinia3CoreEntityListener implements Listener {
 
 		if (EntityUtils.isMezzed((LivingEntity)event.getEntity()))
 		{
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			return;
 		}
 		
 		if (EntityUtils.isFeared((LivingEntity)event.getEntity()))
 		{
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			return;
 		}
 
 
 		if (EntityUtils.isStunned((LivingEntity)event.getEntity()))
 		{
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			return;
 		}
 		
@@ -240,7 +241,7 @@ public class Solinia3CoreEntityListener implements Listener {
 						|| StateManager.getInstance().getEntityManager().hasEntityEffectType(
 								(LivingEntity) event.getTarget(), SpellEffectType.InvisVsUndead2)) {
 					solEntity.setAttackTarget(null);
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 				}
 			}
@@ -254,7 +255,7 @@ public class Solinia3CoreEntityListener implements Listener {
 						|| ((LivingEntity) event.getTarget()).hasPotionEffect(PotionEffectType.INVISIBILITY)
 						) {
 					solEntity.setAttackTarget(null);
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 				}
 			}
@@ -266,7 +267,7 @@ public class Solinia3CoreEntityListener implements Listener {
 						|| StateManager.getInstance().getEntityManager().hasEntityEffectType(
 								(LivingEntity) event.getTarget(), SpellEffectType.ImprovedInvisAnimals)) {
 					solEntity.setAttackTarget(null);
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 				}
 			}
@@ -276,7 +277,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				ISoliniaLivingEntity soliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)event.getTarget());
 				if(soliniaLivingEntity != null && soliniaLivingEntity.isSneaking())
 				{
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 				}
 			}
@@ -290,7 +291,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					if (mezExpiry != null) {
 						solEntity.setAttackTarget(null);
 						event.getEntity().sendMessage("The target is mezzed, you cannot hit it");
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						return;
 					}
 				}
@@ -305,7 +306,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					if (feigned == true) {
 						solEntity.setAttackTarget(null);
 						event.getEntity().sendMessage("The target is feigned, you cannot hit it");
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						return;
 					}
 				}
@@ -319,7 +320,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					{
 						// Cancel owner attack
 						solEntity.setAttackTarget(null);
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 					}
 				}
 			}
@@ -378,7 +379,7 @@ public class Solinia3CoreEntityListener implements Listener {
 						if (entity.isDead())
 							return;
 
-						if (Utils.isLivingEntityNPC((LivingEntity) entity)) {
+						if (EntityUtils.isLivingEntityNPC((LivingEntity) entity)) {
 							try {
 								ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter
 										.Adapt((LivingEntity) entity);
@@ -387,7 +388,7 @@ public class Solinia3CoreEntityListener implements Listener {
 								solEntity.updateMaxHp();
 
 								if (solEntity.doCheckForDespawn()) {
-									Utils.RemoveEntity(entity,"ONCREATURESPAWN");
+									EntityUtils.RemoveEntity(entity,"ONCREATURESPAWN");
 									return;
 								}
 							} catch (CoreStateInitException e) {
@@ -454,14 +455,14 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (entityDamageByEntityEvent.getDamager() instanceof Projectile)
 		{
 			Projectile entity = (Projectile)entityDamageByEntityEvent.getDamager();
-			Utils.RemoveEntity(entity,"cancel arrow ede");
+			EntityUtils.RemoveEntity(entity,"cancel arrow ede");
 		}
 		
 		
 		// WE ARE NO LONGER USING THE CLASSIC ENTITY DAMAGE BY ENTITY SYSTEM
 		
 		if (event instanceof EntityDamageByEntityEvent) {
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 		}
 		
 		if (!(entityDamageByEntityEvent.getDamager() instanceof Player) && !(entityDamageByEntityEvent.getDamager() instanceof Projectile))
@@ -539,7 +540,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				resist_chance = 0;
 			}
 	
-			int roll = Utils.RandomBetween(0, 200);
+			int roll = MathUtils.RandomBetween(0, 200);
 	
 			if (roll > resist_chance) {
 				return 100;
@@ -643,7 +644,7 @@ public class Solinia3CoreEntityListener implements Listener {
 
 				boolean cancelFall = solplayer.getSafefallCheck();
 				if (cancelFall == true) {
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					;
 					solplayer.emote(
 							ChatColor.AQUA + "* " + solplayer.getFullName() + " lands softly, breaking their fall",
@@ -680,19 +681,19 @@ public class Solinia3CoreEntityListener implements Listener {
 
 		if (EntityUtils.isMezzed(event.getPlayer()))
 		{
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			return;
 		}
 
 		if (EntityUtils.isStunned(event.getPlayer()))
 		{
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			return;
 		}
 		
 		if (EntityUtils.isFeared(event.getPlayer()))
 		{
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			return;
 		}
 
@@ -756,7 +757,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					if (seconditem.getType() == Material.BOW || seconditem.getType() == Material.CROSSBOW
 							|| seconditem.getType() == Material.LEGACY_BOW) {
 						shooter.sendMessage("You cannot shoot while you have a bow in your offhand");
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						return;
 					}
 				}
@@ -768,14 +769,14 @@ public class Solinia3CoreEntityListener implements Listener {
 				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(shooter);
 				if (solLivingEntity == null)
 				{
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 				}
 					
 				if (!solLivingEntity.hasArrowsInInventory()) {
 					shooter.sendMessage(
 							"* You do not have sufficient arrows in your inventory to fire your bow!");
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 				}
 				
@@ -789,7 +790,7 @@ public class Solinia3CoreEntityListener implements Listener {
 			}
 		} else {
 			// NPCs dont use manual attacks, they use our auto attack code
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			return;
 		}
 		return;
@@ -817,7 +818,7 @@ public class Solinia3CoreEntityListener implements Listener {
 		if (!(event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent))
 			return;
 
-		if (event.getEntity() instanceof Animals && !Utils.isLivingEntityNPC((LivingEntity) event.getEntity()))
+		if (event.getEntity() instanceof Animals && !EntityUtils.isLivingEntityNPC((LivingEntity) event.getEntity()))
 			return;
 
 		EntityDamageByEntityEvent entitykiller = (EntityDamageByEntityEvent) event.getEntity().getLastDamageCause();
@@ -840,7 +841,7 @@ public class Solinia3CoreEntityListener implements Listener {
 
 		// If damager is npc, have a chance to trigger its chat text for slaying
 		// something
-		if ((!(damager instanceof Player)) && Utils.isLivingEntityNPC((LivingEntity) damager)) {
+		if ((!(damager instanceof Player)) && EntityUtils.isLivingEntityNPC((LivingEntity) damager)) {
 			soldamagerentity.doSlayChat();
 		}
 

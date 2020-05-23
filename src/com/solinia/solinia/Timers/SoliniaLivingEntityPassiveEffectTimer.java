@@ -13,6 +13,7 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Events.SoliniaLivingEntityPassiveEffectTickEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class SoliniaLivingEntityPassiveEffectTimer extends BukkitRunnable {
@@ -51,7 +52,7 @@ public class SoliniaLivingEntityPassiveEffectTimer extends BukkitRunnable {
 					if(entity.isDead())
 						continue;
 					
-					if (!Utils.isLivingEntityNPC(livingEntity))
+					if (!EntityUtils.isLivingEntityNPC(livingEntity))
 						continue;
 					
 					if (completedEntities.contains(livingEntity.getUniqueId().toString()))

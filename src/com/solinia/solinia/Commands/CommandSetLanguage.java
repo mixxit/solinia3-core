@@ -1,6 +1,6 @@
 package com.solinia.solinia.Commands;
 
-
+import com.solinia.solinia.Utils.SkillUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -41,8 +41,8 @@ public class CommandSetLanguage implements CommandExecutor {
 	            }
 	            
 	            String language = args[0].toUpperCase();
-	            SkillType targetLanguage = Utils.getSkillType2(language);
-	            if (!Utils.IsValidLanguage(targetLanguage))
+	            SkillType targetLanguage = SkillUtils.getSkillType2(language);
+	            if (!SkillUtils.IsValidLanguage(targetLanguage))
 	            {
 	            	player.sendMessage("That is not a valid tongue.");
 	            	return false;

@@ -7,6 +7,7 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.PlayerValidatedModEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class PlayerValidatorModListener implements Listener {
@@ -30,7 +31,7 @@ public class PlayerValidatorModListener implements Listener {
 			if (solPlayer.getClassObj() == null)
 			{
 			    try {
-			    	Utils.sendCharCreation(event.getPlayer());
+			    	PlayerUtils.sendCharCreation(event.getPlayer());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

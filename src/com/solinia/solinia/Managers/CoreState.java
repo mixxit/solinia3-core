@@ -44,6 +44,9 @@ import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.SoliniaGroup;
 import com.solinia.solinia.Models.SoliniaSpell;
 import com.solinia.solinia.Models.SoliniaZone;
+import com.solinia.solinia.Utils.ChatUtils;
+import com.solinia.solinia.Utils.MathUtils;
+import com.solinia.solinia.Utils.NPCUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -170,7 +173,7 @@ public class CoreState {
 				if (currentCount > maxCheckSize)
 					break;
 				
-					SoliniaZone zone = Utils.getRandomItemFromList(possibleHotZones);
+					SoliniaZone zone = MathUtils.getRandomItemFromList(possibleHotZones);
 					if (!zone.isHotzone())
 						continue;
 					
@@ -334,7 +337,7 @@ public class CoreState {
 			if (updated == true)
 			{
 				System.out.println("Detected some internal npc changes, recommitting npcs (this may take some time)...");
-				Utils.RecommitNpcs();
+				NPCUtils.RecommitNpcs();
 			}
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
@@ -613,7 +616,7 @@ public class CoreState {
 			if (updated == true)
 			{
 				System.out.println("Detected some internal item changes, recommitting npcs (this may take some time)...");
-				Utils.RecommitNpcs();
+				NPCUtils.RecommitNpcs();
 			}
 			
 			System.out.println("[Solinia3Core] UNKNOWN MATERIAL NAMES:");
@@ -655,9 +658,9 @@ public class CoreState {
 			throw new CoreStateInitException("State not initialised");
 		System.out.println("Commit");
 		try {
-			Utils.SendHintToServer(HINT.SERVER_SAVE_BEGIN, "");
+			ChatUtils.SendHintToServer(HINT.SERVER_SAVE_BEGIN, "");
 			configurationManager.commit();
-			Utils.SendHintToServer(HINT.SERVER_SAVE_FINISH,"");
+			ChatUtils.SendHintToServer(HINT.SERVER_SAVE_FINISH,"");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

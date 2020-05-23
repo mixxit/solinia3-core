@@ -28,6 +28,8 @@ import com.solinia.solinia.Interfaces.ISoliniaQuest;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.EntityUtils;
+import com.solinia.solinia.Utils.MathUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -596,7 +598,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 			}
 			
 			if (this.isAwardsDespawn() == true)
-				Utils.RemoveEntity(npcLivingEntity,"awardsdespawn");
+				EntityUtils.RemoveEntity(npcLivingEntity,"awardsdespawn");
 			
 			// We can support item hand in rewards multiple times without
 			// a quest flag
@@ -610,7 +612,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 						List<ISoliniaLootDropEntry> entries = soliniaLootDrop.getEntriesForClass(player.getClassObj());
 						if (entries.size() > 0)
 						{
-							List<ISoliniaLootDropEntry> pickedEntry = Utils.pickNRandom(entries, 1);
+							List<ISoliniaLootDropEntry> pickedEntry = MathUtils.pickNRandom(entries, 1);
 						
 							final int awardclassitemid = pickedEntry.get(0).getItemid();
 							final UUID awardclassplayeruuid = player.getBukkitPlayer().getUniqueId();
@@ -682,7 +684,7 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 					
 					if (entries.size() > 0)
 					{
-						List<ISoliniaLootDropEntry> pickedEntry = Utils.pickNRandom(entries, 1);
+						List<ISoliniaLootDropEntry> pickedEntry = MathUtils.pickNRandom(entries, 1);
 						final int awardclassitemid = pickedEntry.get(0).getItemid();
 						final UUID awardclassplayeruuid = player.getBukkitPlayer().getUniqueId();
 						

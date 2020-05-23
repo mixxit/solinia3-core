@@ -1,4 +1,4 @@
-package com.solinia.solinia.Utils;
+package com.solinia.solinia.Models;
 
 public enum SpellTargetType {
 	TargetOptional, 

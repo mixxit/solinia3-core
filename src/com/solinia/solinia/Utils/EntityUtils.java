@@ -17,13 +17,16 @@ import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.metadata.MetadataValue;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
@@ -34,9 +37,12 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.FactionStandingType;
+import com.solinia.solinia.Models.NumHit;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SolAnimationType;
 import com.solinia.solinia.Models.SpellEffectType;
@@ -47,14 +53,588 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_14_R1.DamageSource;
 import net.minecraft.server.v1_14_R1.EntityLiving;
 import net.minecraft.server.v1_14_R1.EntityPlayer;
+import net.minecraft.server.v1_14_R1.GenericAttributes;
 import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation;
 import net.minecraft.server.v1_14_R1.PacketPlayOutEntityMetadata;
 
 public class EntityUtils {
+	public static NumHit getNumHitsType(Integer numhitstype) {
+		switch (numhitstype) {
+		case 0:
+			return NumHit.None;
+		case 1:
+			return NumHit.IncomingHitAttempts; // Attempted incoming melee attacks (hit or miss) on YOU.
+		case 2:
+			return NumHit.OutgoingHitAttempts; // Attempted outgoing melee attacks (hit or miss) on YOUR TARGET.
+		case 3:
+			return NumHit.IncomingSpells; // Incoming detrimental spells
+		case 4:
+			return NumHit.OutgoingSpells; // Outgoing detrimental spells
+		case 5:
+			return NumHit.OutgoingHitSuccess; // Successful outgoing melee attack HIT on YOUR TARGET.
+		case 6:
+			return NumHit.IncomingHitSuccess; // Successful incoming melee attack HIT on YOU.
+		case 7:
+			return NumHit.MatchingSpells; // Any casted spell matching/triggering a focus effect.
+		case 8:
+			return NumHit.IncomingDamage; // Successful incoming spell or melee dmg attack on YOU
+		case 9:
+			return NumHit.ReflectSpell; // Incoming Reflected spells.
+		case 10:
+			return NumHit.DefensiveSpellProcs; // Defensive buff procs
+		case 11:
+			return NumHit.OffensiveSpellProcs; // Offensive buff procs
+		default:
+			return NumHit.None;
+		}
+	}
+
+	
+	
+	public static int getMaxLimitInclude() {
+		// TODO Auto-generated method stub
+		return 16;
+	}
+
+	public static int getMaxProcs() {
+		// TODO Auto-generated method stub
+		return 4;
+	}
+	
+	public static int getMinLevelFromLevel(int highestlevel) {
+		int minlevel = 1;
+		if (highestlevel <= 14) {
+			minlevel = highestlevel - 5;
+			if (minlevel < 1)
+				return 1;
+
+			return minlevel;
+		}
+
+		minlevel = (highestlevel / 3) * 2;
+		if (minlevel < 1)
+			return 1;
+
+		return minlevel;
+	}
+	
+	public static org.bukkit.ChatColor getLevelCon(int myLevel, ISoliniaLivingEntity solEntity) {
+		// TODO Auto-generated method stub
+		return getLevelCon(myLevel, solEntity.getMentorLevel());
+	}
+	
+	public static org.bukkit.ChatColor getLevelCon(int mylevel, int iOtherLevel) {
+		org.bukkit.ChatColor conlevel = org.bukkit.ChatColor.WHITE;
+
+		int diff = iOtherLevel - mylevel;
+
+		if (diff == 0)
+			return org.bukkit.ChatColor.WHITE;
+		else if (diff >= 1 && diff <= 2)
+			return org.bukkit.ChatColor.YELLOW;
+		else if (diff >= 3)
+			return org.bukkit.ChatColor.RED;
+
+		if (mylevel <= 8) {
+			if (diff <= -4)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 9) {
+			if (diff <= -6)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -4)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 13) {
+			if (diff <= -7)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -5)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 15) {
+			if (diff <= -7)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -5)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 17) {
+			if (diff <= -8)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -6)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 21) {
+			if (diff <= -9)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -7)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 25) {
+			if (diff <= -10)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -8)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 29) {
+			if (diff <= -11)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -9)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 31) {
+			if (diff <= -12)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -9)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 33) {
+			if (diff <= -13)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -10)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 37) {
+			if (diff <= -14)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -11)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 41) {
+			if (diff <= -16)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -12)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 45) {
+			if (diff <= -17)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -13)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 49) {
+			if (diff <= -18)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -14)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 53) {
+			if (diff <= -19)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -15)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else if (mylevel <= 55) {
+			if (diff <= -20)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -15)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		} else {
+			if (diff <= -21)
+				conlevel = org.bukkit.ChatColor.GRAY;
+			else if (diff <= -16)
+				conlevel = org.bukkit.ChatColor.AQUA;
+			else
+				conlevel = org.bukkit.ChatColor.BLUE;
+		}
+
+		return conlevel;
+	}
+
+	
+	public static boolean ValidatePet(LivingEntity entity) {
+		try {
+			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(entity);
+			if (solLivingEntity.isNPC()) {
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager()
+						.getNPC(solLivingEntity.getNpcid());
+				if (npc.isCorePet() && solLivingEntity.getActiveMob() != null) {
+					if (solLivingEntity.getActiveMob().getOwner() == null || !solLivingEntity.getActiveMob().getOwner().isPresent()) {
+						EntityUtils.RemoveEntity(entity, "VALIDATEPET");
+						System.out.println("ERROR - A pet had no owner but was marked as a pet!");
+						return false;
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			System.out.println(e.getStackTrace() + " " + e.getMessage());
+		}
+
+		return true;
+	}
+
+	
+	public static double DistanceOverAggroLimit(LivingEntity attacker, LivingEntity aggroCheckEntity) {
+		double distance = attacker.getLocation().distance(aggroCheckEntity.getLocation());
+		if (distance > 100D)
+			return 100D - distance;
+
+		net.minecraft.server.v1_14_R1.EntityLiving entity = ((org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity) aggroCheckEntity)
+				.getHandle();
+		if (entity == null)
+			return 0D;
+
+		if (entity.getAttributeInstance(GenericAttributes.FOLLOW_RANGE) == null)
+			return 0D;
+
+		double distanceLimit = entity.getAttributeInstance(GenericAttributes.FOLLOW_RANGE).getValue();
+
+		if (distance > distanceLimit)
+			return distance - distanceLimit;
+
+		return 0D;
+	}
+
+
 	private static final List<Material> SAFE_TO_SHARE;
 	private static final List<Material> DONT_STAND_ON;
 	private static final List<Material> HALF_HEIGHT;
 	private static final List<Material> HEIGHT_AND_HALF;
+	public static double getStatMaxHP(ISoliniaClass classObj, int tmplevel, int stamina) {
+		// level multiplier
+		double multiplier = 1;
+
+		String profession = "UNSKILLED";
+		if (classObj != null)
+			profession = classObj.getName().toUpperCase();
+
+		if (profession != null) {
+			switch (profession) {
+			case "WARRIOR":
+				if (tmplevel < 20)
+					multiplier = 22;
+				else if (tmplevel < 30)
+					multiplier = 23;
+				else if (tmplevel < 40)
+					multiplier = 25;
+				else if (tmplevel < 53)
+					multiplier = 27;
+				else if (tmplevel < 57)
+					multiplier = 28;
+				else
+					multiplier = 30;
+				break;
+
+			case "DRUID":
+			case "CLERIC":
+			case "SHAMAN":
+				multiplier = 15;
+				break;
+
+			case "PALADIN":
+			case "SHADOWKNIGHT":
+				if (tmplevel < 35)
+					multiplier = 21;
+				else if (tmplevel < 45)
+					multiplier = 22;
+				else if (tmplevel < 51)
+					multiplier = 23;
+				else if (tmplevel < 56)
+					multiplier = 24;
+				else if (tmplevel < 60)
+					multiplier = 25;
+				else
+					multiplier = 26;
+				break;
+
+			case "MONK":
+			case "BARD":
+			case "ROGUE":
+				// case BEASTLORD:
+				if (tmplevel < 51)
+					multiplier = 18;
+				else if (tmplevel < 58)
+					multiplier = 19;
+				else
+					multiplier = 20;
+				break;
+
+			case "RANGER":
+				if (tmplevel < 58)
+					multiplier = 20;
+				else
+					multiplier = 21;
+				break;
+
+			case "MAGICIAN":
+			case "WIZARD":
+			case "NECROMANCER":
+			case "ENCHANTER":
+				multiplier = 12;
+				break;
+			default:
+				if (tmplevel < 35)
+					multiplier = 21;
+				else if (tmplevel < 45)
+					multiplier = 22;
+				else if (tmplevel < 51)
+					multiplier = 23;
+				else if (tmplevel < 56)
+					multiplier = 24;
+				else if (tmplevel < 60)
+					multiplier = 25;
+				else
+					multiplier = 26;
+				break;
+			}
+		}
+
+		double hp = tmplevel * multiplier;
+		double hpmain = (stamina / 12) * tmplevel;
+
+		double calculatedhp = hp + hpmain;
+		return (int) Math.floor(calculatedhp);
+	}
+
+
+	
+	public static FactionStandingType getFactionStandingType(int playerFactionValueWithSpellsAndBase) {
+		if (playerFactionValueWithSpellsAndBase >= 1101) {
+			return FactionStandingType.FACTION_ALLY;
+		}
+		if (playerFactionValueWithSpellsAndBase >= 701 && playerFactionValueWithSpellsAndBase <= 1100) {
+			return FactionStandingType.FACTION_WARMLY;
+		}
+		if (playerFactionValueWithSpellsAndBase >= 401 && playerFactionValueWithSpellsAndBase <= 700) {
+			return FactionStandingType.FACTION_KINDLY;
+		}
+		if (playerFactionValueWithSpellsAndBase >= 101 && playerFactionValueWithSpellsAndBase <= 400) {
+			return FactionStandingType.FACTION_AMIABLE;
+		}
+		if (playerFactionValueWithSpellsAndBase >= 0 && playerFactionValueWithSpellsAndBase <= 100) {
+			return FactionStandingType.FACTION_INDIFFERENT;
+		}
+		if (playerFactionValueWithSpellsAndBase >= -100 && playerFactionValueWithSpellsAndBase <= -1) {
+			return FactionStandingType.FACTION_APPREHENSIVE;
+		}
+		if (playerFactionValueWithSpellsAndBase >= -700 && playerFactionValueWithSpellsAndBase <= -101) {
+			return FactionStandingType.FACTION_DUBIOUS;
+		}
+		if (playerFactionValueWithSpellsAndBase >= -999 && playerFactionValueWithSpellsAndBase <= -701) {
+			return FactionStandingType.FACTION_THREATENLY;
+		}
+		if (playerFactionValueWithSpellsAndBase <= -1000) {
+			return FactionStandingType.FACTION_SCOWLS;
+		}
+		return FactionStandingType.FACTION_INDIFFERENT;
+	}
+
+
+	
+	public static void ClearHateAndResetNpcsNotInList(List<UUID> entitiesNearPlayers) {
+		try {
+			List<UUID> activeHateLists = StateManager.getInstance().getEntityManager().getActiveHateListUUIDs();
+			for (UUID uuid : activeHateLists) {
+				try {
+					if (entitiesNearPlayers.contains(uuid))
+						continue;
+					
+					Entity entity = Bukkit.getEntity(uuid);
+					if (entity == null) {
+						StateManager.getInstance().getEntityManager().clearHateList(uuid);
+						continue;
+					}
+
+					if (!(entity instanceof LivingEntity)) {
+						continue;
+					}
+
+					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) entity);
+					solEntity.clearHateList();
+					solEntity.setAttackTarget(null);
+					solEntity.resetPosition(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (CoreStateInitException e) {
+
+		}
+	}
+	
+	public static void RemoveEntity(Entity entity, String caller, boolean runImmediately) {
+		// System.out.println("removing entity via caller: " + caller + " " +
+				// entity.getName());
+		if (entity == null)
+			return;
+		
+				DebugUtils.DebugLog("Utils", "RemoveEntity", entity, "Removing entity via caller: " + caller + " " +entity.getName());
+				if (entity instanceof Player)
+					return;
+				
+				final UUID entityUUID = entity.getUniqueId();
+				
+				if (!runImmediately)
+				{
+					if (StateManager.getInstance().getPlugin().isEnabled())
+						Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(StateManager.getInstance().getPlugin(),
+								new Runnable() {
+									public void run() {
+										Entity entity = Bukkit.getEntity(entityUUID);
+										if (entity == null)
+											return;
+										
+										if (!StateManager.getInstance().isStopping())
+											entity.remove();
+									}
+						}, 20L);
+				} else {
+					System.out.println("Removing entity immediately: " + entity.getName());
+					entity.remove();
+				}
+	}
+
+	public static void RemoveEntity(Entity entity, String caller) {
+		EntityUtils.RemoveEntity(entity, caller, false);
+	}
+	
+	public static void spinLivingEntity(LivingEntity livingEntity) {
+		Location newLocation = livingEntity.getLocation();
+		// todo
+		newLocation.setYaw(0.0f);
+		EntityUtils.teleportSafely(livingEntity,newLocation);
+	}
+	
+	public static void dismountEntity(LivingEntity livingEntity) {
+		Entity vehicle = livingEntity.getVehicle();
+		if (vehicle != null) {
+			vehicle.eject();
+		}
+	}
+
+	public static void despawnBoatIfNotNearWater(Boat entity) {
+		int y = (int) entity.getLocation().getY();
+		if (!(entity.getWorld().getBlockAt((int) entity.getLocation().getX(), y + 1, (int) entity.getLocation().getZ())
+				.getType().equals(Material.LEGACY_STATIONARY_WATER)
+				|| entity.getWorld()
+						.getBlockAt((int) entity.getLocation().getX(), y + 1, (int) entity.getLocation().getZ())
+						.getType().equals(Material.WATER)
+				|| entity.getWorld().getBlockAt((int) entity.getLocation().getX(), y, (int) entity.getLocation().getZ())
+						.getType().equals(Material.LEGACY_STATIONARY_WATER)
+				|| entity.getWorld().getBlockAt((int) entity.getLocation().getX(), y, (int) entity.getLocation().getZ())
+						.getType().equals(Material.WATER)
+				|| entity.getWorld()
+						.getBlockAt((int) entity.getLocation().getX(), y - 1, (int) entity.getLocation().getZ())
+						.getType().equals(Material.LEGACY_STATIONARY_WATER)
+				|| entity.getWorld()
+						.getBlockAt((int) entity.getLocation().getX(), y - 1, (int) entity.getLocation().getZ())
+						.getType().equals(Material.WATER)
+				|| entity.getWorld()
+						.getBlockAt((int) entity.getLocation().getX(), y - 2, (int) entity.getLocation().getZ())
+						.getType().equals(Material.LEGACY_STATIONARY_WATER)
+				|| entity.getWorld()
+						.getBlockAt((int) entity.getLocation().getX(), y - 2, (int) entity.getLocation().getZ())
+						.getType().equals(Material.WATER))) {
+			System.out.println("Despawned Boat on: " + entity.getWorld()
+					.getBlockAt((int) entity.getLocation().getX(), y, (int) entity.getLocation().getZ()).getType()
+					.name());
+			EntityUtils.RemoveEntity(entity, "DESPAWNBOAT");
+		}
+
+	}
+	
+	public static boolean isLivingEntityNPC(LivingEntity livingentity) {
+		String metaid = "";
+		for (MetadataValue val : livingentity.getMetadata("mobname")) {
+			metaid = val.asString();
+		}
+
+		for (MetadataValue val : livingentity.getMetadata("npcid")) {
+			metaid = val.asString();
+		}
+
+		if (metaid.equals(""))
+			return false;
+
+		if (!metaid.contains("NPCID_"))
+			return false;
+
+		return true;
+	}
+
+	
+	public static int convertRawClassToClass(int rawClassId) {
+		switch (rawClassId) {
+		case 1: // war
+			return 1;
+		case 2: // cle
+			return 2;
+		case 3: // pal
+			return 6;
+		case 4: // rng
+			return 3;
+		case 5: // shd
+			return 7;
+		case 6: // dru
+			return 9;
+		case 7: // mnk
+			return 12;
+		case 8: // brd
+			return 10;
+		case 9: // rog
+			return 4;
+		case 10: // shm
+			return 8;
+		case 11: // nec
+			return 13;
+		case 12: // wiz
+			return 5;
+		case 13: // mge
+			return 11;
+		case 14: // enc
+			return 14;
+		default:
+			return 0;
+		}
+	}
+
+	
+	public static String getCasterClass(String classname) {
+		switch (classname) {
+		case "CLERIC":
+		case "PALADIN":
+		case "RANGER":
+		case "DRUID":
+		case "SHAMAN":
+		case "HUNTER":
+		case "EXARCH":
+		case "KNIGHT":
+			return "W";
+		case "ARCANIST":
+		case "SHADOWKNIGHT":
+		case "BARD":
+		case "NECROMANCER":
+		case "WIZARD":
+		case "MAGICIAN":
+		case "ENCHANTER":
+			return "I";
+		default:
+			return "N";
+		}
+	}
+	
+	public static void CancelEvent(Cancellable event) {
+		// System.out.println("Cancel event found for Event Type: " +
+		// event.getClassObj().getName());
+		event.setCancelled(true);
+	}
 	
 	static
 	  {
@@ -189,8 +769,8 @@ public class EntityUtils {
 		stalkerLocation.setX(x);
 	    stalkerLocation.setY(y);
 	    stalkerLocation.setZ(z);
-	    stalkerLocation.setYaw((float)Utils.calculateYaw(deltax, deltaz));
-	    stalkerLocation.setPitch((float)Utils.calculatePitch(deltax, deltay, deltaz));
+	    stalkerLocation.setYaw((float)MathUtils.calculateYaw(deltax, deltaz));
+	    stalkerLocation.setPitch((float)MathUtils.calculatePitch(deltax, deltay, deltaz));
 	    
 	    EntityUtils.teleportUnsafely(source,stalkerLocation);
     }
@@ -213,7 +793,7 @@ public class EntityUtils {
 
 	public static int getSkillCap(SkillType skillType, ISoliniaClass profession, int level, String specialisation, int currentskillamount, ISoliniaLivingEntity solEntity) {
 
-		if (!Utils.isValidSkill(skillType.name().toUpperCase()))
+		if (!SkillUtils.isValidSkill(skillType.name().toUpperCase()))
 			return 0;
 
 		// If the skill being queried happens to be a race name, the cap for
@@ -253,7 +833,7 @@ public class EntityUtils {
 		if (profession != null)
 		{
 			int maxSkill = EntityUtils.maxSkill(skillType, profession.getName().toUpperCase(),level, currentskillamount);
-			if (solEntity != null && Utils.IsTradeskill(skillType))
+			if (solEntity != null && SkillUtils.IsTradeskill(skillType))
 			{
 				System.out.println("We gonna get aa");
 				int aaBonus = solEntity.getAABonuses(SpellEffectType.TradeSkillMastery);

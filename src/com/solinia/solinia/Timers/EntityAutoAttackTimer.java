@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class EntityAutoAttackTimer extends BukkitRunnable {
@@ -59,7 +60,7 @@ List<String> completedEntities = new ArrayList<String>();
 					if (creatureThatWillAttack.getTarget() == null)
 						continue;
 					
-					if (!Utils.isLivingEntityNPC(livingEntityThatWillAutoAttack))
+					if (!EntityUtils.isLivingEntityNPC(livingEntityThatWillAutoAttack))
 						continue;
 					
 					if (completedEntities.contains(livingEntityThatWillAutoAttack.getUniqueId().toString()))

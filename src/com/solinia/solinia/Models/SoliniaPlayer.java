@@ -50,13 +50,14 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ForgeUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.MathUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
-import com.solinia.solinia.Utils.SpellTargetType;
 import com.solinia.solinia.Utils.TextUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -65,7 +66,8 @@ import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.spawning.spawners.MythicSpawner;
 import net.md_5.bungee.api.ChatMessageType;
 import net.minecraft.server.v1_14_R1.Tuple;
-
+import com.solinia.solinia.Utils.SkillUtils;
+import com.solinia.solinia.Utils.SpellUtils;
 public class SoliniaPlayer implements ISoliniaPlayer {
 
 	private static final long serialVersionUID = 9075039437399478391L;
@@ -656,7 +658,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public int getSpellBonuses(SpellEffectType spellEffectType) {
 		int bonus = 0;
-		for (ActiveSpellEffect effect : Utils.getActiveSpellEffects(getBukkitPlayer(), spellEffectType)) {
+		for (ActiveSpellEffect effect : SpellUtils.getActiveSpellEffects(getBukkitPlayer(), spellEffectType)) {
 			bonus += effect.getRemainingValue();
 		}
 
@@ -909,7 +911,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 
 		// Max limit on AA points right now is 100
-		if (getAAPoints() > Utils.getMaxUnspentAAPoints()) {
+		if (getAAPoints() > PlayerUtils.getMaxUnspentAAPoints()) {
 			return;
 		}
 
@@ -1002,7 +1004,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void ooc(String string) {
-		if (getLanguageSkillType() == null || !Utils.IsValidLanguage(getLanguageSkillType())) {
+		if (getLanguageSkillType() == null || !SkillUtils.IsValidLanguage(getLanguageSkillType())) {
 			if (getRace() != null)
 				setLanguageSkillType(getRace().getLanguage());
 		}
@@ -1012,7 +1014,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void say(String message) {
-		if (getLanguageSkillType() == null || !Utils.IsValidLanguage(getLanguageSkillType())) {
+		if (getLanguageSkillType() == null || !SkillUtils.IsValidLanguage(getLanguageSkillType())) {
 			if (getRace() == null) {
 				getBukkitPlayer().sendMessage(
 						"You must set your race to speak in local chat - /opencharcreation - If you need help you can ask in OOC chat (/o <msg>)");
@@ -1056,7 +1058,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void whisper(String string) {
-		if (getLanguageSkillType() == null || !Utils.IsValidLanguage(getLanguageSkillType())) {
+		if (getLanguageSkillType() == null || !SkillUtils.IsValidLanguage(getLanguageSkillType())) {
 			if (getRace() == null) {
 				getBukkitPlayer().sendMessage(
 						"You must set your race to speak in local chat - /opencharcreation - If you need help you can ask in OOC chat (/o <msg>)");
@@ -1074,7 +1076,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void shout(String string) {
-		if (getLanguageSkillType() == null || !Utils.IsValidLanguage(getLanguageSkillType())) {
+		if (getLanguageSkillType() == null || !SkillUtils.IsValidLanguage(getLanguageSkillType())) {
 			if (getRace() == null) {
 				getBukkitPlayer().sendMessage(
 						"You must set your race to speak in local chat - /opencharcreation - If you need help you can ask in OOC chat (/o <msg>)");
@@ -1092,7 +1094,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public SoliniaPlayerSkill getSkill(SkillType skillType) {
-		if (!Utils.isValidSkill(skillType.name().toUpperCase())) {
+		if (!SkillUtils.isValidSkill(skillType.name().toUpperCase())) {
 			sendMessage(
 					"ADMIN ALERT, Please inform Moderators that you have called getSkill for an unknown skill: '"
 							+ skillType.name().toUpperCase() + "'");
@@ -1165,14 +1167,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (!skillType.name().toUpperCase().equals(getSpecialisation().toUpperCase()))
 				return;
 
-			skill = getSkill(Utils.getSkillType2("SPECIALISE" + skillType.name().toUpperCase()));
+			skill = getSkill(SkillUtils.getSkillType2("SPECIALISE" + skillType.name().toUpperCase()));
 
 			currentskill = 0;
 			if (skill != null) {
 				currentskill = skill.getValue();
 			}
 
-			skillcap = getSkillCap(Utils.getSkillType2("SPECIALISE" + skillType.name().toUpperCase()));
+			skillcap = getSkillCap(SkillUtils.getSkillType2("SPECIALISE" + skillType.name().toUpperCase()));
 			if ((currentskill + skillupamount) > skillcap) {
 				return;
 			}
@@ -1185,7 +1187,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			randomInt = r.nextInt(100) + 1;
 			if (randomInt < chance) {
 
-				setSkill(Utils.getSkillType2("SPECIALISE" + skillType.name().toUpperCase()), currentskill + skillupamount);
+				setSkill(SkillUtils.getSkillType2("SPECIALISE" + skillType.name().toUpperCase()), currentskill + skillupamount);
 			}
 			this.setLastUpdatedTimeNow();
 
@@ -1589,19 +1591,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private void tryForceTargetIfNeededForSpell(ISoliniaSpell spell) {
 		try
 		{
-			if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEClientV1)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AreaClientOnly)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Directional)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Group)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupClientAndPet)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupNoPets)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupTeleport)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)) {
+			if (SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEClientV1)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AreaClientOnly)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Directional)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Group)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupClientAndPet)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupNoPets)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupTeleport)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)) {
 				this.setEntityTarget(getBukkitPlayer());
-			} else if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Pet)) {
+			} else if (SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Pet)) {
 				LivingEntity pet = StateManager.getInstance().getEntityManager()
 						.getPet(getBukkitPlayer().getUniqueId());
 				if (pet != null) {
@@ -1692,14 +1694,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				if (item.useItemOnEntity(getBukkitPlayer(), targetmob, false) == true) {
 					if (newAmount < 1) {
 						// To prevent a trap you must cancel event here
-						Utils.CancelEvent(cancellableEvent);
+						EntityUtils.CancelEvent(cancellableEvent);
 						getBukkitPlayer().getEquipment().setItemInMainHand(null);
 						getBukkitPlayer().updateInventory();
 						autoAttack.setLastUpdatedTimeNow(this.getSoliniaLivingEntity());
 
 					} else {
 						// To prevent a trap you must cancel event here
-						Utils.CancelEvent(cancellableEvent);
+						EntityUtils.CancelEvent(cancellableEvent);
 						itemstack.setAmount(newAmount);
 						getBukkitPlayer().getEquipment().setItemInMainHand(itemstack);
 						getBukkitPlayer().updateInventory();
@@ -1845,7 +1847,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				item.useItemOnEntity(getBukkitPlayer(), getBukkitPlayer(), item.isConsumable());
 				if (item.isConsumable()) {
 					// To prevent a trap you must cancel event here
-					Utils.CancelEvent(cancellableEvent);
+					EntityUtils.CancelEvent(cancellableEvent);
 					// cant be stacked so no need to test stacking
 					getBukkitPlayer().getInventory().setItemInMainHand(null);
 					getBukkitPlayer().updateInventory();
@@ -1858,7 +1860,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				item.useItemOnEntity(getBukkitPlayer(), getBukkitPlayer(), item.isConsumable());
 				if (item.isConsumable()) {
 					// To prevent a trap you must cancel event here
-					Utils.CancelEvent(cancellableEvent);
+					EntityUtils.CancelEvent(cancellableEvent);
 					// cant be stacked so no need to test stacking
 					getBukkitPlayer().getInventory().setItemInMainHand(null);
 					getBukkitPlayer().updateInventory();
@@ -1938,13 +1940,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				item.useItemOnEntity(getBukkitPlayer(), getEntityTarget(), true);
 				if (newAmount < 1) {
 					// To prevent a trap you must cancel event here
-					Utils.CancelEvent(cancellableEvent);
+					EntityUtils.CancelEvent(cancellableEvent);
 					getBukkitPlayer().getInventory().setItem(getBukkitPlayer().getInventory().getHeldItemSlot(), null);
 					getBukkitPlayer().updateInventory();
 					return;
 				} else {
 					// To prevent a trap you must cancel event here
-					Utils.CancelEvent(cancellableEvent);
+					EntityUtils.CancelEvent(cancellableEvent);
 					itemstack.setAmount(newAmount);
 					getBukkitPlayer().getInventory().setItem(getBukkitPlayer().getInventory().getHeldItemSlot(), itemstack);
 					getBukkitPlayer().updateInventory();
@@ -2023,31 +2025,31 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	private boolean tryFixSpellTarget(ISoliniaSpell spell) {
 		try {
-			if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEClientV1)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AreaClientOnly)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Directional)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Group)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupClientAndPet)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupNoPets)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupTeleport)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)) {
+			if (SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEClientV1)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AreaClientOnly)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Directional)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Group)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupClientAndPet)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupNoPets)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupTeleport)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)) {
 				this.setEntityTarget(getBukkitPlayer());
 				return true;
-			} else if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Pet)) {
+			} else if (SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Pet)) {
 				LivingEntity pet = StateManager.getInstance().getEntityManager()
 						.getPet(getBukkitPlayer().getUniqueId());
 				if (pet != null) {
 					this.setEntityTarget(pet);
 					return true;
 				} else {
-					Utils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "fixspelltargetI", false);
+					ChatUtils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "fixspelltargetI", false);
 					return false;
 				}
 			} else {
-				Utils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "fixspelltargetII", false);
+				ChatUtils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "fixspelltargetII", false);
 				return false;
 			}
 		} catch (CoreStateInitException e) {
@@ -2137,23 +2139,23 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		LivingEntity targetmob = null;
 
 		if (getEntityTarget() == null) {
-			if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEClientV1)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AreaClientOnly)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Directional)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Group)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupClientAndPet)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupNoPets)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupTeleport)
-					|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)) {
+			if (SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEClientV1)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AreaClientOnly)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Directional)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Group)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupClientAndPet)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupNoPets)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupTeleport)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)) {
 				setEntityTarget(getBukkitPlayer());
 				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Set target to self");
 
 			} else {
 				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Not target");
-				Utils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "spellitem", false);
+				ChatUtils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "spellitem", false);
 				return;
 			}
 		}
@@ -2161,7 +2163,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		targetmob = getEntityTarget();
 
 		if (targetmob != null) {
-			double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity) getBukkitPlayer(), targetmob);
+			double distanceOverLimit = EntityUtils.DistanceOverAggroLimit((LivingEntity) getBukkitPlayer(), targetmob);
 
 			if (distanceOverLimit > 0) {
 				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Too far to interact");
@@ -2234,14 +2236,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (targetmob != null && player != null && spell != null)
 			{
 				// dont check these ones this early
-				if (Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard)
-						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster)
-						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEClientV1)
-						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AreaClientOnly)
-						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Directional)
-						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)
-						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AETarget)
-						|| Utils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AETargetHateList
+				if (SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard)
+						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster)
+						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEClientV1)
+						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AreaClientOnly)
+						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Directional)
+						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)
+						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AETarget)
+						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AETargetHateList
 								)
 						)
 				{
@@ -2250,7 +2252,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					Tuple<Boolean,String> result = SoliniaSpell.isValidEffectForEntity(targetmob, player, spell);
 					if (!result.a())
 					{
-						Utils.SendHint(player, HINT.SPELL_INVALIDEFFECT, result.b(), false);
+						ChatUtils.SendHint(player, HINT.SPELL_INVALIDEFFECT, result.b(), false);
 						return;
 					}
 					
@@ -2265,14 +2267,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Cast success for spell id ["+spell.getId()+"] state: " + success);
 				if (success == true) {
 					DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Trying to increase skill");
-					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()), 1);
+					tryIncreaseSkill(SkillUtils.getSkillType(spell.getSkill()), 1);
 				}
 				return;
 			} else {
 				boolean success = spell.tryCast(player, player, useMana, useReagents, requiredWeaponSkillType);
 				if (success == true) {
 					DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Trying to increase skill non dead/null mob");
-					tryIncreaseSkill(Utils.getSkillType(spell.getSkill()), 1);
+					tryIncreaseSkill(SkillUtils.getSkillType(spell.getSkill()), 1);
 				}
 				return;
 			}
@@ -2293,7 +2295,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					return false;
 				}
 				if (!solPlayer.hasSufficientReagents(spell.getComponents1(), spell.getComponentCounts1())) {
-					Utils.SendHint(player,HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
+					ChatUtils.SendHint(player,HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
 					return false;
 				}
 			}
@@ -2308,7 +2310,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					return false;
 				}
 				if (!solPlayer.hasSufficientReagents(spell.getComponents2(), spell.getComponentCounts2())) {
-					Utils.SendHint(player,HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
+					ChatUtils.SendHint(player,HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
 					return false;
 				}
 			}
@@ -2323,7 +2325,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					return false;
 				}
 				if (!solPlayer.hasSufficientReagents(spell.getComponents3(), spell.getComponentCounts3())) {
-					Utils.SendHint(player,HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
+					ChatUtils.SendHint(player,HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
 					return false;
 				}
 			}
@@ -2338,7 +2340,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					return false;
 				}
 				if (!solPlayer.hasSufficientReagents(spell.getComponents4(), spell.getComponentCounts4())) {
-					Utils.SendHint(player,HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
+					ChatUtils.SendHint(player,HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
 					return false;
 				}
 			}
@@ -2405,7 +2407,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		if (aa != null) {
-			ISoliniaAARank AArank = Utils.getRankOfAAAbility(getBukkitPlayer(), aa);
+			ISoliniaAARank AArank = SpellUtils.getRankOfAAAbility(getBukkitPlayer(), aa);
 			if (AArank != null) {
 				for (SoliniaAARankEffect rankEffect : AArank.getEffects()) {
 					DebugUtils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer(),
@@ -2421,7 +2423,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			// there are two potential mastery of the pasts
 			for (ISoliniaAAAbility aaMasteryOfThePast : StateManager.getInstance().getConfigurationManager()
 					.getAAbilitiesBySysname("MASTERYOFTHEPAST")) {
-				ISoliniaAARank AArank = Utils.getRankOfAAAbility(getBukkitPlayer(), aaMasteryOfThePast);
+				ISoliniaAARank AArank = SpellUtils.getRankOfAAAbility(getBukkitPlayer(), aaMasteryOfThePast);
 				if (AArank != null) {
 					for (SoliniaAARankEffect rankEffect : AArank.getEffects()) {
 						DebugUtils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer(),
@@ -2477,7 +2479,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			par_skill += minLevel;
 
-			SoliniaPlayerSkill playerSkill = getSkill(Utils.getSkillType(spell.getSkill()));
+			SoliniaPlayerSkill playerSkill = getSkill(SkillUtils.getSkillType(spell.getSkill()));
 
 			if (playerSkill != null)
 				act_skill = playerSkill.getValue();
@@ -2491,9 +2493,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			if (getClassObj().getName().equals("BARD")) {
 				diff -= (entity.getCharisma() - 110) / 20.0;
-			} else if (Utils.getCasterClass(getClassObj().getName().toUpperCase()).equals("W")) {
+			} else if (EntityUtils.getCasterClass(getClassObj().getName().toUpperCase()).equals("W")) {
 				diff -= (entity.getWisdom() - 125) / 20.0;
-			} else if (Utils.getCasterClass(getClassObj().getName().toUpperCase()).equals("I")) {
+			} else if (EntityUtils.getCasterClass(getClassObj().getName().toUpperCase()).equals("I")) {
 				diff -= (entity.getIntelligence() - 125) / 20.0;
 			}
 
@@ -2503,7 +2505,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			// always at least 1% chance to fail or 5% to succeed
 			fizzlechance = fizzlechance < 1 ? 1 : (fizzlechance > 95 ? 95 : fizzlechance);
 
-			float fizzle_roll = Utils.RandomBetween(0, 100);
+			float fizzle_roll = MathUtils.RandomBetween(0, 100);
 
 			// System.out.println(getFullName() + " Fizzle Roll: " + fizzle_roll + " vs " +
 			// fizzlechance);
@@ -2600,19 +2602,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			int effectId = 0;
 			switch (type) {
 			case RESIST_FIRE:
-				effectId = Utils.getEffectIdFromEffectType(SpellEffectType.ResistFire);
+				effectId = SpellUtils.getEffectIdFromEffectType(SpellEffectType.ResistFire);
 				break;
 			case RESIST_COLD:
-				effectId = Utils.getEffectIdFromEffectType(SpellEffectType.ResistCold);
+				effectId = SpellUtils.getEffectIdFromEffectType(SpellEffectType.ResistCold);
 				break;
 			case RESIST_MAGIC:
-				effectId = Utils.getEffectIdFromEffectType(SpellEffectType.ResistMagic);
+				effectId = SpellUtils.getEffectIdFromEffectType(SpellEffectType.ResistMagic);
 				break;
 			case RESIST_POISON:
-				effectId = Utils.getEffectIdFromEffectType(SpellEffectType.ResistPoison);
+				effectId = SpellUtils.getEffectIdFromEffectType(SpellEffectType.ResistPoison);
 				break;
 			case RESIST_DISEASE:
-				effectId = Utils.getEffectIdFromEffectType(SpellEffectType.ResistDisease);
+				effectId = SpellUtils.getEffectIdFromEffectType(SpellEffectType.ResistDisease);
 				break;
 			default:
 				break;
@@ -2621,14 +2623,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (effectId > 0) {
 				int aaEffect = 0;
 
-				for (SoliniaAARankEffect highestRankEffect : Utils.getHighestRankEffectsForEffectId(this, effectId)) {
+				for (SoliniaAARankEffect highestRankEffect : SpellUtils.getHighestRankEffectsForEffectId(this, effectId)) {
 					aaEffect += highestRankEffect.getBase1();
 				}
 
 				total += aaEffect;
 			}
 
-			int resistAllEffectId = Utils.getEffectIdFromEffectType(SpellEffectType.ResistAll);
+			int resistAllEffectId = SpellUtils.getEffectIdFromEffectType(SpellEffectType.ResistAll);
 			for (SoliniaAARankEffect effect : this.getRanksEffectsOfEffectType(resistAllEffectId)) {
 				total += effect.getBase1();
 			}
@@ -3003,7 +3005,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		chance += 100;
 		chance /= 40;
 
-		return Utils.RandomBetween(1, 500) <= chance;
+		return MathUtils.RandomBetween(1, 500) <= chance;
 	}
 
 	@Override
@@ -3015,7 +3017,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		chance += 100;
 		chance /= 50;
 
-		return Utils.RandomBetween(1, 500) <= chance;
+		return MathUtils.RandomBetween(1, 500) <= chance;
 	}
 
 	@Override
@@ -3030,7 +3032,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 		chance /= 5;
 
-		return Utils.RandomBetween(1, 500) <= chance;
+		return MathUtils.RandomBetween(1, 500) <= chance;
 	}
 
 	@Override
@@ -3042,7 +3044,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		chance += 10;
 		chance += getMentorLevel();
 
-		return Utils.RandomBetween(1, 500) <= chance;
+		return MathUtils.RandomBetween(1, 500) <= chance;
 	}
 
 	private boolean canSafefall() {
@@ -3751,7 +3753,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			chance = 95;
 		}
 
-		float res = Utils.RandomBetween(min, max);
+		float res = MathUtils.RandomBetween(min, max);
 		if (chance > res) {
 			return true;
 		}
@@ -4926,7 +4928,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		System.out.println("Found spellbook size of : " + this.getSpellBookItems().size());
 
-		List<List<Integer>> spellBookItemPages = Utils.getPages(this.getSpellBookItems(), 16);
+		List<List<Integer>> spellBookItemPages = MathUtils.getPages(this.getSpellBookItems(), 16);
 		if (spellBookItemPages.size() >= (pageNo + 1))
 			spellBookPage = spellBookItemPages.get(pageNo);
 
@@ -5222,7 +5224,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				trackingChoice.Name = npc.getName();
 				// cast to int as its never more than skill limit of tracking
 				trackingChoice.Distance = (int) msl.getLocation().distance(BukkitAdapter.adapt(this.getBukkitPlayer().getLocation()));
-				trackingChoice.Color = Utils.getLevelCon(this.getMentorLevel(), npc.getLevel()).name();
+				trackingChoice.Color = EntityUtils.getLevelCon(this.getMentorLevel(), npc.getLevel()).name();
 				trackingChoice.Id = msl.getName();
 				
 				tracking_list.add(trackingChoice);
@@ -5305,7 +5307,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				levelRanges.add(memberPlayer.getMentorLevel());
 			}
 			
-			Tuple<Integer,Integer> lowhighlvl = Utils.GetGroupExpMinAndMaxLevel(levelRanges);
+			Tuple<Integer,Integer> lowhighlvl = PlayerUtils.GetGroupExpMinAndMaxLevel(levelRanges);
 			int ilowlvl = lowhighlvl.a();
 			int ihighlvl = lowhighlvl.b();
 			
@@ -5342,7 +5344,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return HintSetting.Off;
 		
 		if (this.hintSettings.get(hint.name()) == null)
-			this.hintSettings.put(hint.name(), Utils.getDefaultHintLocation(hint));
+			this.hintSettings.put(hint.name(), ChatUtils.getDefaultHintLocation(hint));
 		
 		return this.hintSettings.get(hint.name());
 	}
@@ -5557,14 +5559,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					levelRanges.add(checkedlevel);
 				}
 				
-				Tuple<Integer,Integer> lowhighlvl = Utils.GetGroupExpMinAndMaxLevel(levelRanges);
+				Tuple<Integer,Integer> lowhighlvl = PlayerUtils.GetGroupExpMinAndMaxLevel(levelRanges);
 				int ilowlvl = lowhighlvl.a();
 				int ihighlvl = lowhighlvl.b();
 
 				if (getMentorLevel() < ilowlvl || getMentorLevel() > ihighlvl) {
 					// Only award player the experience
 					// as they are out of range of the group
-					if (livingEntity.getMentorLevel() >= Utils.getMinLevelFromLevel(getMentorLevel())) {
+					if (livingEntity.getMentorLevel() >= EntityUtils.getMinLevelFromLevel(getMentorLevel())) {
 						// Due to being out of range they get the full xp
 						increasePlayerExperience(experience, true, true);
 						if (getFellowship() != null)
@@ -5610,7 +5612,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 							}
 
 							if (tgtplayer.getLocation().distance(getBukkitPlayer().getLocation()) <= Utils.MaxRangeForExperience) {
-								if (livingEntity.getMentorLevel() >= (Utils.getMinLevelFromLevel(tgtsolplayer.getMentorLevel()))) {
+								if (livingEntity.getMentorLevel() >= (EntityUtils.getMinLevelFromLevel(tgtsolplayer.getMentorLevel()))) {
 									// they split the overall experience across the group size
 									
 									// add 10% bonus per player
@@ -5640,7 +5642,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 								} else {
 									// The npc was too low level to gain
 									// experience from - Was: " + livingEntity.getLevel() + " Min: " +
-									// Utils.getMinLevelFromLevel(tgtsolplayer.getLevel()));
+									// EntityUtils.getMinLevelFromLevel(tgtsolplayer.getLevel()));
 								}
 
 							} else {
@@ -5652,7 +5654,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					}
 				}
 			} else {
-				if (livingEntity.getMentorLevel() >= (Utils.getMinLevelFromLevel(getMentorLevel()))) {
+				if (livingEntity.getMentorLevel() >= (EntityUtils.getMinLevelFromLevel(getMentorLevel()))) {
 					// they are on their own so get the full amount of xp
 					increasePlayerExperience(experience, true, true);
 					
@@ -5675,7 +5677,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				} else {
 					// player.getBukkitPlayer().sendMessage(ChatColor.GRAY + "* The npc was too low
 					// level to gain experience from - Was: " + livingEntity.getLevel() + " Min: " +
-					// Utils.getMinLevelFromLevel(player.getLevel()));
+					// EntityUtils.getMinLevelFromLevel(player.getLevel()));
 				}
 			}
 
@@ -5704,7 +5706,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 				if (npc != null) {
 					if (npc.getChanceToRespawnOnDeath() > 0)
-						if (Utils.RandomBetween(1, 100) <= npc.getChanceToRespawnOnDeath()) {
+						if (MathUtils.RandomBetween(1, 100) <= npc.getChanceToRespawnOnDeath()) {
 							npc.Spawn(getBukkitPlayer().getLocation(), 1);
 						}
 
@@ -5919,7 +5921,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				ISoliniaItem augItem = null;
 				if (augmentationId != null && augmentationId != 0) {
 					augItem = StateManager.getInstance().getConfigurationManager().getItem(augmentationId);
-					Utils.AddAccountClaim(this.getBukkitPlayer().getName(),augItem.getId());
+					PlayerUtils.AddAccountClaim(this.getBukkitPlayer().getName(),augItem.getId());
 				}
 				
 				int count = this.getBukkitPlayer().getInventory().getItemInOffHand().getAmount();
@@ -5927,7 +5929,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					count = 1;
 				for (int x = 0; x < count; x++)
 				{
-					Utils.AddAccountClaim(this.getBukkitPlayer().getName(),i.getId());
+					PlayerUtils.AddAccountClaim(this.getBukkitPlayer().getName(),i.getId());
 				}
 				
 				this.getBukkitPlayer().getInventory().setItemInOffHand(null);

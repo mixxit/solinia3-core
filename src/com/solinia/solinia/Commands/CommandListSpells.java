@@ -1,5 +1,7 @@
 package com.solinia.solinia.Commands;
 
+import com.solinia.solinia.Utils.ChatUtils;
+import com.solinia.solinia.Utils.SpellUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -36,7 +38,7 @@ public class CommandListSpells implements CommandExecutor {
 		if (args.length > 0 && args[0].equals(".criteria"))
 		{
 			try {
-				Utils.sendFilterByCriteria(StateManager.getInstance().getConfigurationManager().getSpells(), sender, args,SoliniaSpell.class);
+				ChatUtils.sendFilterByCriteria(StateManager.getInstance().getConfigurationManager().getSpells(), sender, args,SoliniaSpell.class);
 			return true;
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
@@ -49,7 +51,7 @@ public class CommandListSpells implements CommandExecutor {
 		{
 			sender.sendMessage("Seeking spells by effect");
 			try {
-				SpellEffectType type = Utils.getSpellEffectType(Integer.parseInt(args[1]));
+				SpellEffectType type = SpellUtils.getSpellEffectType(Integer.parseInt(args[1]));
 				for(ISoliniaSpell spell : StateManager.getInstance().getConfigurationManager().getSpells())
 				{
 					if (spell.isEffectInSpell(type))

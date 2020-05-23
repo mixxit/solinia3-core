@@ -37,8 +37,10 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.MathUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -49,7 +51,8 @@ import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import net.md_5.bungee.api.ChatColor;
-
+import com.solinia.solinia.Utils.SkillUtils;
+import com.solinia.solinia.Utils.SpellUtils;
 public class SoliniaActiveSpell {
 	private int spellId;
 	private int ticksLeft;
@@ -208,21 +211,21 @@ public class SoliniaActiveSpell {
 					Player player = Bukkit.getPlayer(getOwnerUuid());
 					if (soliniaSpell.isBardSong()) {
 						if (sendMessages) {
-							Utils.SendHint(player, HINT.CAST_ON_YOU_SONG, soliniaSpell.getCastOnYou(), false);
+							ChatUtils.SendHint(player, HINT.CAST_ON_YOU_SONG, soliniaSpell.getCastOnYou(), false);
 						}
 					} else {
 						if (sendMessages)
-							Utils.SendHint(player, HINT.CAST_ON_YOU, soliniaSpell.getCastOnYou(), false);
+							ChatUtils.SendHint(player, HINT.CAST_ON_YOU, soliniaSpell.getCastOnYou(), false);
 					}
 				}
 
 				if (soliniaSpell.getCastOnOther() != null && !soliniaSpell.getCastOnOther().equals("")) {
 					if (sendMessages) {
 						if (soliniaSpell.isBardSong())
-							Utils.SendHint((LivingEntity) Bukkit.getEntity(getOwnerUuid()), HINT.CAST_ON_OTHER_SONG,
+							ChatUtils.SendHint((LivingEntity) Bukkit.getEntity(getOwnerUuid()), HINT.CAST_ON_OTHER_SONG,
 									this.getLivingEntity().getName() + "^" + soliniaSpell.getCastOnOther(), true);
 						else
-							Utils.SendHint((LivingEntity) Bukkit.getEntity(getOwnerUuid()), HINT.CAST_ON_OTHER,
+							ChatUtils.SendHint((LivingEntity) Bukkit.getEntity(getOwnerUuid()), HINT.CAST_ON_OTHER,
 									this.getLivingEntity().getName() + "^" + soliniaSpell.getCastOnOther(), true);
 					}
 				}
@@ -1719,7 +1722,7 @@ public class SoliniaActiveSpell {
 					if (target.isPlayer())
 						stun_resist += target.getAABonuses(SpellEffectType.StunResist);
 
-					if (stun_resist <= 0 || Utils.RandomBetween(0, 99) >= stun_resist) {
+					if (stun_resist <= 0 || MathUtils.RandomBetween(0, 99) >= stun_resist) {
 						// Log(Logs::Detail, Logs::Combat, "Stunned. We had %d percent resist chance.",
 						// stun_resist);
 
@@ -1867,7 +1870,7 @@ public class SoliniaActiveSpell {
 				focus = solLivingEntity.getFocusEffect(FocusEffect.FcBaseEffects, soliniaSpell);
 				int reuseTime = soliniaSpell.getRecastTime() + soliniaSpell.getRecoveryTime();
 				solLivingEntity.doMeleeSkillAttackDmg(getLivingEntity(), spellEffect.getBase(),
-						Utils.getSkillType(soliniaSpell.getSkill()), spellEffect.getBase2(), focus, false, reuseTime);
+						SkillUtils.getSkillType(soliniaSpell.getSkill()), spellEffect.getBase2(), focus, false, reuseTime);
 			} catch (CoreStateInitException e) {
 
 			}
@@ -1909,7 +1912,7 @@ public class SoliniaActiveSpell {
 				return;
 			}
 
-			Utils.dismountEntity(getLivingEntity());
+			EntityUtils.dismountEntity(getLivingEntity());
 
 			ISoliniaLivingEntity sourceSolLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
 			sourceSolLivingEntity.InterruptSpell();
@@ -1920,7 +1923,7 @@ public class SoliniaActiveSpell {
 				sourceSolLivingEntity.setAttackTarget(null);
 			}
 
-			Utils.dismountEntity(getLivingEntity());
+			EntityUtils.dismountEntity(getLivingEntity());
 
 			Entity vehicle = getLivingEntity().getVehicle();
 			if (vehicle != null) {
@@ -2056,7 +2059,7 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyTossUpEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.dismountEntity(getLivingEntity());
+		EntityUtils.dismountEntity(getLivingEntity());
 		getLivingEntity().setVelocity(new Vector(0, 5, 0));
 
 		return;
@@ -2070,7 +2073,7 @@ public class SoliniaActiveSpell {
 		double y = Math.sin(pitch) * Math.sin(yaw);
 		double z = Math.cos(pitch);
 
-		Utils.dismountEntity(getLivingEntity());
+		EntityUtils.dismountEntity(getLivingEntity());
 		getLivingEntity().setVelocity(new Vector(x, z, y));
 
 		return;
@@ -2334,7 +2337,7 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyVision(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.NIGHT_VISION, 1);
+		SpellUtils.AddPotionEffect(getLivingEntity(), PotionEffectType.NIGHT_VISION, 1);
 	}
 
 	private void applySummonItem(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
@@ -2589,7 +2592,7 @@ public class SoliniaActiveSpell {
 			Location targetLocation = block.getLocation();
 			targetLocation.setDirection(getLivingEntity().getLocation().getDirection());
 			if (block != null) {
-				Utils.dismountEntity(getLivingEntity());
+				EntityUtils.dismountEntity(getLivingEntity());
 				EntityUtils.teleportSafely(getLivingEntity(), targetLocation);
 			}
 		} catch (Exception e) {
@@ -2598,31 +2601,31 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyBlind(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.BLINDNESS, 1);
+		SpellUtils.AddPotionEffect(getLivingEntity(), PotionEffectType.BLINDNESS, 1);
 	}
 
 	private void applyInvisibility(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.INVISIBILITY, 1);
+		SpellUtils.AddPotionEffect(getLivingEntity(), PotionEffectType.INVISIBILITY, 1);
 	}
 
 	private void applyWaterBreathing(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.WATER_BREATHING, 1);
+		SpellUtils.AddPotionEffect(getLivingEntity(), PotionEffectType.WATER_BREATHING, 1);
 	}
 
 	private void applyConfusion(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.CONFUSION, 1);
+		SpellUtils.AddPotionEffect(getLivingEntity(), PotionEffectType.CONFUSION, 1);
 	}
 
 	private void applyLevitateSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (this.getLivingEntity() instanceof Player)
-			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.LEVITATION, 255);
+			SpellUtils.AddPotionEffect(getLivingEntity(), PotionEffectType.LEVITATION, 255);
 
 	}
 
 	private void applyRootSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.dismountEntity(getLivingEntity());
+		EntityUtils.dismountEntity(getLivingEntity());
 
-		Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW, 10);
+		SpellUtils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW, 10);
 	}
 
 	private void applyWipeHateList(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
@@ -2634,7 +2637,7 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyMezSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.dismountEntity(getLivingEntity());
+		EntityUtils.dismountEntity(getLivingEntity());
 
 		if (!(getLivingEntity() instanceof LivingEntity))
 			return;
@@ -2653,14 +2656,14 @@ public class SoliniaActiveSpell {
 
 			}
 
-			Utils.dismountEntity(getLivingEntity());
+			EntityUtils.dismountEntity(getLivingEntity());
 
 			Entity vehicle = getLivingEntity().getVehicle();
 			if (vehicle != null) {
 				vehicle.eject();
 			}
 
-			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.CONFUSION, 1);
+			SpellUtils.AddPotionEffect(getLivingEntity(), PotionEffectType.CONFUSION, 1);
 		} catch (CoreStateInitException e) {
 			return;
 		}
@@ -2790,30 +2793,30 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applySpinTarget(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.spinLivingEntity(getLivingEntity());
+		EntityUtils.spinLivingEntity(getLivingEntity());
 	}
 
 	private void applyMovementSpeedEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		Utils.dismountEntity(getLivingEntity());
+		EntityUtils.dismountEntity(getLivingEntity());
 
 		int normalize = spellEffect.getBase();
 		// value is a percentage but we range from 1-5 (we can stretch to 10)
 		normalize = normalize / 10;
 		if (spellEffect.getBase() > 0) {
-			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SPEED, normalize);
+			SpellUtils.AddPotionEffect(getLivingEntity(), PotionEffectType.SPEED, normalize);
 		} else {
-			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW, (normalize * -1));
+			SpellUtils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW, (normalize * -1));
 		}
 	}
 
 	private void applyMiningHasteSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (this.getLivingEntity() instanceof Player)
-			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.FAST_DIGGING, spellEffect.getBase());
+			SpellUtils.AddPotionEffect(getLivingEntity(), PotionEffectType.FAST_DIGGING, spellEffect.getBase());
 	}
 
 	private void applyFeatherFallSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
 		if (this.getLivingEntity() instanceof Player)
-			Utils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW_FALLING, spellEffect.getBase());
+			SpellUtils.AddPotionEffect(getLivingEntity(), PotionEffectType.SLOW_FALLING, spellEffect.getBase());
 	}
 
 	private void applyCurrentHpSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
@@ -3186,7 +3189,7 @@ public class SoliniaActiveSpell {
 				}
 
 				if (!solLivingEntity.passCharismaCheck(this.getLivingEntity(), this.getSpell())) {
-					Utils.SendHint((LivingEntity) source, HINT.CHARM_CHA_FAIL, "", false);
+					ChatUtils.SendHint((LivingEntity) source, HINT.CHARM_CHA_FAIL, "", false);
 					removeActiveSpellNextTick();
 					return;
 				}

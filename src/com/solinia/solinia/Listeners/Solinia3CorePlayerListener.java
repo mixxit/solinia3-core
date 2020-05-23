@@ -84,11 +84,15 @@ import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.UniversalMerchant;
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.DropUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ForgeUtils;
+import com.solinia.solinia.Utils.InventoryUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
+import com.solinia.solinia.Utils.SkillUtils;
+import com.solinia.solinia.Utils.SpellUtils;
 import com.solinia.solinia.Utils.Utils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
@@ -127,12 +131,12 @@ public class Solinia3CorePlayerListener implements Listener {
 			    try {
 			    	if (StateManager.getInstance().getPlayerManager().hasValidMod((Player)playerEntity))
 					{
-			    		Utils.sendCharCreation((Player)playerEntity);
+			    		PlayerUtils.sendCharCreation((Player)playerEntity);
 			    		solPlayer.setLastOpenedCharCreationNow();
 					} else {
 				    	if (solPlayer.getLastOpenedCharCreation() == null)
 				    	{
-				    		Utils.sendCharCreation((Player)playerEntity);
+				    		PlayerUtils.sendCharCreation((Player)playerEntity);
 				    		solPlayer.setLastOpenedCharCreationNow();
 				    	} else {
 					    	LocalDateTime datetime = LocalDateTime.now();
@@ -141,7 +145,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		
 							if (nowtimestamp.after(mintimestamp))
 							{
-								Utils.sendCharCreation((Player)playerEntity);
+								PlayerUtils.sendCharCreation((Player)playerEntity);
 					    		solPlayer.setLastOpenedCharCreationNow();
 							}
 				    	}
@@ -303,7 +307,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					{
 						if (!player.hasPotionEffect(PotionEffectType.INVISIBILITY))
 							player.sendMessage("You fade into the shadows...");
-						Utils.AddPotionEffect(player, PotionEffectType.INVISIBILITY, 1);
+						SpellUtils.AddPotionEffect(player, PotionEffectType.INVISIBILITY, 1);
 					} else {
 						player.sendMessage("You try to step into the shadows but your enemy notices you...");
 					}
@@ -464,7 +468,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				if (!soliniaitem.isPlaceable() || (soliniaitem.getAbilityid() > 0 && soliniaitem.isSkullItem()))
 				{
 					event.getPlayer().sendMessage(ChatColor.GRAY + "You cannot place a customised head item with an ability as a block");
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 				}
 			}
 		} catch (CoreStateInitException e) {
@@ -745,7 +749,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			// Prevent jump when slowed
 			if (event.getTo().getBlockY() > event.getFrom().getBlockY()) {
 				if (event.getPlayer().hasPotionEffect(PotionEffectType.SLOW)) {
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					event.getPlayer().sendMessage(ChatColor.GRAY + "* Your legs are bound and unable to jump!");
 					return;
 				}
@@ -844,14 +848,14 @@ public class Solinia3CorePlayerListener implements Listener {
 				if (soliniaitem.getAllowedClassNamesUpper().size() > 0)
 				{
 					if (solplayer.getClassObj() == null) {
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						;
 						event.getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 						return;
 					}
 	
 					if (!soliniaitem.getAllowedClassNamesUpper().contains(solplayer.getClassObj().getName().toUpperCase())) {
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						;
 						event.getPlayer().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 						return;
@@ -861,14 +865,14 @@ public class Solinia3CorePlayerListener implements Listener {
 				if (soliniaitem.getAllowedRaceNamesUpper().size() > 0)
 				{
 					if (solplayer.getRace() == null) {
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						;
 						event.getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
 						return;
 					}
 	
 					if (!soliniaitem.getAllowedRaceNamesUpper().contains(solplayer.getRace().getName().toUpperCase())) {
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						;
 						event.getPlayer().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
 						return;
@@ -876,8 +880,8 @@ public class Solinia3CorePlayerListener implements Listener {
 				}
 				
 				if (soliniaitem.getMinLevel() > solplayer.getActualLevel()) {
-					Utils.CancelEvent(event);
-					Utils.SendHint(event.getPlayer().getPlayer(), HINT.INSUFFICIENT_LEVEL_GEAR, "", false);
+					EntityUtils.CancelEvent(event);
+					ChatUtils.SendHint(event.getPlayer().getPlayer(), HINT.INSUFFICIENT_LEVEL_GEAR, "", false);
 					return;
 				}
 
@@ -937,7 +941,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event) {
-		if (Utils.isInventoryMerchant(event.getInventory())) {
+		if (InventoryUtils.isInventoryMerchant(event.getInventory())) {
 			onMerchantInventoryClose(event);
 			return;
 		}
@@ -982,14 +986,14 @@ public class Solinia3CorePlayerListener implements Listener {
 	@EventHandler
 	public void onInventoryDrag(InventoryDragEvent event) {
 		// More hassle than it is worth, cancel it always
-		if (Utils.isInventoryMerchant(event.getInventory())) {
-			Utils.CancelEvent(event);
+		if (InventoryUtils.isInventoryMerchant(event.getInventory())) {
+			EntityUtils.CancelEvent(event);
 			return;
 		}
 		
 		if (event.getInventory().getHolder() instanceof SoliniaCraftHolder)
 		{
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			return;
 		}
 		
@@ -1000,12 +1004,12 @@ public class Solinia3CorePlayerListener implements Listener {
 		// more trouble than its worth
 		if (event.getClick().equals(ClickType.NUMBER_KEY))
 		{
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			return;
 		}
 		
 
-		if (Utils.isInventoryMerchant(event.getInventory())) {
+		if (InventoryUtils.isInventoryMerchant(event.getInventory())) {
 			onMerchantInventoryClick(event);
 			return;
 		}
@@ -1036,7 +1040,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					StateManager.getInstance().getPlayerManager()
 							.setApplyingAugmentation(event.getView().getPlayer().getUniqueId(), 0);
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 				}
 
@@ -1046,7 +1050,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					StateManager.getInstance().getPlayerManager()
 							.setApplyingAugmentation(event.getView().getPlayer().getUniqueId(), 0);
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 				}
 
@@ -1056,7 +1060,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					StateManager.getInstance().getPlayerManager()
 							.setApplyingAugmentation(event.getView().getPlayer().getUniqueId(), 0);
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 				}
 				
@@ -1068,7 +1072,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					StateManager.getInstance().getPlayerManager()
 							.setApplyingAugmentation(event.getView().getPlayer().getUniqueId(), 0);
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 				}
 
@@ -1080,7 +1084,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					StateManager.getInstance().getPlayerManager()
 							.setApplyingAugmentation(event.getView().getPlayer().getUniqueId(), 0);
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 				}
 
@@ -1091,7 +1095,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					StateManager.getInstance().getPlayerManager()
 							.setApplyingAugmentation(event.getView().getPlayer().getUniqueId(), 0);
 					event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 				}
 
@@ -1106,7 +1110,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				StateManager.getInstance().getPlayerManager()
 						.setApplyingAugmentation(event.getView().getPlayer().getUniqueId(), 0);
 				event.getView().getPlayer().sendMessage("* Ended applying Augmentation");
-				Utils.CancelEvent(event);
+				EntityUtils.CancelEvent(event);
 
 				return;
 			}
@@ -1139,21 +1143,21 @@ public class Solinia3CorePlayerListener implements Listener {
 					ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 					
 					if (soliniaitem.getMinLevel() > solplayer.getActualLevel()) {
-						Utils.CancelEvent(event);
-						Utils.SendHint(event.getView().getPlayer(), HINT.INSUFFICIENT_LEVEL_GEAR, "", false);
+						EntityUtils.CancelEvent(event);
+						ChatUtils.SendHint(event.getView().getPlayer(), HINT.INSUFFICIENT_LEVEL_GEAR, "", false);
 						return;
 					}
 					
 					if (soliniaitem.getAllowedClassNamesUpper().size() > 0)
 					{
 						if (solplayer.getClassObj() == null) {
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 							return;
 						}
 	
 						if (!soliniaitem.getAllowedClassNamesUpper().contains(solplayer.getClassObj().getName().toUpperCase())) {
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 							return;
 						}
@@ -1162,13 +1166,13 @@ public class Solinia3CorePlayerListener implements Listener {
 					if (soliniaitem.getAllowedRaceNamesUpper().size() > 0)
 					{
 						if (solplayer.getRace() == null) {
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
 							return;
 						}
 	
 						if (!soliniaitem.getAllowedRaceNamesUpper().contains(solplayer.getRace().getName().toUpperCase())) {
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
 							return;
 						}
@@ -1188,22 +1192,22 @@ public class Solinia3CorePlayerListener implements Listener {
 					ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 
 					if (soliniaitem.getMinLevel() > solplayer.getActualLevel()) {
-						Utils.CancelEvent(event);
-						Utils.SendHint(event.getView().getPlayer(), HINT.INSUFFICIENT_LEVEL_GEAR, "", false);
+						EntityUtils.CancelEvent(event);
+						ChatUtils.SendHint(event.getView().getPlayer(), HINT.INSUFFICIENT_LEVEL_GEAR, "", false);
 						return;
 					}
 
 					if (soliniaitem.getAllowedClassNamesUpper().size() > 0)
 					{
 						if (solplayer.getClassObj() == null) {
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							;
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 							return;
 						}
 	
 						if (!soliniaitem.getAllowedClassNamesUpper().contains(solplayer.getClassObj().getName().toUpperCase())) {
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							;
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 							return;
@@ -1213,14 +1217,14 @@ public class Solinia3CorePlayerListener implements Listener {
 					if (soliniaitem.getAllowedRaceNamesUpper().size() > 0)
 					{
 						if (solplayer.getRace() == null) {
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							;
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
 							return;
 						}
 	
 						if (!soliniaitem.getAllowedRaceNamesUpper().contains(solplayer.getRace().getName().toUpperCase())) {
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							;
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
 							return;
@@ -1241,22 +1245,22 @@ public class Solinia3CorePlayerListener implements Listener {
 					ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager().getItem(itemstack);
 					
 					if (soliniaitem.getMinLevel() > solplayer.getActualLevel()) {
-						Utils.CancelEvent(event);
-						Utils.SendHint(event.getView().getPlayer(), HINT.INSUFFICIENT_LEVEL_GEAR, "", false);
+						EntityUtils.CancelEvent(event);
+						ChatUtils.SendHint(event.getView().getPlayer(), HINT.INSUFFICIENT_LEVEL_GEAR, "", false);
 						return;
 					}
 					
 					if (soliniaitem.getAllowedClassNamesUpper().size() > 0)
 					{
 						if (solplayer.getClassObj() == null) {
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							;
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 							return;
 						}
 	
 						if (!soliniaitem.getAllowedClassNamesUpper().contains(solplayer.getClassObj().getName().toUpperCase())) {
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							;
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your class cannot wear this armour");
 							return;
@@ -1266,14 +1270,14 @@ public class Solinia3CorePlayerListener implements Listener {
 					if (soliniaitem.getAllowedRaceNamesUpper().size() > 0)
 					{
 						if (solplayer.getRace() == null) {
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							;
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
 							return;
 						}
 	
 						if (!soliniaitem.getAllowedRaceNamesUpper().contains(solplayer.getRace().getName().toUpperCase())) {
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							;
 							event.getView().getPlayer().sendMessage(ChatColor.GRAY + "Your race cannot wear this armour");
 							return;
@@ -1300,7 +1304,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 		// This is to stop drops after closing shop
 		if (ItemStackUtils.IsSoliniaItem(event.getItemDrop().getItemStack()))
-			if (event.getItemDrop().getItemStack().getType() != null && Utils.IsDisplayItem(event.getItemDrop().getItemStack())) {
+			if (event.getItemDrop().getItemStack().getType() != null && ItemStackUtils.IsDisplayItem(event.getItemDrop().getItemStack())) {
 				event.getItemDrop().getItemStack().setAmount(0);
 			}
 	}
@@ -1311,7 +1315,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (event.getRawSlot() == 8)
 			{
 				tryCraftInventory(event);
-				Utils.CancelEvent(event);
+				EntityUtils.CancelEvent(event);
 				return;
 			}
 		}
@@ -1323,7 +1327,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			if (!ItemStackUtils.IsSoliniaItem(event.getCurrentItem()))
 			{
 				event.getView().getPlayer().sendMessage("This is not a solinia item (pickup)");
-				Utils.CancelEvent(event);
+				EntityUtils.CancelEvent(event);
 				return;
 			}
 		}
@@ -1333,7 +1337,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				&& (event.getCurrentItem() != null && !event.getCurrentItem().getType().equals(Material.AIR))) {
 			if (!ItemStackUtils.IsSoliniaItem(event.getCurrentItem())) {
 				event.getView().getPlayer().sendMessage("This is not a solinia item (swap)");
-				Utils.CancelEvent(event);
+				EntityUtils.CancelEvent(event);
 				return;
 			}
 		}
@@ -1576,7 +1580,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		{
 			if (event.getRawSlot() < 27) {
 				event.getView().getPlayer().sendMessage("You appeared to not click on a merchant item correctly");
-				Utils.CancelEvent(event);
+				EntityUtils.CancelEvent(event);
 				return;
 			}
 		}
@@ -1586,13 +1590,13 @@ public class Solinia3CorePlayerListener implements Listener {
 		int nextpage = 0;
 		try {
 			universalmerchant = StateManager.getInstance().getEntityManager()
-					.getUniversalMerchant(Utils.getInventoryUniversalMerchant(event.getInventory()));
-			page = Utils.getInventoryPage(event.getInventory());
-			nextpage = Utils.getInventoryPage(event.getInventory());
+					.getUniversalMerchant(InventoryUtils.getInventoryUniversalMerchant(event.getInventory()));
+			page = InventoryUtils.getInventoryPage(event.getInventory());
+			nextpage = InventoryUtils.getInventoryPage(event.getInventory());
 		} catch (Exception e) {
 			event.getView().getPlayer().sendMessage(e.getMessage());
 			e.printStackTrace();
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			;
 			return;
 		}
@@ -1600,13 +1604,13 @@ public class Solinia3CorePlayerListener implements Listener {
 		if (universalmerchant == null) {
 			event.getView().getPlayer().sendMessage("Could not find universal mercahnt or page " + page);
 			System.out.println("Could not find universal merchant or page " + page);
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			;
 			return;
 		}
 
 		if (event.getRawSlot() < 0) {
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			;
 			return;
 		}
@@ -1618,27 +1622,27 @@ public class Solinia3CorePlayerListener implements Listener {
 					if (event.getCurrentItem() == null || event.getCurrentItem().getType() == null)
 					{
 						event.getView().getPlayer().sendMessage("Merchants are not interested in this item [null type]");
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 					}
 					
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 							.getItem(event.getCurrentItem());
 					if (item == null && !ItemStackUtils.getAllowedVanillaItemStacks().contains(event.getCurrentItem().getType())) {
 						event.getView().getPlayer().sendMessage("Merchants are not interested in this item");
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						return;
 					}
 
 					if (item != null && item.isTemporary()) {
 						event.getView().getPlayer().sendMessage("Merchants are not interested in temporary items");
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						return;
 					}
 
 					// Picked up sellable item
 
 				} catch (CoreStateInitException e) {
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					event.getView().getPlayer().sendMessage("Cannot sell/buy right now");
 					return;
 				}
@@ -1648,7 +1652,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				ItemStack pickingUpItem = event.getCurrentItem();
 				if (pickingUpItem.getType().equals(Material.BARRIER)) {
 					// event.getView().getPlayer().sendMessage("Ignoring barrier");
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 				}
 
@@ -1670,20 +1674,20 @@ public class Solinia3CorePlayerListener implements Listener {
 									nextpage + 1);
 						}
 					}
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 				}
 
 				// Do not allow movement of identifiers
 				if (event.getRawSlot() == 19) {
 					// event.getView().getPlayer().sendMessage("Ignoring identifier block");
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 				}
 				
 				if (event.getCurrentItem() == null)
 				{
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 				}
 
@@ -1706,7 +1710,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						}
 				);
 
-				Utils.CancelEvent(event);
+				EntityUtils.CancelEvent(event);
 				return;
 			}
 
@@ -1716,7 +1720,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			// Clicking item in cursor onto a slot
 			if (event.getRawSlot() > 26) {
 				// Dropping own item or buying
-				if (event.getCursor().getType() != null && event.getCursor().getItemMeta() != null && Utils.IsDisplayItem(event.getCursor())) {
+				if (event.getCursor().getType() != null && event.getCursor().getItemMeta() != null && ItemStackUtils.IsDisplayItem(event.getCursor())) {
 					// Buying
 					// event.getView().getPlayer().sendMessage("Buying item");
 
@@ -1733,7 +1737,7 @@ public class Solinia3CorePlayerListener implements Listener {
 											}
 									}
 							);
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							return;
 						}
 
@@ -1754,7 +1758,7 @@ public class Solinia3CorePlayerListener implements Listener {
 											}
 									}
 							);
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							return;
 						}
 						
@@ -1786,7 +1790,7 @@ public class Solinia3CorePlayerListener implements Listener {
 											}
 									}
 							);
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							return;
 						}
 
@@ -1804,7 +1808,7 @@ public class Solinia3CorePlayerListener implements Listener {
 											}
 									}
 							);
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							;
 							event.getClickedInventory().setItem(event.getSlot(), purchase);
 							event.getView().getPlayer().sendMessage(ChatColor.YELLOW + "* You pay $" + price + " for "
@@ -1827,7 +1831,7 @@ public class Solinia3CorePlayerListener implements Listener {
 											}
 									}
 							);
-							Utils.CancelEvent(event);
+							EntityUtils.CancelEvent(event);
 							return;
 						}
 					} catch (CoreStateInitException e) {
@@ -1841,7 +1845,7 @@ public class Solinia3CorePlayerListener implements Listener {
 										}
 								}
 						);
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						return;
 					}
 				} else {
@@ -1850,7 +1854,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					ItemStack item = event.getClickedInventory().getItem(event.getSlot());
 					if (item != null && !ItemStackUtils.IsSoliniaItem(item))
 					{
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						event.getView().getPlayer().sendMessage("You are trying to place an item on something a merchant is not interested in");
 						return;
 					}
@@ -1859,7 +1863,7 @@ public class Solinia3CorePlayerListener implements Listener {
 
 			} else {
 				// Selling items or dropping item back
-				if (event.getCursor().getType() != null && event.getCursor().getItemMeta() != null && Utils.IsDisplayItem(event.getCursor())) {
+				if (event.getCursor().getType() != null && event.getCursor().getItemMeta() != null && ItemStackUtils.IsDisplayItem(event.getCursor())) {
 					// Returning store item
 					// Cursor events are deprecated, must be done next tick before a cancel
 					final UUID uuid = event.getView().getPlayer().getUniqueId();
@@ -1870,7 +1874,7 @@ public class Solinia3CorePlayerListener implements Listener {
 									}
 							}
 					);
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					return;
 
 				} else {
@@ -1928,13 +1932,13 @@ public class Solinia3CorePlayerListener implements Listener {
 										}
 								}
 						);
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						return;
 
 						
 					} catch (CoreStateInitException e) {
 						event.getView().getPlayer().sendMessage("Cannot sell item to merchant right now");
-						Utils.CancelEvent(event);
+						EntityUtils.CancelEvent(event);
 						return;
 					}
 				}
@@ -1942,7 +1946,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		}
 
 		event.getView().getPlayer().sendMessage("Please alert an admin of this message code: GMMI1");
-		Utils.CancelEvent(event);
+		EntityUtils.CancelEvent(event);
 		return;
 	}
 	
@@ -2081,7 +2085,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					}
 				}
 			
-				Utils.SendHintToServer(HINT.PLAYER_JOIN,event.getPlayer().getName() + " ("+solplayer.getFullName()+") has joined the game aka: " + players);
+				ChatUtils.SendHintToServer(HINT.PLAYER_JOIN,event.getPlayer().getName() + " ("+solplayer.getFullName()+") has joined the game aka: " + players);
 				
 			} catch (Exception e)
 			{
@@ -2164,19 +2168,19 @@ public class Solinia3CorePlayerListener implements Listener {
 		
 		if (EntityUtils.isMezzed((LivingEntity) event.getPlayer()))
 		{
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			return;
 		}
 		
 		if (EntityUtils.isFeared((LivingEntity)event.getPlayer()))
 		{
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			return;
 		}
 
 		if (EntityUtils.isStunned((LivingEntity) event.getPlayer()))
 		{
-			Utils.CancelEvent(event);
+			EntityUtils.CancelEvent(event);
 			return;
 		}
 
@@ -2201,7 +2205,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			{
 				if (item.getMinLevel() > player.getActualLevel())
 				{
-					Utils.CancelEvent(event);
+					EntityUtils.CancelEvent(event);
 					player.getBukkitPlayer().sendMessage("This item requires a level greater than you have");
 					return;
 				}
@@ -2223,7 +2227,7 @@ public class Solinia3CorePlayerListener implements Listener {
 		
 		// We control all chat!
 		AsyncPlayerChatEvent rawEvent = (AsyncPlayerChatEvent)event;
-		Utils.CancelEvent(rawEvent);
+		EntityUtils.CancelEvent(rawEvent);
 		
 		Bukkit.getScheduler().runTask(plugin, new Runnable() {
 		    @Override
@@ -2239,7 +2243,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					
 					ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player)playerEntity);
 
-					if (solplayer.getLanguageSkillType() == null || !Utils.IsValidLanguage(solplayer.getLanguageSkillType())) {
+					if (solplayer.getLanguageSkillType() == null || !SkillUtils.IsValidLanguage(solplayer.getLanguageSkillType())) {
 						if (solplayer.getRace() != null) {
 							solplayer.setLanguageSkillType(solplayer.getRace().getLanguage());
 						}

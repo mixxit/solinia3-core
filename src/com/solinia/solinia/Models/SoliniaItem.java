@@ -556,7 +556,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 			return false;
 		}
 		
-		double distanceOverLimit = Utils.DistanceOverAggroLimit((LivingEntity) player,
+		double distanceOverLimit = EntityUtils.DistanceOverAggroLimit((LivingEntity) player,
 				targetentity);
 
 		if (distanceOverLimit > 0)
@@ -652,7 +652,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 		
 		if (isConsumable == true && !getLanguagePrimer().equals(""))
 		{
-			SoliniaPlayerAdapter.Adapt(player).setSkill(Utils.getSkillType2(getLanguagePrimer()), 100);
+			SoliniaPlayerAdapter.Adapt(player).setSkill(SkillUtils.getSkillType2(getLanguagePrimer()), 100);
 			return true;
 		}
 		
@@ -685,7 +685,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 
 			if (!result.a())
 			{
-				Utils.SendHint(player, HINT.SPELL_INVALIDEFFECT, result.b(), false);
+				ChatUtils.SendHint(player, HINT.SPELL_INVALIDEFFECT, result.b(), false);
 				return false;
 			}
 		}
@@ -1221,7 +1221,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	
 	@Override
 	public AugmentationSlotType getAcceptsAugmentationSlotType() {
-		return Utils.getItemStackAugSlotType(getBasename(), isAugmentation);
+		return ItemStackUtils.getItemStackAugSlotType(getBasename(), isAugmentation);
 	}
 
 	@Override
@@ -1787,7 +1787,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	public int getItemElementalDamage(int magic, int fire, int cold, int poison, int disease, int chromatic,
 			int prismatic, int physical, int corruption, boolean augments, ItemStack itemStack) {
 		
-		switch (Utils.getSpellResistType(this.elementalDamageType)) {
+		switch (SpellUtils.getSpellResistType(this.elementalDamageType)) {
 		case RESIST_MAGIC:
 			magic += this.getElementalDamageAmount();
 			break;

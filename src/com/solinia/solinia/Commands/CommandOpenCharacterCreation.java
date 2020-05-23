@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.solinia.solinia.Utils.PlayerUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandOpenCharacterCreation implements CommandExecutor {
@@ -14,7 +15,7 @@ public class CommandOpenCharacterCreation implements CommandExecutor {
 		if (!(sender instanceof Player))
 			return false;
 		
-	    Utils.sendCharCreation((Player)sender);
+	    PlayerUtils.sendCharCreation((Player)sender);
 		return true;
 	}
 

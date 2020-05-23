@@ -28,6 +28,7 @@ import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
@@ -109,7 +110,7 @@ public class CommandPet implements CommandExecutor {
 							
 							player.setLastDamageCause(null);
 							petLivingEntity.clearHateList();
-							Utils.SendHint(player,HINT.PET_BACKINGOFFTGT,"",false);
+							ChatUtils.SendHint(player,HINT.PET_BACKINGOFFTGT,"",false);
 
 							EntityUtils.teleportSafely(pet,player.getLocation());
 						}
@@ -119,7 +120,7 @@ public class CommandPet implements CommandExecutor {
 					if (petcommand.equals("attack"))
 					{
 						if (solPlayer.getEntityTarget() == null) {
-							Utils.SendHint(player, HINT.NEED_TARGET, "", false);
+							ChatUtils.SendHint(player, HINT.NEED_TARGET, "", false);
 						}
 						
 						LivingEntity targetentity = solPlayer.getEntityTarget();
@@ -176,7 +177,7 @@ public class CommandPet implements CommandExecutor {
 								return true;
 							}
 							
-							Utils.SendHint(player,HINT.PET_ATTACKINGTGT,targetentity.getCustomName(),false);
+							ChatUtils.SendHint(player,HINT.PET_ATTACKINGTGT,targetentity.getCustomName(),false);
 							
 						}
 						

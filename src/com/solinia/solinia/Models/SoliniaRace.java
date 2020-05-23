@@ -11,7 +11,8 @@ import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Utils.SpellTargetType;
+import com.solinia.solinia.Utils.SkillUtils;
+import com.solinia.solinia.Utils.SpellUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -252,14 +253,14 @@ public class SoliniaRace implements ISoliniaRace,IPersistable {
 			String types = "";
 			for(SkillType type: SkillType.values())
 			{
-				if (Utils.IsValidLanguage(type))
+				if (SkillUtils.IsValidLanguage(type))
 					types += type+",";
 			}
 
 			try
 			{
 				
-				if (!Utils.IsValidLanguage(SkillType.valueOf(value)))
+				if (!SkillUtils.IsValidLanguage(SkillType.valueOf(value)))
 				{
 					throw new InvalidRaceSettingException("Invalid type, type must be exactly the same case and can be one of the following: " + types);
 				}
@@ -301,7 +302,7 @@ public class SoliniaRace implements ISoliniaRace,IPersistable {
 				if (ability == null)
 					throw new InvalidRaceSettingException("Invalid id");
 				
-				if (!ability.isBuffSpell() || !Utils.getSpellTargetType(ability.getTargettype()).equals(SpellTargetType.Self))
+				if (!ability.isBuffSpell() || !SpellUtils.getSpellTargetType(ability.getTargettype()).equals(SpellTargetType.Self))
 					throw new InvalidRaceSettingException("Only Self only buff type spells can be set as a passive spell");
 
 			} catch (CoreStateInitException e)

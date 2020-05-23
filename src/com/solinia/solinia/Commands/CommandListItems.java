@@ -10,6 +10,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaItem;
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -40,7 +41,7 @@ public class CommandListItems implements CommandExecutor {
 		if (args.length > 0 && args[0].equals(".criteria"))
 		{
 			try {
-				Utils.sendFilterByCriteria(StateManager.getInstance().getConfigurationManager().getItems(), sender, args,SoliniaItem.class);
+				ChatUtils.sendFilterByCriteria(StateManager.getInstance().getConfigurationManager().getItems(), sender, args,SoliniaItem.class);
 			return true;
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block

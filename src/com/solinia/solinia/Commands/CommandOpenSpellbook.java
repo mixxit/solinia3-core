@@ -11,6 +11,7 @@ import com.solinia.solinia.Models.PacketOpenSpellbook;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Utils.ForgeUtils;
+import com.solinia.solinia.Utils.MathUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandOpenSpellbook implements CommandExecutor {
@@ -24,7 +25,7 @@ public class CommandOpenSpellbook implements CommandExecutor {
 		
 		if (args.length > 0)
 		{
-			if (!Utils.isInteger(args[0]))
+			if (!MathUtils.isInteger(args[0]))
 				return false;				
 
 			pageNo = Integer.parseInt(args[0]);	

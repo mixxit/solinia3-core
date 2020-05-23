@@ -14,6 +14,7 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
@@ -49,7 +50,7 @@ public class CommandSetRace implements CommandExecutor {
 
 		{
 			try {
-				Utils.sendRaceInfo(sender);
+				ChatUtils.sendRaceInfo(sender);
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -75,7 +76,7 @@ public class CommandSetRace implements CommandExecutor {
         if (args.length == 0)
         {
         	try {
-				Utils.sendRaceInfo(sender);
+				ChatUtils.sendRaceInfo(sender);
 			} catch (CoreStateInitException e1) {
 				
 			}
@@ -112,7 +113,7 @@ public class CommandSetRace implements CommandExecutor {
         if (found == false)
         {
         	try {
-				Utils.sendRaceInfo(sender);
+				ChatUtils.sendRaceInfo(sender);
 			} catch (CoreStateInitException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -132,7 +133,7 @@ public class CommandSetRace implements CommandExecutor {
 				
 				return true;
 			} else {
-				Utils.sendRaceInfo(sender);
+				ChatUtils.sendRaceInfo(sender);
 				player.sendMessage("Insufficient arguments. Please provide correct race name");
 				return false;
 			}

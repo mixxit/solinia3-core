@@ -17,6 +17,7 @@ import com.solinia.solinia.Models.ItemGenBonusStatType;
 import com.solinia.solinia.Models.ItemType;
 import com.solinia.solinia.Models.SoliniaItem;
 import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.MathUtils;
 import com.solinia.solinia.Utils.TextUtils;
 import com.solinia.solinia.Utils.Utils;
 
@@ -35,7 +36,7 @@ public class SoliniaItemFactory {
 		// ItemType auto configuration
 		if (ConfigurationManager.HandMaterials.contains(item.getBasename().toUpperCase()))
 		{
-			switch (Utils.getDefaultSkillForMaterial(item.asItemStack().getType()))
+			switch (ItemStackUtils.getDefaultSkillForMaterial(item.asItemStack().getType()))
 			{
 				case "SLASHING":
 					item.setItemType(ItemType.OneHandSlashing);
@@ -314,7 +315,7 @@ public class SoliniaItemFactory {
 				
 				item.setWorth(armourtier*15);
 				// Randomise the stats of the class armour so we get more unique content in each dungeon
-				int rarityChance = Utils.RandomBetween(1, 100);
+				int rarityChance = MathUtils.RandomBetween(1, 100);
 				int rarityBonus = 0;
 				String rarityName = "";
 
@@ -425,36 +426,36 @@ public class SoliniaItemFactory {
 				// Unless there is a bonus defined, the class doesnt seem to use that statistic
 				
 				if (classStrBonus > 0)
-					item.setStrength(Utils.RandomBetween(tierMin, tierMax) + rarityBonus + classStrBonus);
+					item.setStrength(MathUtils.RandomBetween(tierMin, tierMax) + rarityBonus + classStrBonus);
 				if (classStaBonus > 0)
-					item.setStamina(Utils.RandomBetween(tierMin, tierMax) + rarityBonus + classStaBonus);
+					item.setStamina(MathUtils.RandomBetween(tierMin, tierMax) + rarityBonus + classStaBonus);
 				if (classAgiBonus > 0)
-					item.setAgility(Utils.RandomBetween(tierMin, tierMax) + rarityBonus + classAgiBonus);
+					item.setAgility(MathUtils.RandomBetween(tierMin, tierMax) + rarityBonus + classAgiBonus);
 				if (classDexBonus > 0)
-					item.setDexterity(Utils.RandomBetween(tierMin, tierMax) + rarityBonus + classDexBonus);
+					item.setDexterity(MathUtils.RandomBetween(tierMin, tierMax) + rarityBonus + classDexBonus);
 				if (classIntBonus > 0)
-					item.setIntelligence(Utils.RandomBetween(tierMin, tierMax) + rarityBonus+classIntBonus);
+					item.setIntelligence(MathUtils.RandomBetween(tierMin, tierMax) + rarityBonus+classIntBonus);
 				if (classWisBonus > 0)
-					item.setWisdom(Utils.RandomBetween(tierMin, tierMax) + rarityBonus+classWisBonus);
+					item.setWisdom(MathUtils.RandomBetween(tierMin, tierMax) + rarityBonus+classWisBonus);
 				if (classChaBonus > 0)
-					item.setCharisma(Utils.RandomBetween(tierMin, tierMax) + rarityBonus+classChaBonus);
+					item.setCharisma(MathUtils.RandomBetween(tierMin, tierMax) + rarityBonus+classChaBonus);
 				
 				
 				
 				setItemDamageAndAcAndDelay(item, armourtier, tierMin, tierMax, classAcBonus, rarityBonus, classStrBonus, classDelayBonus, item.getItemType());
 				
 				// mana
-				item.setMana(Utils.RandomBetween(0,armourtier * 20)+rarityBonus);
+				item.setMana(MathUtils.RandomBetween(0,armourtier * 20)+rarityBonus);
 								
 				// hp
-				item.setHp(Utils.RandomBetween(0,armourtier * 20)+rarityBonus);
+				item.setHp(MathUtils.RandomBetween(0,armourtier * 20)+rarityBonus);
 				
 				// resists
-				item.setColdResist(Utils.RandomBetween(0,(int)Math.floor(armourtier * 0.7) + rarityBonus));
-				item.setFireResist(Utils.RandomBetween(0,(int)Math.floor(armourtier * 0.7) + rarityBonus));
-				item.setMagicResist(Utils.RandomBetween(0,(int)Math.floor(armourtier * 0.7) + rarityBonus));
-				item.setPoisonResist(Utils.RandomBetween(0,(int)Math.floor(armourtier * 0.7) + rarityBonus));
-				item.setDiseaseResist(Utils.RandomBetween(0,(int)Math.floor(armourtier * 0.7) + rarityBonus));
+				item.setColdResist(MathUtils.RandomBetween(0,(int)Math.floor(armourtier * 0.7) + rarityBonus));
+				item.setFireResist(MathUtils.RandomBetween(0,(int)Math.floor(armourtier * 0.7) + rarityBonus));
+				item.setMagicResist(MathUtils.RandomBetween(0,(int)Math.floor(armourtier * 0.7) + rarityBonus));
+				item.setPoisonResist(MathUtils.RandomBetween(0,(int)Math.floor(armourtier * 0.7) + rarityBonus));
+				item.setDiseaseResist(MathUtils.RandomBetween(0,(int)Math.floor(armourtier * 0.7) + rarityBonus));
 				
 				// TODO class procs?
 				StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
@@ -519,7 +520,7 @@ public class SoliniaItemFactory {
 				if (dmgMax < 7)
 					dmgMax = 7;
 				
-				int damage = Utils.RandomBetween(dmgMin, dmgMax) + rarityBonus + damageBonus;
+				int damage = MathUtils.RandomBetween(dmgMin, dmgMax) + rarityBonus + damageBonus;
 				if (itemType.equals(ItemType.TwoHandBlunt) || itemType.equals(ItemType.TwoHandPiercing) || itemType.equals(ItemType.TwoHandSlashing) )
 					damage = damage*2;
 				
@@ -561,7 +562,7 @@ public class SoliniaItemFactory {
 		if (armourTier > 1)
 			acMin =+ (acMultiplier * armourTier) - acMultiplier;
 
-		int armourClass = Utils.RandomBetween(acMin,acMax)  + rarityBonus;
+		int armourClass = MathUtils.RandomBetween(acMin,acMax)  + rarityBonus;
 		return armourClass;
 	}
 }
