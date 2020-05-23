@@ -5882,7 +5882,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		// check for items being illegally attained
 		if (weapon_item != null) {
-			if (!this.isNPC() && weapon_item.getMinLevel() > getMentorLevel())
+			if (!this.isNPC() && weapon_item.getMinLevel() > getActualLevel())
 				return 0;
 
 			if (!this.isNPC() && !weapon_item.isEquipable(this.getRace(),this.getClassObj()))
