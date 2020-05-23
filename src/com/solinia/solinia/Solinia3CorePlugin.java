@@ -225,7 +225,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	private void startProtocolListeners() {
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		protocolManager.addPacketListener(new ParticlePacketAdapter(
-				PacketAdapter.params(this, new PacketType[] { PacketType.Play.Server.ANIMATION, PacketType.Play.Server.ENTITY_EFFECT, PacketType.Play.Server.ENTITY_METADATA })));
+				PacketAdapter.params(this, new PacketType[] { PacketType.Play.Server.ANIMATION, PacketType.Play.Server.ENTITY_EFFECT, PacketType.Play.Server.ENTITY_METADATA, PacketType.Play.Server.ENTITY_STATUS })));
 	}
 
 	private void unloadDynmap() {
