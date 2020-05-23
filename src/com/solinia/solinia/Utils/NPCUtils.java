@@ -74,7 +74,7 @@ public class NPCUtils {
 
 		public static int getHeroicDamageMultiplier() {
 			// TODO Auto-generated method stub
-			return 4;
+			return 110;
 		}
 
 		public static int getHeroicHPMultiplier() {
@@ -92,9 +92,9 @@ public class NPCUtils {
 		public static int getBossDamageMultiplier(boolean heroicBoss) {
 			// TODO Auto-generated method stub
 			if (heroicBoss)
-				return getHeroicDamageMultiplier() * 6;
+				return 125;
 			else
-				return getHeroicDamageMultiplier() * 2;
+				return 115;
 		}
 
 		public static int getBossHPMultiplier(boolean heroicBoss) {
@@ -113,8 +113,7 @@ public class NPCUtils {
 		}
 
 		public static int getRaidHeroicDamageMultiplier() {
-			// TODO Auto-generated method stub
-			return 10;
+			return 120;
 		}
 
 		public static int getRaidHeroicHPMultiplier() {
@@ -131,7 +130,7 @@ public class NPCUtils {
 
 		public static int getRaidBossDamageMultiplier() {
 			// TODO Auto-generated method stub
-			return 30;
+			return 150;
 		}
 
 		public static int getRaidBossHPMultiplier() {

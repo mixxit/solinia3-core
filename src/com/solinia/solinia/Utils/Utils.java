@@ -909,6 +909,8 @@ public class Utils {
 			return new DisguisePackage(DisguiseType.PLAYER, "Joker");
 		case 454:
 			return new DisguisePackage(DisguiseType.PLAYER, "Apiii");
+		case 485:
+			return new DisguisePackage(DisguiseType.SKELETON, "Demi Lich");
 		default:
 			return new DisguisePackage(DisguiseType.UNKNOWN, "Unknown");
 		}

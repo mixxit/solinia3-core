@@ -1908,25 +1908,25 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		if (mindmg < 1)
 		{
 			mindmg = calcNPCDamage().a();
-			
+
 			if (isBoss()) {
-				mindmg += (NPCUtils.getBossDamageMultiplier(isHeroic()) * mindmg);
+				mindmg += (NPCUtils.getBossDamageMultiplier(isHeroic())/100 * mindmg);
 			}
 
 			if (isHeroic()) {
-				mindmg += (NPCUtils.getHeroicDamageMultiplier() * mindmg);
+				mindmg += (NPCUtils.getHeroicDamageMultiplier()/100 * mindmg);
 			}
 
 			if (isRaidboss()) {
-				mindmg += (NPCUtils.getRaidBossDamageMultiplier() * mindmg);
+				mindmg += (NPCUtils.getRaidBossDamageMultiplier()/100 * mindmg);
 			}
 
 			if (isRaidheroic()) {
-				mindmg += (NPCUtils.getHeroicDamageMultiplier() * mindmg);
+				mindmg += (NPCUtils.getHeroicDamageMultiplier()/100 * mindmg);
 			}
 		}
-		
-		return (int) Math.round((getMaxDamage() - mindmg) / 1.9);
+		int base = (int) Math.round((getMaxDamage() - mindmg) / 1.9);
+		return  base;
 	}
 	
 	@Override
@@ -1990,21 +1990,20 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			return getMaxDmg();
 		} else {
 			int maxDamage = calcNPCDamage().b();
-			
 			if (isBoss()) {
-				maxDamage += (NPCUtils.getBossHPMultiplier(isHeroic()) * maxDamage);
+				maxDamage += (NPCUtils.getBossDamageMultiplier(isHeroic())/100 * maxDamage);
 			}
 
 			if (isHeroic()) {
-				maxDamage += (NPCUtils.getHeroicHPMultiplier() * maxDamage);
+				maxDamage += (NPCUtils.getHeroicDamageMultiplier()/100 * maxDamage);
 			}
 
 			if (isRaidboss()) {
-				maxDamage += (NPCUtils.getRaidBossHPMultiplier() * maxDamage);
+				maxDamage += (NPCUtils.getRaidBossDamageMultiplier()/100 * maxDamage);
 			}
 
 			if (isRaidheroic()) {
-				maxDamage += (NPCUtils.getRaidHeroicHPMultiplier() * maxDamage);
+				maxDamage += (NPCUtils.getRaidHeroicDamageMultiplier()/100 * maxDamage);
 			}
 			
 			return maxDamage;
@@ -2019,19 +2018,19 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			mindmg = calcNPCDamage().a();
 			
 			if (isBoss()) {
-				mindmg += (NPCUtils.getBossHPMultiplier(isHeroic()) * mindmg);
+				mindmg += (NPCUtils.getBossDamageMultiplier(isHeroic())/100 * mindmg);
 			}
 
 			if (isHeroic()) {
-				mindmg += (NPCUtils.getHeroicHPMultiplier() * mindmg);
+				mindmg += (NPCUtils.getHeroicDamageMultiplier()/100 * mindmg);
 			}
 
 			if (isRaidboss()) {
-				mindmg += (NPCUtils.getRaidBossHPMultiplier() * mindmg);
+				mindmg += (NPCUtils.getRaidBossDamageMultiplier()/100 * mindmg);
 			}
 
 			if (isRaidheroic()) {
-				mindmg += (NPCUtils.getRaidHeroicHPMultiplier() * mindmg);
+				mindmg += (NPCUtils.getRaidHeroicDamageMultiplier()/100 * mindmg);
 			}
 		}
 

@@ -1,6 +1,7 @@
 package com.solinia.solinia;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 
 import com.comphenix.protocol.PacketType;
@@ -57,14 +58,13 @@ public class ParticlePacketAdapter extends PacketAdapter {
 			try
 			{
 			// Cancel Screen shake
-			if (e.getPacketType().equals(PacketType.Play.Server.ENTITY_STATUS))
+			if (e.getPacketType().equals(PacketType.Play.Server.ANIMATION))
 	    	{
-			if(e.getPacket().getIntegers().read(0) == e.getPlayer().getEntityId() &&
-	                e.getPacket().getBytes().read(0) == 2) {
-	            e.setCancelled(true);
+				if(e.getPacket().getIntegers().read(0) == e.getPlayer().getEntityId() &&
+		                e.getPacket().getIntegers().read(1) == 1) {
 
-	            e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_PLAYER_HURT, 1, 1);
-	        }
+		            e.setCancelled(true);
+		        }
 	    	}
 			} catch (Exception a)
 			{

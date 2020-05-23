@@ -1524,7 +1524,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			my_hit.min_damage = this.getNPC().getMinDamage();
 			DebugUtils.DebugLog("SoliniaLivingEntity", "CalcNPCAttack", this.getBukkitLivingEntity(), "NPC Base Dmg: " + my_hit.min_damage);
 			int hate = my_hit.base_damage + my_hit.min_damage;
-
+			
 			int hit_chance_bonus = 0;
 
 			/*if (opts) {
