@@ -1910,19 +1910,19 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			mindmg = calcNPCDamage().a();
 			
 			if (isBoss()) {
-				mindmg += (NPCUtils.getBossHPMultiplier(isHeroic()) * mindmg);
+				mindmg += (NPCUtils.getBossDamageMultiplier(isHeroic()) * mindmg);
 			}
 
 			if (isHeroic()) {
-				mindmg += (NPCUtils.getHeroicHPMultiplier() * mindmg);
+				mindmg += (NPCUtils.getHeroicDamageMultiplier() * mindmg);
 			}
 
 			if (isRaidboss()) {
-				mindmg += (NPCUtils.getRaidBossHPMultiplier() * mindmg);
+				mindmg += (NPCUtils.getRaidBossDamageMultiplier() * mindmg);
 			}
 
 			if (isRaidheroic()) {
-				mindmg += (NPCUtils.getRaidHeroicHPMultiplier() * mindmg);
+				mindmg += (NPCUtils.getHeroicDamageMultiplier() * mindmg);
 			}
 		}
 		
