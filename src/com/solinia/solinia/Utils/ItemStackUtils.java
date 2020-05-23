@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -18,6 +19,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.bukkit.inventory.meta.tags.ItemTagType;
 
+import com.earth2me.essentials.Essentials;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
 import com.mojang.authlib.GameProfile;
@@ -58,7 +60,17 @@ public class ItemStackUtils {
 		String isMerchant = compound.getString("merchant");
 		return Boolean.parseBoolean(isMerchant);
 	}
+	
+	public static double getWorthOfVanillaMaterial(ItemStack itemStack) {
+		if (itemStack == null || itemStack.getType() == null || itemStack.getType().equals(Material.AIR))
+			return 0D;
 
+		Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+		if (ess != null)
+			return ess.getWorth().getPrice(ess, itemStack).doubleValue();
+
+		return 1D;
+	}
 	
 	public static AugmentationSlotType getItemStackAugSlotType(String basename, boolean isAugmentation) {
 		if (isAugmentation)

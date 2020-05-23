@@ -1889,7 +1889,7 @@ public class Solinia3CorePlayerListener implements Listener {
 						if (item != null)
 							individualprice = item.getWorth();
 						else
-							individualprice = getWorthOfVanillaMaterial(event.getCursor());
+							individualprice = ItemStackUtils.getWorthOfVanillaMaterial(event.getCursor());
 
 						// Total price
 						double price = individualprice * event.getCursor().getAmount();
@@ -1948,17 +1948,6 @@ public class Solinia3CorePlayerListener implements Listener {
 		event.getView().getPlayer().sendMessage("Please alert an admin of this message code: GMMI1");
 		EntityUtils.CancelEvent(event);
 		return;
-	}
-	
-	public double getWorthOfVanillaMaterial(ItemStack itemStack) {
-		if (itemStack == null || itemStack.getType() == null || itemStack.getType().equals(Material.AIR))
-			return 0D;
-
-		Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
-		if (ess != null)
-			return ess.getWorth().getPrice(ess, itemStack).doubleValue();
-
-		return 1D;
 	}
 
 	@EventHandler

@@ -988,6 +988,7 @@ public class SoliniaActiveSpell {
 		case ArmyOfTheDead:
 			return;
 		case Appraisal:
+			applyAppraisal(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case SuspendMinion:
 			return;
@@ -1389,6 +1390,48 @@ public class SoliniaActiveSpell {
 			return;
 		default:
 			return;
+		}
+	}
+
+	private void applyAppraisal(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		if (!this.isSourcePlayer())
+			return;
+		
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+		
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+		try {
+			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellEffect.getBase());
+			if (spell == null)
+				return;
+
+			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			if (sourceSoliniaLivingEntity != null && getLivingEntity() != null) {
+				
+				ItemStack itemStack = getLivingEntity().getEquipment().getItemInMainHand();
+				if (itemStack != null)
+				{
+					try
+					{
+						ISoliniaItem solItem = SoliniaItemAdapter.Adapt(itemStack);
+						sourceLivingEntity.sendMessage("Looking at each item you believe a single one is worth: " + solItem.getWorth());
+					} catch (CoreStateInitException e)
+					{
+					} catch (SoliniaItemException e) {
+						double individualprice = ItemStackUtils.getWorthOfVanillaMaterial(itemStack);
+						sourceLivingEntity.sendMessage("Looking at each item you believe a single one is worth: " + individualprice + " 0 sols");
+					}
+				} else {
+					sourceLivingEntity.sendMessage("Looking at each item you believe a single one is worth: 0 sols");
+				}
+			}
+		} catch (CoreStateInitException e) {
+			// just skip it
 		}
 	}
 
