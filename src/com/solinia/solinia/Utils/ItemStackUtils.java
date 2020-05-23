@@ -360,11 +360,13 @@ public class ItemStackUtils {
 	{
 		List<Material> allowedVanillaItems = new ArrayList<Material>();
 		allowedVanillaItems.add(Material.COAL_ORE);
+		allowedVanillaItems.add(Material.GOLD_NUGGET);
 		allowedVanillaItems.add(Material.GOLD_ORE);
 		allowedVanillaItems.add(Material.GOLD_INGOT);
 		allowedVanillaItems.add(Material.GOLD_BLOCK);
-		allowedVanillaItems.add(Material.IRON_INGOT);
+		allowedVanillaItems.add(Material.IRON_NUGGET);
 		allowedVanillaItems.add(Material.IRON_ORE);
+		allowedVanillaItems.add(Material.IRON_INGOT);
 		allowedVanillaItems.add(Material.IRON_BLOCK);
 		allowedVanillaItems.add(Material.DIAMOND_ORE);
 		allowedVanillaItems.add(Material.DIAMOND);
