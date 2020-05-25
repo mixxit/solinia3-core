@@ -815,17 +815,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		Double percenttolevel = Math.floor((currentxpprogress / totalxpneeded) * 100);
 		int ipercenttolevel = percenttolevel.intValue();
 		if (changeamount > 0) {
-			getBukkitPlayer()
-					.sendMessage(ChatColor.YELLOW + "* You gain experience (" + ipercenttolevel + "% into level)");
-			getBukkitPlayer().sendMessage(ChatColor.GRAY + "Exp Gained: " + changeamount);
+			ChatUtils.SendHint(getBukkitPlayer(), HINT.GAINEXPERIENCE, ""+ipercenttolevel, false);
 			if (modified == true)
-				getBukkitPlayer().sendMessage(ChatColor.YELLOW
-						+ "* You were given bonus XP from a xp bonus /hotzone or potion! (See /stats && /hotzones)");
+				ChatUtils.SendHint(getBukkitPlayer(), HINT.GAINEXPERIENCE, null, false);
 		}
 
 		if (changeamount < 0) {
-			getBukkitPlayer()
-					.sendMessage(ChatColor.RED + "* You lost experience (" + ipercenttolevel + "% into level)");
+			ChatUtils.SendHint(getBukkitPlayer(), HINT.LOSTEXPERIENCE, ""+ipercenttolevel, false);
 		}
 		if (Double.compare(newlevel, level) > 0) {
 			getBukkitPlayer().sendMessage(ChatColor.DARK_PURPLE + "* You gained a level (" + newlevel + ")!");
@@ -3127,13 +3123,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				grantTitle(playerFactionEntry.getFaction().getAllyGrantsTitle());
 			}
 
-			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with "
-					+ playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any better");
+			ChatUtils.SendHint(getBukkitPlayer(), HINT.FACTION_COULDNOTGETBETTER, playerFactionEntry.getFaction().getName().toLowerCase(), false);
 		}
 
 		if (!hitCap) {
-			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with "
-					+ playerFactionEntry.getFaction().getName().toLowerCase() + " got better");
+			ChatUtils.SendHint(getBukkitPlayer(), HINT.FACTION_GOTBETTER, playerFactionEntry.getFaction().getName().toLowerCase(), false);
 		}
 
 		playerFactionEntry.setValue(newValue);
@@ -3169,14 +3163,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (!playerFactionEntry.getFaction().getScowlsGrantsTitle().equals("")) {
 				grantTitle(playerFactionEntry.getFaction().getScowlsGrantsTitle());
 			}
-
-			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with "
-					+ playerFactionEntry.getFaction().getName().toLowerCase() + " could not possibly get any worse");
+			
+			ChatUtils.SendHint(getBukkitPlayer(), HINT.FACTION_COULDNOTGETWORSE, playerFactionEntry.getFaction().getName().toLowerCase(), false);
 		}
 
 		if (!hitCap) {
-			getBukkitPlayer().sendMessage(ChatColor.GRAY + "* Your faction standing with "
-					+ playerFactionEntry.getFaction().getName().toLowerCase() + " got worse");
+			ChatUtils.SendHint(getBukkitPlayer(), HINT.FACTION_GOTWORSE, playerFactionEntry.getFaction().getName().toLowerCase(), false);
 		}
 
 		playerFactionEntry.setValue(newValue);

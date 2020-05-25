@@ -328,8 +328,30 @@ public class ChatUtils {
 		case ASSASSINATES:
 			message = referenceCode + " ASSASSINATES their victim!!";
 			break;		
+		case BONUSEXPERIENCE:
+			message = "You were given bonus XP from a xp bonus /hotzone or potion! (See /stats && /hotzones)";
+			break;
+		case GAINEXPERIENCE:
+			message = ChatColor.YELLOW + "You gain experience (" + referenceCode + "% into level)";
+			break;
+		case LOSTEXPERIENCE:
+			message = ChatColor.RED + "You lost experience (" + referenceCode + "% into level)";
+			break;
+		case FACTION_GOTBETTER:
+			message = "Your faction standing with " + referenceCode + " could not possibly got better";
+			break;
+		case FACTION_GOTWORSE:
+			message = "Your faction standing with " + referenceCode + " could not possibly got worse";
+			break;
+		case FACTION_COULDNOTGETWORSE:
+			message = "Your faction standing with " + referenceCode + " could not possibly get any worse";
+			break;
+		case FACTION_COULDNOTGETBETTER:
+			message = "Your faction standing with " + referenceCode + " could not possibly get any better";
+			break;
 		case SLAYUNDEAD:
 			message = referenceCode +"'s holy blade cleanses their target!";
+			break;
 		case ITEM_DISCOVERED:
 			String[] itemDiscoveryData = referenceCode.split("\\^");
 			try
@@ -522,6 +544,20 @@ public class ChatUtils {
 		case ASSASSINATES:
 			return HintSetting.Chat;
 		case SLAYUNDEAD:
+			return HintSetting.Chat;
+		case GAINEXPERIENCE:
+			return HintSetting.Chat;
+		case LOSTEXPERIENCE:
+			return HintSetting.Chat;
+		case BONUSEXPERIENCE:
+			return HintSetting.Chat;
+		case FACTION_GOTBETTER:
+			return HintSetting.Chat;
+		case FACTION_COULDNOTGETBETTER:
+			return HintSetting.Chat;
+		case FACTION_GOTWORSE:
+			return HintSetting.Chat;
+		case FACTION_COULDNOTGETWORSE:
 			return HintSetting.Chat;
 		}
 		

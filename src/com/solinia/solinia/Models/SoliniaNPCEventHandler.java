@@ -710,7 +710,6 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 				
 				// xp 
 				if (getAwardsExperience() > 0) {
-					System.out.println("Awarding experience with awardquestflag: " + getAwardsQuestFlag());
 					player.increasePlayerExperience(getAwardsExperience(), false, true);
 					hasAwardedXp = true;
 				}
@@ -783,7 +782,6 @@ public class SoliniaNPCEventHandler implements ISoliniaNPCEventHandler {
 					// xp 
 					if (!hasAwardedXp)
 					if (getAwardsExperience() > 0) {
-						System.out.println("Awarding experience with awardquestflag: " + getAwardsQuestFlag());
 						player.increasePlayerExperience(getAwardsExperience(), false, true);
 						hasAwardedXp = true;
 					}
