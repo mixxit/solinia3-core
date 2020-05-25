@@ -410,24 +410,38 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 
 							if (ConfigurationManager.WeaponMaterials.contains(item.getBasename().toUpperCase())) {
 								if (item.getAllowedClassNamesUpper().size() == 0) {
-									if (item.getBasename().contains("SHIELD"))
+									if (item.getBasename().contains("SHIELD") && (item.getAC() > 0))
+									{
 										potentialShields.add(item);
-									else if (item.getBasename().contains("BOW") || item.getBasename().contains("CROSSBOW"))
+									}
+									else if (item.getDefinedItemDamage() > 0 && item.getWeaponDelay() > 0 && (item.getBasename().contains("BOW") || item.getBasename().contains("CROSSBOW")))
+									{
 										potentialBows.add(item);
+									}
 									else
-										potentialWeapons.add(item);
+									{
+										if (item.getDefinedItemDamage() > 0 && item.getWeaponDelay() > 0)
+											potentialWeapons.add(item);
+									}
 									continue;
 								}
 
 								// We should check race here too
 								if (npc.getClassObj() != null) {
 									if (item.getAllowedClassNamesUpper().contains(npc.getClassObj().getName())) {
-										if (item.getBasename().contains("SHIELD"))
+										if (item.getBasename().contains("SHIELD") && (item.getAC() > 0))
+										{
 											potentialShields.add(item);
-										else if (item.getBasename().contains("BOW") || item.getBasename().contains("CROSSBOW"))
+										}
+										else if (item.getDefinedItemDamage() > 0 && item.getWeaponDelay() > 0 && (item.getBasename().contains("BOW") || item.getBasename().contains("CROSSBOW")))
+										{
 											potentialBows.add(item);
+										}
 										else
+										{
+											if (item.getDefinedItemDamage() > 0 && item.getWeaponDelay() > 0)
 											potentialWeapons.add(item);
+										}
 										continue;
 									}
 								}
@@ -436,11 +450,20 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 							if (ConfigurationManager.HandMaterials.contains(item.getBasename().toUpperCase())) {
 								if (item.getAllowedClassNamesUpper().size() == 0) {
 									if (item.getBasename().contains("SHIELD"))
+									{
+										if (item.getAC() > 0)
 										potentialShields.add(item);
+									}
 									else if (item.getBasename().contains("BOW") || item.getBasename().contains("CROSSBOW"))
+									{
+										if (item.getDefinedItemDamage() > 0 && item.getWeaponDelay() > 0)
 										potentialBows.add(item);
+									}
 									else
+									{
+										if (item.getDefinedItemDamage() > 0 && item.getWeaponDelay() > 0)
 										potentialWeapons.add(item);
+									}
 									continue;
 								}
 
@@ -448,10 +471,13 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 								if (npc.getClassObj() != null) {
 									if (item.getAllowedClassNamesUpper().contains(npc.getClassObj().getName())) {
 										if (item.getBasename().contains("SHIELD"))
+											if (item.getAC() > 0)
 											potentialShields.add(item);
 										else if (item.getBasename().contains("BOW") || item.getBasename().contains("CROSSBOW"))
+											if (item.getDefinedItemDamage() > 0 && item.getWeaponDelay() > 0)
 											potentialBows.add(item);
 										else
+											if (item.getDefinedItemDamage() > 0 && item.getWeaponDelay() > 0)
 											potentialWeapons.add(item);
 										continue;
 									}
