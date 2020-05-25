@@ -9,6 +9,7 @@ public class StateCommitTimer extends BukkitRunnable {
 	public void run() {
 		try {
 			StateManager.getInstance().Commit();
+			StateManager.getInstance().setXPBonus();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
