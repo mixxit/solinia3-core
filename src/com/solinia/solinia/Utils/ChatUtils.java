@@ -349,6 +349,12 @@ public class ChatUtils {
 		case FACTION_COULDNOTGETBETTER:
 			message = "Your faction standing with " + referenceCode + " could not possibly get any better";
 			break;
+		case DUALWIELD:
+			message = "You dual wield!";
+			break;
+		case DOUBLEATTACK:
+			message = "You double attack!";
+			break;
 		case SLAYUNDEAD:
 			message = referenceCode +"'s holy blade cleanses their target!";
 			break;
@@ -558,6 +564,10 @@ public class ChatUtils {
 		case FACTION_GOTWORSE:
 			return HintSetting.Chat;
 		case FACTION_COULDNOTGETWORSE:
+			return HintSetting.Chat;
+		case DUALWIELD:
+			return HintSetting.Chat;
+		case DOUBLEATTACK:
 			return HintSetting.Chat;
 		}
 		

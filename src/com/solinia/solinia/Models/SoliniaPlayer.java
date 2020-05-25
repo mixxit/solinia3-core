@@ -817,7 +817,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (changeamount > 0) {
 			ChatUtils.SendHint(getBukkitPlayer(), HINT.GAINEXPERIENCE, ""+ipercenttolevel, false);
 			if (modified == true)
-				ChatUtils.SendHint(getBukkitPlayer(), HINT.GAINEXPERIENCE, null, false);
+				ChatUtils.SendHint(getBukkitPlayer(), HINT.BONUSEXPERIENCE, "", false);
 		}
 
 		if (changeamount < 0) {

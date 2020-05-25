@@ -554,7 +554,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				tryIncreaseSkill(SkillType.DualWield, 1);
 				if (checkDualWield()) {
 					tryWeaponProc(getBukkitLivingEntity().getEquipment().getItemInOffHand(), defender, InventorySlot.Secondary);
-					this.getBukkitLivingEntity().sendMessage("You dual wield!");
+					ChatUtils.SendHint(this.getBukkitLivingEntity(), HINT.DUALWIELD, "", false);
 					doAttackRounds(defender, InventorySlot.Secondary, false);
 				}
 			}
@@ -1318,7 +1318,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (candouble) {
 			tryIncreaseSkill(SkillType.DoubleAttack, 1);
 			if (checkDoubleAttack()) {
-				this.sendMessage(ChatColor.GRAY + "* You double attack!");
+				ChatUtils.SendHint(this.getBukkitLivingEntity(), HINT.DOUBLEATTACK, "", false);
 				Attack(target, hand, false, false, isFromSpell);
 
 				// Modern AA description: Increases your chance of ... performing one additional hit with a 2-handed weapon when double attacking by 2%.
@@ -1326,7 +1326,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					int extraattackchance = getAABonuses(SpellEffectType.ExtraAttackChance) + getSpellBonuses(SpellEffectType.ExtraAttackChance) + getItemBonuses(SpellEffectType.ExtraAttackChance);
 					if (extraattackchance > 0 && hasTwoHanderEquipped() && MathUtils.Roll(extraattackchance))
 					{
-						this.sendMessage(ChatColor.GRAY + "* You double attack!");
+						ChatUtils.SendHint(this.getBukkitLivingEntity(), HINT.DOUBLEATTACK, "", false);
 						Attack(target, hand, false, false, isFromSpell);
 					}
 				}
