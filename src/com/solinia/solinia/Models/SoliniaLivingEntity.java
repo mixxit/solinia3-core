@@ -6469,7 +6469,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	
 	@Override
 	public Tuple<Integer,Integer> getSpellBonusesTuple(SpellEffectType spellEffectType) {
-		return getSpellBonusesTuple(spellEffectType);
+		return getSpellBonusesTuple(spellEffectType,null);
 	}
 	
 	// In EQEmu this gets done only once (ApplySpellsBonuses/NegateSpellBonuses), for now we should just work around it
