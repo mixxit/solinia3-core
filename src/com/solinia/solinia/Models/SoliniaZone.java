@@ -239,6 +239,12 @@ public class SoliniaZone implements IPersistable {
 		case "hpregen":
 			setHpRegen(Integer.parseInt(value));
 			break;
+		case "disableallspawns":
+			if (value.toUpperCase().equals("TRUE"))
+				disableAllSpawners();
+			else
+				enableAllSpawners();
+			break;
 		case "manaregen":
 			setManaRegen(Integer.parseInt(value));
 			break;
@@ -339,6 +345,40 @@ public class SoliniaZone implements IPersistable {
 		default:
 			throw new InvalidZoneSettingException(
 					"Invalid zone setting. Valid Options are: name,bottomleftcornerx,bottomleftcornery,bottomleftcornerz,toprightcornerx,toprightcornery,toprightcornerz,requiresalignment,hotzone,succorx,succory,succorz,forestryloottableid,fishingloottableid,miningloottableid,forestryminskill,miningminskill,fishingminskill,music,nounstuck");
+		}
+	}
+	
+	private void enableAllSpawners() {
+		try
+		{
+			for (ISoliniaSpawnGroup spawngroup : StateManager.getInstance().getConfigurationManager().getSpawnGroups())
+			{
+				if (!this.isLocationInside(spawngroup.getLocation()))
+					continue;
+				
+				System.out.println("Enabled spawngroup " + spawngroup);
+				spawngroup.setDisabled(false);
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	private void disableAllSpawners() {
+		try
+		{
+			for (ISoliniaSpawnGroup spawngroup : StateManager.getInstance().getConfigurationManager().getSpawnGroups())
+			{
+				if (!this.isLocationInside(spawngroup.getLocation()))
+					continue;
+				
+				System.out.println("Disabled spawngroup " + spawngroup);
+				spawngroup.setDisabled(true);
+			}
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 	}
 	
