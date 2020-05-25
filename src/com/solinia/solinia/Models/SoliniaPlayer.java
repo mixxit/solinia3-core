@@ -2590,11 +2590,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public int getTotalResist(SpellResistType type) {
-		int total = 0;
-		// Get resist total from all active effects
-		try {
-			total += SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer()).getResistsFromActiveEffects(type);
-
+		try
+		{
+			int total = 0;
+			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(getBukkitPlayer());
+			if (solLivingEntity == null)
+				return 0;
+			
+			total += solLivingEntity.getResistsFromActiveEffects(type);
+	
 			int effectId = 0;
 			switch (type) {
 			case RESIST_FIRE:
@@ -2615,62 +2619,64 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			default:
 				break;
 			}
-
+	
 			if (effectId > 0) {
 				int aaEffect = 0;
-
+	
 				for (SoliniaAARankEffect highestRankEffect : SpellUtils.getHighestRankEffectsForEffectId(this, effectId)) {
 					aaEffect += highestRankEffect.getBase1();
 				}
-
+	
 				total += aaEffect;
 			}
-
+	
 			int resistAllEffectId = SpellUtils.getEffectIdFromEffectType(SpellEffectType.ResistAll);
 			for (SoliniaAARankEffect effect : this.getRanksEffectsOfEffectType(resistAllEffectId,true)) {
 				total += effect.getBase1();
 			}
-
-		} catch (CoreStateInitException e) {
-			// Skip
-		}
-
-		for (ISoliniaItem item : this.getEquippedSoliniaItems()) {
-			switch (type) {
-			case RESIST_FIRE:
-				if (item.getFireResist() > 0) {
-					total += item.getFireResist();
+	
+			for (ISoliniaItem item : this.getEquippedSoliniaItems()) {
+				switch (type) {
+				case RESIST_FIRE:
+					if (item.getFireResist() > 0) {
+						total += item.getFireResist();
+					}
+					break;
+				case RESIST_COLD:
+					if (item.getColdResist() > 0) {
+						total += item.getColdResist();
+					}
+					break;
+				case RESIST_MAGIC:
+					if (item.getMagicResist() > 0) {
+						total += item.getMagicResist();
+					}
+					break;
+				case RESIST_POISON:
+					if (item.getPoisonResist() > 0) {
+						total += item.getPoisonResist();
+					}
+					break;
+				case RESIST_DISEASE:
+					if (item.getDiseaseResist() > 0) {
+						total += item.getDiseaseResist();
+					}
+					break;
+				default:
+					break;
 				}
-				break;
-			case RESIST_COLD:
-				if (item.getColdResist() > 0) {
-					total += item.getColdResist();
-				}
-				break;
-			case RESIST_MAGIC:
-				if (item.getMagicResist() > 0) {
-					total += item.getMagicResist();
-				}
-				break;
-			case RESIST_POISON:
-				if (item.getPoisonResist() > 0) {
-					total += item.getPoisonResist();
-				}
-				break;
-			case RESIST_DISEASE:
-				if (item.getDiseaseResist() > 0) {
-					total += item.getDiseaseResist();
-				}
-				break;
-			default:
-				break;
 			}
+			
+			if (total > solLivingEntity.getResistCap(type))
+				return solLivingEntity.getResistCap(type);
+	
+			return total;
+		} catch (CoreStateInitException e)
+		{
+			
 		}
-
-		if (total > 255)
-			return 255;
-
-		return total;
+		
+		return 0;
 	}
 
 	@Override

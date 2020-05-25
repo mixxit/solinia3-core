@@ -6419,9 +6419,62 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return getSpellBonusesTuple(spellEffectType).a();
 	}
 	
-	// In EQEmu this gets done only once (ApplySpellsBonuses/NegateSpellBonuses), for now we should just work around it
+	@Override
+	public int getSpellBonuses(SpellEffectType spellEffectType, Integer base2filter) {
+		return getSpellBonusesTuple(spellEffectType, base2filter).a();
+	}
+	
+	@Override
+	public int getResistCap(SpellResistType type) {
+		int baseMaxStat = 255;
+		
+		int filter = -1;
+		
+		switch(type)
+		{
+		case RESIST_MAGIC: // mr
+			filter = 7;
+			break;
+		case RESIST_COLD: // cr
+			filter = 8;
+			break;
+		case RESIST_FIRE: // fr
+			filter = 9;
+			break;
+		case RESIST_POISON: // pr
+			filter = 10;
+			break;
+		case RESIST_DISEASE: // dr
+			filter = 11;
+			break;
+		case RESIST_CORRUPTION: // corruption
+			filter = 12;
+			break;
+		default:
+			break;
+		}
+		
+		int bonuses = 0;
+		if (filter > -1)
+		{
+			bonuses = this.getAABonuses(SpellEffectType.RaiseStatCap) + this.getSpellBonuses(SpellEffectType.RaiseStatCap);;
+		}
+
+		if (bonuses == 0) {
+			return baseMaxStat;
+		} else {
+			return baseMaxStat+bonuses;
+		}
+	}
+	
 	@Override
 	public Tuple<Integer,Integer> getSpellBonusesTuple(SpellEffectType spellEffectType) {
+		return getSpellBonusesTuple(spellEffectType);
+	}
+	
+	// In EQEmu this gets done only once (ApplySpellsBonuses/NegateSpellBonuses), for now we should just work around it
+	@Override
+	public Tuple<Integer,Integer> getSpellBonusesTuple(SpellEffectType spellEffectType, Integer base2filter) {
 		int bonus = 0;
 		int bonus2 = 0;
 		for (ActiveSpellEffect effect : SpellUtils.getActiveSpellEffects(getBukkitLivingEntity(), spellEffectType)) {
@@ -6435,6 +6488,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					!(sentity instanceof LivingEntity) ||
 					!(sentity instanceof LivingEntity)
 					)
+				continue;
+			
+			if (base2filter != null && effect.getBase2() != base2filter)
 				continue;
 			
 			Tuple<Integer,Integer> spellBonuses = ApplySpellsBonuses(effect.getSpellId(), (LivingEntity)sentity, (LivingEntity)tentity,effect,effect.getSourceLevel(),effect.getTicksLeft(),effect.getInstrumentMod());
@@ -8406,34 +8462,46 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public int getMaxStat(StatType statType) {
 		int baseMaxStat = 255;
-		ISoliniaAAAbility aa = null;
-		try {
-			if (getBukkitLivingEntity() instanceof Player) {
-				ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt((Player) getBukkitLivingEntity());
-				if (solplayer != null && solplayer.hasAaRanks()) {
-					for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
-							.getAAbilitiesBySysname("PLANARPOWER")) {
-						if (!solplayer.hasAAAbility(ability.getId()))
-							continue;
-
-						aa = ability;
-					}
-				}
-			}
-		} catch (CoreStateInitException e) {
-
+		
+		int filter = -1;
+		
+		switch(statType)
+		{
+		case Strength: // str
+			filter = 0;
+			break;
+		case Stamina: // sta
+			filter = 1;
+			break;
+		case Agility: // agi
+			filter = 2;
+			break;
+		case Dexterity: // dex
+			filter = 3;
+			break;
+		case Wisdom: // wis
+			filter = 4;
+			break;
+		case Intelligence: // int
+			filter = 5;
+			break;
+		case Charisma: // cha
+			filter = 6;
+			break;
+		default:
+			break;
+		}
+		
+		int bonuses = 0;
+		if (filter > -1)
+		{
+			bonuses = this.getAABonuses(SpellEffectType.RaiseStatCap,filter) + this.getSpellBonuses(SpellEffectType.RaiseStatCap,filter);
 		}
 
-		int rank = 0;
-
-		if (aa != null) {
-			rank = SpellUtils.getRankPositionOfAAAbility(getBukkitLivingEntity(), aa);
-		}
-
-		if (rank == 0) {
+		if (bonuses == 0) {
 			return baseMaxStat;
 		} else {
-			return baseMaxStat + (rank * 5);
+			return baseMaxStat + bonuses;
 		}
 	}
 
@@ -11907,6 +11975,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public int getAABonuses(SpellEffectType effect) {
 		return getAABonusesTuple(effect).a();
+	}
+	
+	@Override
+	public int getAABonuses(SpellEffectType effect, Integer filterBase2) {
+		return getAABonusesTuple(effect,filterBase2).a();
+	}
+	
+	@Override
+	public Tuple<Integer,Integer> getAABonusesTuple(SpellEffectType effect, Integer filterbase2) {
+		return SpellUtils.getHighestAAEffectEffectTypeTuple(getBukkitLivingEntity(),
+				effect,  filterbase2);
 	}
 	
 	@Override

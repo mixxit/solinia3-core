@@ -430,6 +430,10 @@ public class SpellUtils {
 	}
 	
 	public static Tuple<Integer,Integer> getHighestAAEffectEffectTypeTuple(LivingEntity bukkitLivingEntity, SpellEffectType effectType) {
+		return getHighestAAEffectEffectTypeTuple(bukkitLivingEntity, effectType, null);
+	}
+
+	public static Tuple<Integer,Integer> getHighestAAEffectEffectTypeTuple(LivingEntity bukkitLivingEntity, SpellEffectType effectType, Integer filterbase2) {
 		if (!(bukkitLivingEntity instanceof Player))
 			return new Tuple<Integer,Integer>(0,0);
 
@@ -450,6 +454,9 @@ public class SpellUtils {
 			for (SoliniaAARankEffect effect : player
 					.getRanksEffectsOfEffectType(SpellUtils.getEffectIdFromEffectType(effectType),true)) 
 			{
+				if (filterbase2 != null && effect.getBase2() != filterbase2)
+					continue;
+				
 				// Everything else
 				if (enforceSpellCritFormula) {
 					int base = 0;
@@ -479,6 +486,7 @@ public class SpellUtils {
 
 	}
 
+	
 	public static int getTotalAAEffectEffectType(LivingEntity bukkitLivingEntity, SpellEffectType effectType) {
 		if (!(bukkitLivingEntity instanceof Player))
 			return 0;

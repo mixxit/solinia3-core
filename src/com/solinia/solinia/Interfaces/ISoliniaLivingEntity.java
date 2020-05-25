@@ -529,4 +529,14 @@ public interface ISoliniaLivingEntity  {
 
 	public void doMPRegenTick();
 
+	Tuple<Integer, Integer> getAABonusesTuple(SpellEffectType effect, Integer filterbase2);
+
+	int getAABonuses(SpellEffectType effect, Integer filterBase2);
+
+	Tuple<Integer, Integer> getSpellBonusesTuple(SpellEffectType spellEffectType, Integer base2filter);
+
+	int getSpellBonuses(SpellEffectType spellEffectType, Integer base2filter);
+
+	int getResistCap(SpellResistType type);
+
 }
