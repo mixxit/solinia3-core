@@ -6001,4 +6001,16 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			
 		}
 	}
+
+	@Override
+	public void resetPlayerStatus(Plugin plugin) {
+		updateDisplayName();
+		updateMaxHp();
+		removeAllEntityEffects(plugin);
+		killAllPets();
+		resetReverseAggro();
+		setPassiveEnabled(true);
+		StopSinging();
+		stopTracking();
+	}
 }

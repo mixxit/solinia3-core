@@ -403,13 +403,7 @@ public class Solinia3CorePlayerListener implements Listener {
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
 			if (solPlayer != null)
 			{
-				solPlayer.removeAllEntityEffects(plugin);
-				solPlayer.killAllPets();
-				solPlayer.resetReverseAggro();
-				solPlayer.setLastLocation(event.getPlayer().getLocation());
-				solPlayer.setPassiveEnabled(true);
-				solPlayer.StopSinging();
-				solPlayer.stopTracking();
+				solPlayer.resetPlayerStatus(plugin);
 			}
 			
 			if (event.getPlayer() != null)
@@ -916,10 +910,7 @@ public class Solinia3CorePlayerListener implements Listener {
 				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(event.getEntity());
 				if (solPlayer != null)
 				{
-					solPlayer.setLastLocation(event.getEntity().getLocation());
-					solPlayer.setPassiveEnabled(true);
-					solPlayer.StopSinging();
-					solPlayer.stopTracking();
+					solPlayer.resetPlayerStatus(plugin);
 				}
 			}
 	    } catch (CoreStateInitException e)
@@ -2026,14 +2017,8 @@ public class Solinia3CorePlayerListener implements Listener {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
 
 			soliniaevent = new SoliniaPlayerJoinEvent(event, solplayer);
-			solplayer.updateDisplayName();
-			solplayer.updateMaxHp();
-			solplayer.removeAllEntityEffects(plugin);
-			solplayer.killAllPets();
-			solplayer.resetReverseAggro();
-			solplayer.setPassiveEnabled(true);
-			solplayer.StopSinging();
-			solplayer.stopTracking();
+			solplayer.resetPlayerStatus(plugin);
+			
 
 			Bukkit.getPluginManager().callEvent(soliniaevent);
 			

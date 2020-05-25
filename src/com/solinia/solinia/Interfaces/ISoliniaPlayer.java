@@ -662,4 +662,5 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	int getPlayerMeditatingManaBonus();
 	List<SoliniaAARankEffect> getRanksEffectsOfEffectType(int effectId, boolean enforceMentorLevelReq);
 	public void stopTracking();
+	void resetPlayerStatus(Plugin plugin);
 }
