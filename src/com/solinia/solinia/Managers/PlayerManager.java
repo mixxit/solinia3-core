@@ -237,6 +237,8 @@ public class PlayerManager implements IPlayerManager {
 			solPlayer.killAllPets();
 			solPlayer.resetReverseAggro();
 			solPlayer.setPassiveEnabled(true);
+			solPlayer.StopSinging();
+			solPlayer.stopTracking();
 			
 			if (solPlayer.getGroup() != null) {
 				StateManager.getInstance().removePlayerFromGroup(player);
@@ -304,6 +306,8 @@ public class PlayerManager implements IPlayerManager {
 			solPlayer.killAllPets();
 			solPlayer.resetReverseAggro();
 			solPlayer.setPassiveEnabled(true);
+			solPlayer.StopSinging();
+			solPlayer.stopTracking();
 			
 			if (solPlayer.getGroup() != null) {
 				StateManager.getInstance().removePlayerFromGroup(player);

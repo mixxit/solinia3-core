@@ -403,8 +403,13 @@ public class Solinia3CorePlayerListener implements Listener {
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
 			if (solPlayer != null)
 			{
+				solPlayer.removeAllEntityEffects(plugin);
+				solPlayer.killAllPets();
+				solPlayer.resetReverseAggro();
 				solPlayer.setLastLocation(event.getPlayer().getLocation());
 				solPlayer.setPassiveEnabled(true);
+				solPlayer.StopSinging();
+				solPlayer.stopTracking();
 			}
 			
 			if (event.getPlayer() != null)
@@ -913,6 +918,8 @@ public class Solinia3CorePlayerListener implements Listener {
 				{
 					solPlayer.setLastLocation(event.getEntity().getLocation());
 					solPlayer.setPassiveEnabled(true);
+					solPlayer.StopSinging();
+					solPlayer.stopTracking();
 				}
 			}
 	    } catch (CoreStateInitException e)
@@ -2021,7 +2028,12 @@ public class Solinia3CorePlayerListener implements Listener {
 			soliniaevent = new SoliniaPlayerJoinEvent(event, solplayer);
 			solplayer.updateDisplayName();
 			solplayer.updateMaxHp();
+			solplayer.removeAllEntityEffects(plugin);
+			solplayer.killAllPets();
+			solplayer.resetReverseAggro();
 			solplayer.setPassiveEnabled(true);
+			solplayer.StopSinging();
+			solplayer.stopTracking();
 
 			Bukkit.getPluginManager().callEvent(soliniaevent);
 			

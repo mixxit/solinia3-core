@@ -5986,4 +5986,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		this.backStory = backStory;
 		this.setLastUpdatedTimeNow();
 	}
+
+	@Override
+	public void stopTracking() {
+		try
+		{
+			if (this.getBukkitPlayer() == null)
+				return;
+			
+			StateManager.getInstance().getEntityManager().stopTracking(this.getBukkitPlayer().getUniqueId());
+			this.getBukkitPlayer().sendMessage("You stop tracking");
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
 }

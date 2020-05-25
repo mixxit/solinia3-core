@@ -661,4 +661,5 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public void clearTargetsAgainstMeWithoutEffect(SpellEffectType invisibility);
 	int getPlayerMeditatingManaBonus();
 	List<SoliniaAARankEffect> getRanksEffectsOfEffectType(int effectId, boolean enforceMentorLevelReq);
+	public void stopTracking();
 }
