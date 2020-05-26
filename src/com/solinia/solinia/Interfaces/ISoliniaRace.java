@@ -96,4 +96,8 @@ public interface ISoliniaRace extends IPersistable {
 	boolean isAnimal();
 
 	void setAnimal(boolean animal);
+
+	void setArmouredSkin(boolean armouredSkin);
+
+	boolean isArmouredSkin();
 }

@@ -22,6 +22,10 @@ public class MathUtils {
 	public static boolean isInteger(String s) {
 	    return isInteger(s,10);
 	}
+	
+	public static float clamp(float val, float min, float max) {
+	    return Math.max(min, Math.min(max, val));
+	}
 
 	public static boolean isInteger(String s, int radix) {
 	    if(s.isEmpty()) return false;

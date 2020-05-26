@@ -47,6 +47,7 @@ public class SoliniaRace implements ISoliniaRace,IPersistable {
 
 	private int passiveAbilityId = 0;
 	private int raceLootTableId = 0;
+	private boolean armouredSkin = false;
 	
 	@Override
 	public String getName() {
@@ -187,6 +188,7 @@ public class SoliniaRace implements ISoliniaRace,IPersistable {
 		sender.sendMessage("- vampire: " + ChatColor.GOLD + isVampire() + ChatColor.RESET);
 		sender.sendMessage("- undead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET);
 		sender.sendMessage("- plant: " + ChatColor.GOLD + isPlant() + ChatColor.RESET);
+		sender.sendMessage("- armouredskin: " + ChatColor.GOLD + isArmouredSkin() + ChatColor.RESET);
 		sender.sendMessage("- animal: " + ChatColor.GOLD + isAnimal() + ChatColor.RESET);
 		sender.sendMessage("- admin: " + ChatColor.GOLD + isAdmin() + ChatColor.RESET);
 		sender.sendMessage("- language: " + ChatColor.GOLD + getLanguage() + ChatColor.RESET);
@@ -248,6 +250,9 @@ public class SoliniaRace implements ISoliniaRace,IPersistable {
 			break;
 		case "bodytype":
 			setBodyType(Integer.parseInt(value));
+			break;
+		case "armouredskin":
+			setArmouredSkin(Boolean.parseBoolean(value));
 			break;
 		case "language":
 			String types = "";
@@ -414,6 +419,16 @@ public class SoliniaRace implements ISoliniaRace,IPersistable {
 	@Override
 	public void setAnimal(boolean animal) {
 		this.animal = animal;
+	}
+
+	@Override
+	public boolean isArmouredSkin() {
+		return armouredSkin;
+	}
+
+	@Override
+	public void setArmouredSkin(boolean armouredSkin) {
+		this.armouredSkin = armouredSkin;
 	}
 
 }

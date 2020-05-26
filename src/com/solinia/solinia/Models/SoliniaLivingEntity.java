@@ -9440,6 +9440,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		// racial benefit
+		if (getRace() != null && getRace().isArmouredSkin())
+			ac_bonus += MathUtils.clamp(level, 10, 35);
+			
 		//if (GetRace() == IKSAR)
 		//	ac_bonus += EQEmu::Clamp(static_cast<int>(level), 10, 35);
 
