@@ -234,6 +234,19 @@ public class SoliniaWorld {
 				throw new InvalidWorldSettingException("Loottable ID does not exist");
 			setGlobalLootTableId(Integer.parseInt(value));
 			break;
+		case "globallevelloottableid":
+			if (Integer.parseInt(value) == 0)
+			{
+				setGlobalLevelLootTableId(0);
+				break;
+			}
+			
+			ISoliniaLootTable loottable4 = StateManager.getInstance().getConfigurationManager()
+			.getLootTable(Integer.parseInt(value));
+			if (loottable4 == null)
+				throw new InvalidWorldSettingException("Loottable ID does not exist");
+			setGlobalLevelLootTableId(Integer.parseInt(value));
+			break;
 		case "miningloottableid":
 			if (Integer.parseInt(value) == 0)
 			{
