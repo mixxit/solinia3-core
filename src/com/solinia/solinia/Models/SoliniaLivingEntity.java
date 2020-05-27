@@ -6853,8 +6853,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				
 				SoliniaWorld world = StateManager.getInstance().getConfigurationManager().getWorld(this.getBukkitLivingEntity().getWorld().getName());
 				if (world != null)
+				{
 					if (world.getGlobalLootTableId() > 0)
 						DropUtils.DropLoot(world.getGlobalLootTableId(),this.getBukkitLivingEntity().getWorld(),this.getBukkitLivingEntity().getLocation(),"",0);
+
+					if (world.getGlobalLevelLootTableId() > 0)
+						DropUtils.DropLoot(world.getGlobalLevelLootTableId(),this.getBukkitLivingEntity().getWorld(),this.getBukkitLivingEntity().getLocation(),"",getMentorLevel());
+				}
 						
 			}
 		} catch (CoreStateInitException e) {

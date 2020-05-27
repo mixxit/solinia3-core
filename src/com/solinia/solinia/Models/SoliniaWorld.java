@@ -28,6 +28,7 @@ public class SoliniaWorld {
 	private int foragingLootTableId = 0;
 	private int playerStartLootTableId = 0;
 	private int globalLootTableId = 0;
+	private int globalLevelLootTableId = 0;
 	private int inspirationLootTableId = 0;
 	private int whisperchatrange = 5;
 	private int localchatrange = 32;
@@ -87,6 +88,14 @@ public class SoliniaWorld {
 					"- globalloottableid: " + ChatColor.GOLD + getGlobalLootTableId() + " (No Loot Table)" + ChatColor.RESET);
 		}
 
+		if (getGlobalLevelLootTableId() != 0) {
+			sender.sendMessage("- globallevelloottableid: " + ChatColor.GOLD + getGlobalLevelLootTableId() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getLootTable(getGlobalLevelLootTableId()).getName()
+					+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- globallevelloottableid: " + ChatColor.GOLD + getGlobalLevelLootTableId() + " (No Loot Table)" + ChatColor.RESET);
+		}
 		
 		sender.sendMessage("- forestryminskill: " + ChatColor.GOLD + getForestryMinSkill() + ChatColor.RESET);
 		sender.sendMessage("- fishingminskill: " + ChatColor.GOLD + getFishingMinSkill() + ChatColor.RESET);
@@ -390,5 +399,13 @@ public class SoliniaWorld {
 
 	public void setInspirationLootTableId(int inspirationLootTableId) {
 		this.inspirationLootTableId = inspirationLootTableId;
+	}
+
+	public int getGlobalLevelLootTableId() {
+		return globalLevelLootTableId;
+	}
+
+	public void setGlobalLevelLootTableId(int globalLevelLootTableId) {
+		this.globalLevelLootTableId = globalLevelLootTableId;
 	}
 }

@@ -73,6 +73,7 @@ public class DropUtils {
 			List<ISoliniaLootDropEntry> rollitems = new ArrayList<ISoliniaLootDropEntry>();
 			List<ISoliniaLootDropEntry> alwaysrollitems = new ArrayList<ISoliniaLootDropEntry>();
 			List<ISoliniaLootDropEntry> alwaysrollspells = new ArrayList<ISoliniaLootDropEntry>();
+			List<ISoliniaLootDropEntry> alwaysrolllevel = new ArrayList<ISoliniaLootDropEntry>();
 
 			for (ISoliniaLootTableEntry entry : StateManager.getInstance().getConfigurationManager()
 					.getLootTable(table.getId()).getEntries()) {
@@ -103,6 +104,23 @@ public class DropUtils {
 							continue;
 						
 						alwaysrollspells.add(dropentry);
+					}
+					
+					// this is for gloabl level based loot (ie pages)
+					if ((className == null || className.equals("")) && levelLimit > 0)
+					{
+						// validate item
+						ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(dropentry.getItemid());
+						if (item == null)
+							continue;
+						
+						if (item.getMinLevel() < 2)
+							continue;
+						
+						if (item.getMinLevel() > levelLimit)
+							continue;
+						
+						alwaysrolllevel.add(dropentry);
 					}
 					
 					if (dropentry.isAlways() == true) {
@@ -258,6 +276,50 @@ public class DropUtils {
 						break;
 				}
 			}
+			
+			// we should try to roll level loot one in every 16 mobs
+						randomInt = r.nextInt(100) + 1;
+						if (randomInt <= 6) 
+						if (alwaysrolllevel.size() > 0) {
+							for (int i = 0; i < alwaysrolllevel.size(); i++) {
+								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+										.getItem(alwaysrolllevel.get(i).getItemid());
+								
+								boolean dropped = false;
+								for (int c = 0; c < alwaysrolllevel.get(i).getCount(); c++) {
+
+									if (item.isNeverDrop())
+										continue;
+									
+									randomInt = r.nextInt(100) + 1;
+
+									// Handle unique item checking also
+									if (item.isArtifact() == true && item.isArtifactFound() == true)
+										continue;
+
+									if (randomInt <= alwaysrolllevel.get(i).getChance()) {
+										if (item.isArtifact() == true) {
+											ChatUtils.SendHintToServer(HINT.ARTIFACT_DISCOVERED, Integer.toString(item.getId()));
+										}
+										
+										world.dropItemNaturally(location, item.asItemStack());
+				
+										// Handle unique item setting also
+										if (item.isArtifact() == true && item.isArtifactFound() == false) {
+											StateManager.getInstance().getConfigurationManager().setItemsChanged(true);
+											item.setArtifactFound(true);
+										}
+										
+										dropped = true;
+									}
+
+								}
+								
+								// Only ever drop one spell
+								if (dropped)
+									break;
+							}
+						}
 
 			// Always drop these items
 			if (absoluteitems.size() > 0) {
