@@ -241,9 +241,9 @@ public class SoliniaWorld {
 				break;
 			}
 			
-			ISoliniaLootTable loottable4 = StateManager.getInstance().getConfigurationManager()
+			ISoliniaLootTable loottable41 = StateManager.getInstance().getConfigurationManager()
 			.getLootTable(Integer.parseInt(value));
-			if (loottable4 == null)
+			if (loottable41 == null)
 				throw new InvalidWorldSettingException("Loottable ID does not exist");
 			setGlobalLevelLootTableId(Integer.parseInt(value));
 			break;
