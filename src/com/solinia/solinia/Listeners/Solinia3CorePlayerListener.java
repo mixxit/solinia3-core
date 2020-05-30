@@ -1623,7 +1623,7 @@ public class Solinia3CorePlayerListener implements Listener {
 					
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 							.getItem(event.getCurrentItem());
-					if (item == null && !ItemStackUtils.getAllowedVanillaItemStacks().contains(event.getCurrentItem().getType())) {
+					if (item == null && event.getCurrentItem().getType() != null && !ItemStackUtils.getAllowedVanillaItemStacks().contains(event.getCurrentItem().getType())) {
 						event.getView().getPlayer().sendMessage("Merchants are not interested in this item");
 						EntityUtils.CancelEvent(event);
 						return;
