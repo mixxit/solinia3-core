@@ -150,6 +150,14 @@ commands:
     usage: /cast <memoryslot>
     aliases:
     - castslot
+  importnpc:
+    description: Imports an NPC file
+    usage: /importnpc <npcfileid>
+    aliases: []
+  importitem:
+    description: Imports an Item file
+    usage: /importitem <itemfileid>
+    aliases: []
   givehead:
     description: Gives a head from minecraft-heads.com
     usage: /givehead player headurl
@@ -294,6 +302,14 @@ commands:
   listitems:
     description: Lists items
     usage: /listitems searchstring
+    aliases: []
+  listimportitems:
+    description: Lists import items
+    usage: /listimportitems searchstring
+    aliases: []
+  listimportnpcs:
+    description: Lists import npcs
+    usage: /listimportnpcs searchstring
     aliases: []
   listzones:
     description: Lists active zones

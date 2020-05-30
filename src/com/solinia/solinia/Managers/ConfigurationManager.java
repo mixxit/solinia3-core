@@ -2,7 +2,6 @@ package com.solinia.solinia.Managers;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -68,9 +67,10 @@ import com.solinia.solinia.Models.AlignmentType;
 import com.solinia.solinia.Models.Bond;
 import com.solinia.solinia.Models.CharacterCreation;
 import com.solinia.solinia.Models.ConfigSettings;
+import com.solinia.solinia.Models.EQItem;
+import com.solinia.solinia.Models.EQMob;
 import com.solinia.solinia.Models.Fellowship;
 import com.solinia.solinia.Models.Flaw;
-import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.Ideal;
 import com.solinia.solinia.Models.NPCSpellList;
 import com.solinia.solinia.Models.Oath;
@@ -97,10 +97,11 @@ import com.solinia.solinia.Repositories.JsonCraftRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonFellowshipRepository;
 import com.solinia.solinia.Repositories.JsonGodRepository;
+import com.solinia.solinia.Repositories.JsonImportItemsRepository;
+import com.solinia.solinia.Repositories.JsonImportNPCsRepository;
 import com.solinia.solinia.Repositories.JsonZoneRepository;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
-import com.solinia.solinia.Utils.Utils;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
 import com.solinia.solinia.Repositories.JsonLootTableRepository;
 import com.solinia.solinia.Repositories.JsonNPCMerchantRepository;
@@ -168,6 +169,8 @@ public class ConfigurationManager implements IConfigurationManager {
 	private boolean spellsChanged = false;
 	private boolean itemsChanged = false;
 	private ConfigSettings configSettings = new ConfigSettings();
+	private JsonImportItemsRepository importItemsRepository;
+	private JsonImportNPCsRepository importNPCsRepository;
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
 			IRepository<ISoliniaItem> itemContext, IRepository<ISoliniaSpell> spellContext,
@@ -178,7 +181,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext, 
 			JsonCharacterListRepository characterlistsContext, JsonNPCSpellListRepository npcspelllistsContext, 
 			JsonAccountClaimRepository accountClaimsContext, JsonZoneRepository zonesContext, JsonCraftRepository craftContext, JsonWorldRepository worldContext,
-			JsonGodRepository godsContext, JsonFellowshipRepository fellowshipContext,JsonPlayerStateRepository playerstateContext, ConfigSettings configSettings
+			JsonGodRepository godsContext, JsonFellowshipRepository fellowshipContext,JsonPlayerStateRepository playerstateContext, ConfigSettings configSettings, JsonImportItemsRepository importitemsrepo, JsonImportNPCsRepository importnpcsrepo
 			) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
@@ -205,6 +208,8 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.configSettings  = configSettings;
 		this.fellowshipRepository = fellowshipContext;
 		this.playerStateRepository = playerstateContext;
+		this.importItemsRepository = importitemsrepo;
+		this.importNPCsRepository = importnpcsrepo;
 		
 		this.setBonds(generateBonds());
 		this.setOaths(generateOaths());
@@ -403,6 +408,26 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public List<SoliniaWorld> getWorlds() {
 		return worldRepository.query(q -> q.getId() > 0);
+	}
+
+	@Override
+	public List<EQItem> getImportItems(String name) {
+		return importItemsRepository.query(q -> q.getName().toUpperCase().contains(name.toUpperCase()));
+	}
+
+	@Override
+	public List<EQMob> getImportNPCs(String name) {
+		return importNPCsRepository.query(q -> q.getName().toUpperCase().contains(name.toUpperCase()));
+	}
+	
+	@Override
+	public EQItem getImportItems(int id) {
+		return importItemsRepository.getByKey(id);
+	}
+
+	@Override
+	public EQMob getImportNPCs(int id) {
+		return importNPCsRepository.getByKey(id);
 	}
 	
 	@Override

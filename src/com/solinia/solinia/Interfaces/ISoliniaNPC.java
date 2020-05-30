@@ -309,4 +309,46 @@ public interface ISoliniaNPC extends IPersistable {
 	int getFR();
 
 	int getNPCDefaultAccuracyRating();
+
+	int getMinInternalDmg();
+
+	void setMinInternalDmg(int minDmg);
+
+	int getMaxInternalDmg();
+
+	void setMaxInternalDmg(int maxDmg);
+
+	void setMagicresist(int magicresist);
+
+	void setPoisonresist(int poisonresist);
+
+	void setColdresist(int coldresist);
+
+	void setDiseaseresist(int diseaseresist);
+
+	void setFireresist(int fireresist);
+
+	void setAvoidanceRating(int avoidanceRating);
+
+	void setAccuracyRating(int accuracyRating);
+
+	void setAtk(int atk);
+
+	int getAtk();
+
+	void setHpRegenRate(int hpRegenRate);
+
+	void setManaRegenRate(int manaRegenRate);
+
+	void setMana(int mana);
+
+	int getInternalFireresist();
+
+	int getInternalDiseaseresist();
+
+	int getInternalColdresist();
+
+	int getInternalPoisonresist();
+
+	int getInternalMagicresist();
 }

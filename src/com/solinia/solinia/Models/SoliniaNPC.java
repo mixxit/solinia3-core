@@ -31,7 +31,6 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.MathUtils;
@@ -416,13 +415,13 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 				+ getManaRegenRate() + ChatColor.RESET + " " + "mana: " + ChatColor.GOLD + getMana());
 		sender.sendMessage("- avoidancerating: " + ChatColor.GOLD + getAvoidanceRating() + ChatColor.RESET + " "
 				+ "accuracyrating: " + ChatColor.GOLD + getNPCDefaultAccuracyRating() + ChatColor.RESET);
-		sender.sendMessage("- mindmg: " + ChatColor.GOLD + getMinDmg() + ChatColor.RESET + " "
-				+ "maxdmg: " + ChatColor.GOLD + getMaxDmg() + ChatColor.RESET+ " atk: " + ChatColor.GOLD + getAtk() + ChatColor.RESET);
-		sender.sendMessage("fireresist: " + ChatColor.GOLD + getFireresist() + ChatColor.RESET + 
-	    		" coldresist: " + ChatColor.GOLD + getColdresist() + ChatColor.RESET + 
-	    		" magicresist: " + ChatColor.GOLD + getMagicresist() + ChatColor.RESET + 
-	    		" poisonresist: " + ChatColor.GOLD + getPoisonresist() + ChatColor.RESET + 
-	    		" diseaseresist: " + ChatColor.GOLD + getDiseaseresist() + ChatColor.RESET)
+		sender.sendMessage("- mindmg: " + ChatColor.GOLD + getMinInternalDmg() + ChatColor.RESET + " "
+				+ "maxdmg: " + ChatColor.GOLD + getMaxInternalDmg() + ChatColor.RESET+ " atk: " + ChatColor.GOLD + getAtk() + ChatColor.RESET);
+		sender.sendMessage("fireresist: " + ChatColor.GOLD + getInternalFireresist() + ChatColor.RESET + 
+	    		" coldresist: " + ChatColor.GOLD + getInternalColdresist() + ChatColor.RESET + 
+	    		" magicresist: " + ChatColor.GOLD + getInternalMagicresist() + ChatColor.RESET + 
+	    		" poisonresist: " + ChatColor.GOLD + getInternalPoisonresist() + ChatColor.RESET + 
+	    		" diseaseresist: " + ChatColor.GOLD + getInternalDiseaseresist() + ChatColor.RESET)
 	    		;
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
@@ -812,39 +811,51 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			break;
 		case "forcedmaxhp":
 			setForcedMaxHp(Integer.parseInt(value));
+			requiresreload = true;
 			break;
 		case "hpregenrate":
 			setHpRegenRate(Integer.parseInt(value));
+			requiresreload = false;
 			break;
 		case "manaregenrate":
 			setManaRegenRate(Integer.parseInt(value));
+			requiresreload = false;
 			break;
 		case "mana":
 			setMana(Integer.parseInt(value));
+			requiresreload = false;
 			break;
 		case "mindmg":
-			setMinDmg(Integer.parseInt(value));
+			setMinInternalDmg(Integer.parseInt(value));
+			requiresreload = true;
 			break;
 		case "maxdmg":
-			setMaxDmg(Integer.parseInt(value));
+			setMaxInternalDmg(Integer.parseInt(value));
+			requiresreload = true;
 			break;
 		case "fireresist":
 			setFireresist(Integer.parseInt(value));
+			requiresreload = false;
 			break;
 		case "coldresist":
 			setColdresist(Integer.parseInt(value));
+			requiresreload = false;
 			break;
 		case "magicresist":
 			setMagicresist(Integer.parseInt(value));
+			requiresreload = false;
 			break;
 		case "diseaseresist":
 			setDiseaseresist(Integer.parseInt(value));
+			requiresreload = false;
 			break;
 		case "poisonresist":
 			setPoisonresist(Integer.parseInt(value));
+			requiresreload = false;
 			break;
 		case "petcontrollable":
 			setPetControllable(Boolean.parseBoolean(value));
+			requiresreload = false;
 			break;
 		default:
 			throw new InvalidNpcSettingException(
@@ -1454,18 +1465,22 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		return skillLevel;
 	}
 
+	@Override
 	public int getAvoidanceRating() {
 		return avoidanceRating;
 	}
 
+	@Override
 	public void setAvoidanceRating(int avoidanceRating) {
 		this.avoidanceRating = avoidanceRating;
 	}
 
+	@Override
 	public int getAccuracyRating() {
 		return accuracyRating;
 	}
 
+	@Override
 	public void setAccuracyRating(int accuracyRating) {
 		this.accuracyRating = accuracyRating;
 	}
@@ -1904,7 +1919,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 
 	@Override
 	public int getBaseDamage() {
-		int mindmg = getMinDmg();
+		int mindmg = getMinInternalDmg();
 		if (mindmg < 1)
 		{
 			mindmg = calcNPCDamage().a();
@@ -1986,8 +2001,8 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	@Override
 	public int getMaxDamage()
 	{
-		if(getMaxDmg() > 0){
-			return getMaxDmg();
+		if(getMaxInternalDmg() > 0){
+			return getMaxInternalDmg();
 		} else {
 			int maxDamage = calcNPCDamage().b();
 			if (isBoss()) {
@@ -2012,7 +2027,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 
 	@Override
 	public int getMinDamage() {
-		int mindmg = getMinDmg();
+		int mindmg = getMinInternalDmg();
 		if (mindmg < 1)
 		{
 			mindmg = calcNPCDamage().a();
@@ -2067,7 +2082,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 
 	@Override
 	public int getNPCHPRegen() {
-		if(this.getManaRegenRate() > 0)
+		if(this.getHpRegenRate() > 0)
 			return this.getHpRegenRate();
 		return NPCUtils.getDefaultNPCHPRegen(this);
 	}
@@ -2090,7 +2105,8 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		return hpRegenRate;
 	}
 
-	private void setHpRegenRate(int hpRegenRate) {
+	@Override
+	public void setHpRegenRate(int hpRegenRate) {
 		this.hpRegenRate = hpRegenRate;
 	}
 
@@ -2098,7 +2114,8 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		return this.manaRegenRate;
 	}
 	
-	private void setManaRegenRate(int manaRegenRate) {
+	@Override
+	public void setManaRegenRate(int manaRegenRate) {
 		this.manaRegenRate = manaRegenRate;
 	}
 
@@ -2106,102 +2123,119 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		return mana;
 	}
 
-	private void setMana(int mana) {
+	@Override
+	public void setMana(int mana) {
 		this.mana = mana;
 	}
 
-	public int getMinDmg() {
+	@Override
+	public int getMinInternalDmg() {
 		return minDmg;
 	}
 
-	public void setMinDmg(int minDmg) {
+	@Override
+	public void setMinInternalDmg(int minDmg) {
 		this.minDmg = minDmg;
 	}
 
-	public int getMaxDmg() {
+	@Override
+	public int getMaxInternalDmg() {
 		return maxDmg;
 	}
 
-	public void setMaxDmg(int maxDmg) {
+	@Override
+	public void setMaxInternalDmg(int maxDmg) {
 		this.maxDmg = maxDmg;
 	}
 
-	private int getFireresist() {
+	@Override
+	public int getInternalFireresist() {
 		return fireresist;
 	}
 
-	private void setFireresist(int fireresist) {
+	@Override
+	public void setFireresist(int fireresist) {
 		this.fireresist = fireresist;
 	}
 
-	private int getDiseaseresist() {
+	@Override
+	public int getInternalDiseaseresist() {
 		return diseaseresist;
 	}
 
-	private void setDiseaseresist(int diseaseresist) {
+	@Override
+	public void setDiseaseresist(int diseaseresist) {
 		this.diseaseresist = diseaseresist;
 	}
 
-	private int getColdresist() {
+	@Override
+	public int getInternalColdresist() {
 		return coldresist;
 	}
 
-	private void setColdresist(int coldresist) {
+	@Override
+	public void setColdresist(int coldresist) {
 		this.coldresist = coldresist;
 	}
 
-	private int getPoisonresist() {
+	@Override
+	public int getInternalPoisonresist() {
 		return poisonresist;
 	}
 
-	private void setPoisonresist(int poisonresist) {
+	@Override
+	public void setPoisonresist(int poisonresist) {
 		this.poisonresist = poisonresist;
 	}
 
-	private int getMagicresist() {
+	@Override
+	public int getInternalMagicresist() {
 		return magicresist;
 	}
 
-	private void setMagicresist(int magicresist) {
+	@Override
+	public void setMagicresist(int magicresist) {
 		this.magicresist = magicresist;
 	}
 	
 	@Override
 	public int getFR() {
-		if(this.getFireresist() > 0)
-			return this.getFireresist();
+		if(this.getInternalFireresist() > 0)
+			return this.getInternalFireresist();
 		return NPCUtils.getDefaultNPCResist(this);
 	}
 	@Override
 	public int getCR() {
-		if(this.getColdresist() > 0)
-			return this.getColdresist();
+		if(this.getInternalColdresist() > 0)
+			return this.getInternalColdresist();
 		return NPCUtils.getDefaultNPCResist(this);
 	}
 	@Override
 	public int getMR() {
-		if(this.getMagicresist() > 0)
-			return this.getMagicresist();
+		if(this.getInternalMagicresist() > 0)
+			return this.getInternalMagicresist();
 		return NPCUtils.getDefaultNPCResist(this);
 	}
 	@Override
 	public int getDR() {
-		if(this.getDiseaseresist() > 0)
-			return this.getDiseaseresist();
+		if(this.getInternalDiseaseresist() > 0)
+			return this.getInternalDiseaseresist();
 		return NPCUtils.getDefaultNPCResist(this);
 	}
 	@Override
 	public int getPR() {
-		if(this.getPoisonresist() > 0)
-			return this.getPoisonresist();
+		if(this.getInternalPoisonresist() > 0)
+			return this.getInternalPoisonresist();
 		return NPCUtils.getDefaultNPCResist(this);
 	}
 
-	private int getAtk() {
+	@Override
+	public int getAtk() {
 		return atk;
 	}
 
-	private void setAtk(int atk) {
+	@Override
+	public void setAtk(int atk) {
 		this.atk = atk;
 	}
 }

@@ -20,8 +20,6 @@ import com.solinia.solinia.Models.EquipmentSlot;
 import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
-import com.solinia.solinia.Utils.Utils;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class PlayerInventoryValidatorTimer extends BukkitRunnable {

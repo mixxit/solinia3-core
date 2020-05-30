@@ -7,8 +7,6 @@ import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SoliniaNPCEventHandler;
 import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.QuestUtils;
-import com.solinia.solinia.Utils.Utils;
-
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;

@@ -18,7 +18,6 @@ import com.solinia.solinia.Models.Ideal;
 import com.solinia.solinia.Models.Trait;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
-import com.solinia.solinia.Utils.Utils;
 
 public class CommandCreateCharacterFull implements CommandExecutor {
 Solinia3CorePlugin plugin;

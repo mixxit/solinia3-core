@@ -2,10 +2,8 @@ package com.solinia.solinia.Repositories;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -21,10 +19,8 @@ import com.google.gson.reflect.TypeToken;
 import com.solinia.solinia.Factories.ISoliniaLootDropEntryTypeAdapterFactory;
 import com.solinia.solinia.Interfaces.IRepository;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
-import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.SoliniaLootDrop;
 import com.solinia.solinia.Models.SoliniaLootDropEntry;
-import com.solinia.solinia.Models.SoliniaPlayer;
 
 public class JsonLootDropRepository implements IRepository<ISoliniaLootDrop> {
 

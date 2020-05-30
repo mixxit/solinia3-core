@@ -9,8 +9,6 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.NPCSpellList;
 import com.solinia.solinia.Utils.ChatUtils;
-import com.solinia.solinia.Utils.Utils;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class CommandListNpcSpells implements CommandExecutor 

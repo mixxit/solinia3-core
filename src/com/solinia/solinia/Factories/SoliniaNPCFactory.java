@@ -7,10 +7,12 @@ import com.solinia.solinia.Models.SoliniaNPC;
 
 public class SoliniaNPCFactory {
 
-	public static ISoliniaNPC CreateNPC(String name, int level, int raceid, int classid, int factionid, boolean reloadProvider) throws Exception {
+	public static ISoliniaNPC CreateNPC(String name, int level, int raceid, int classid, int factionid, boolean reloadProvider, boolean createBaseLoot, boolean commit) throws Exception {
 		int lootTableId = 0;
+		
 		try
 		{
+			if (createBaseLoot)
 			lootTableId = CreateLootTableAndLootDrop(name);
 		} catch (Exception e)
 		{
@@ -18,6 +20,7 @@ public class SoliniaNPCFactory {
 		}
 		
 		SoliniaNPC npc = new SoliniaNPC();
+		if (commit)
 		npc.setId(StateManager.getInstance().getConfigurationManager().getNextNPCId());
 		npc.setName(name);
 		npc.setRaceid(raceid);
@@ -26,7 +29,10 @@ public class SoliniaNPCFactory {
 		npc.setFactionid(factionid);
 		npc.setLoottableid(lootTableId);
 		
+		if (commit)
 		return StateManager.getInstance().getConfigurationManager().addNPC(npc, reloadProvider);
+		
+		return npc;
 	}
 	
 	public static int CreateLootTableAndLootDrop(String name) throws CoreStateInitException, Exception

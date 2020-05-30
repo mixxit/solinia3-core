@@ -3,10 +3,8 @@ package com.solinia.solinia.Listeners;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.SpectralArrow;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
@@ -19,7 +17,6 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.EntityUtils;
-import com.solinia.solinia.Utils.Utils;
 
 public class Solinia3CoreVehicleListener implements Listener {
 	Solinia3CorePlugin plugin;

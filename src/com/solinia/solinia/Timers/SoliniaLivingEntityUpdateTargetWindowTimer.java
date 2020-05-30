@@ -12,7 +12,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Utils.EntityUtils;
-import com.solinia.solinia.Utils.Utils;
 
 public class SoliniaLivingEntityUpdateTargetWindowTimer extends BukkitRunnable {
 

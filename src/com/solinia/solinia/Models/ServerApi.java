@@ -7,8 +7,6 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ChatUtils;
-import com.solinia.solinia.Utils.Utils;
-
 import io.javalin.http.Context;
 import net.md_5.bungee.api.ChatColor;
 

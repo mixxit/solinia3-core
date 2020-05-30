@@ -14,7 +14,6 @@ import com.solinia.solinia.Events.SoliniaLivingEntityPassiveEffectTickEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Utils.EntityUtils;
-import com.solinia.solinia.Utils.Utils;
 
 public class SoliniaLivingEntityPassiveEffectTimer extends BukkitRunnable {
 	@Override

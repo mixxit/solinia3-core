@@ -23,8 +23,6 @@ import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
-import com.solinia.solinia.Utils.Utils;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class CommandNPCGive implements CommandExecutor {

@@ -64,7 +64,7 @@ public class CommandPublishBook implements CommandExecutor {
         		return true;
         	}
         	
-        	ISoliniaItem item = SoliniaItemFactory.CreateItem(itemstack);
+        	ISoliniaItem item = SoliniaItemFactory.CreateItem(itemstack, true);
         	sender.sendMessage("Book is a brand new title! " + item.getId());
         	
         	List<Integer> merchantItemList = new ArrayList<Integer>();

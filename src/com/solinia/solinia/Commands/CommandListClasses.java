@@ -10,8 +10,6 @@ import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaClass;
 import com.solinia.solinia.Utils.ChatUtils;
-import com.solinia.solinia.Utils.Utils;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class CommandListClasses implements CommandExecutor {

@@ -10,8 +10,6 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.PlayerFactionEntry;
 import com.solinia.solinia.Utils.EntityUtils;
-import com.solinia.solinia.Utils.Utils;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class CommandFaction implements CommandExecutor {

@@ -2,8 +2,6 @@ package com.solinia.solinia.Models;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.bukkit.Bukkit;
-
 public class DebuggerSettings {
 	private ConcurrentHashMap<String, String> debugValues = new ConcurrentHashMap<String, String>();
 	

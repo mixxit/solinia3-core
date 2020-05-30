@@ -16,7 +16,6 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.PlayerFactionEntry;
-import com.solinia.solinia.Utils.Utils;
 import com.solinia.solinia.Utils.EntityUtils;
 public class CommandConsider implements CommandExecutor {
 	@Override

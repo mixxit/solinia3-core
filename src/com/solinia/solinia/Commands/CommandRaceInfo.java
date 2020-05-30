@@ -6,7 +6,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Utils.ChatUtils;
-import com.solinia.solinia.Utils.Utils;
 
 public class CommandRaceInfo implements CommandExecutor {
 	@Override

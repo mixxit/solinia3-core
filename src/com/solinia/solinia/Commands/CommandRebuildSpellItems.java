@@ -128,7 +128,7 @@ public class CommandRebuildSpellItems implements CommandExecutor {
 					}
 				} else {
 					// Doesnt exist, create it
-					ISoliniaItem item = SoliniaItemFactory.CreateItem(new ItemStack(Material.ENCHANTED_BOOK));
+					ISoliniaItem item = SoliniaItemFactory.CreateItem(new ItemStack(Material.ENCHANTED_BOOK), true);
 					item.setAbilityid(spell.getId());
 					item.setDisplayname("Spell: " + spell.getName());
 					item.setSpellscroll(true);

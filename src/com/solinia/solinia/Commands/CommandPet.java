@@ -31,8 +31,6 @@ import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
-import com.solinia.solinia.Utils.Utils;
-
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_14_R1.EntityInsentient;

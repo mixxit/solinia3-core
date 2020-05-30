@@ -2,10 +2,8 @@ package com.solinia.solinia.Repositories;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -19,9 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.solinia.solinia.Interfaces.IRepository;
-import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
-import com.solinia.solinia.Models.SoliniaItem;
 
 public class JsonAccountClaimRepository implements IRepository<SoliniaAccountClaim> {
 	private String filePath;

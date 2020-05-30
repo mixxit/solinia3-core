@@ -118,7 +118,7 @@ public class CommandCreateNpc implements CommandExecutor {
 		name = name.replace(" ", "_");
 		
 		try {
-			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPC(name,level,raceid,classid,factionid, false);
+			ISoliniaNPC npc = SoliniaNPCFactory.CreateNPC(name,level,raceid,classid,factionid, false, true, true);
 			
 			sender.sendMessage("Created NPC: " + npc.getId());
 			sender.sendMessage("You have updated a mythic mob npc, for changes to appear in game you will need to do /mm reload");

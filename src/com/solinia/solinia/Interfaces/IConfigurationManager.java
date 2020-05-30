@@ -31,6 +31,8 @@ import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Models.Bond;
 import com.solinia.solinia.Models.CharacterCreation;
 import com.solinia.solinia.Models.ConfigSettings;
+import com.solinia.solinia.Models.EQItem;
+import com.solinia.solinia.Models.EQMob;
 import com.solinia.solinia.Models.Fellowship;
 import com.solinia.solinia.Models.Flaw;
 import com.solinia.solinia.Models.Ideal;
@@ -634,4 +636,12 @@ public interface IConfigurationManager {
 	SoliniaMetrics getSoliniaMetrics();
 
 	ISoliniaNPC addNPC(SoliniaNPC npc, boolean reloadProvider);
+
+	List<EQItem> getImportItems(String name);
+
+	List<EQMob> getImportNPCs(String name);
+
+	EQItem getImportItems(int id);
+
+	EQMob getImportNPCs(int id);
 }

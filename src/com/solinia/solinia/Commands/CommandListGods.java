@@ -10,8 +10,6 @@ import com.solinia.solinia.Interfaces.ISoliniaGod;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaGod;
 import com.solinia.solinia.Utils.ChatUtils;
-import com.solinia.solinia.Utils.Utils;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class CommandListGods implements CommandExecutor {

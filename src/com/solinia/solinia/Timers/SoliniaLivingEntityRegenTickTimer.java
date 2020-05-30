@@ -17,7 +17,6 @@ import com.solinia.solinia.Events.SoliniaLivingEntityHPRegenTickEvent;
 import com.solinia.solinia.Events.SoliniaLivingEntityMPRegenTickEvent;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Utils.EntityUtils;
-import com.solinia.solinia.Utils.Utils;
 
 public class SoliniaLivingEntityRegenTickTimer extends BukkitRunnable {
 	Plugin plugin;

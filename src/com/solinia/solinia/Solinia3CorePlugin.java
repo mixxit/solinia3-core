@@ -51,6 +51,8 @@ import com.solinia.solinia.Repositories.JsonCraftRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonFellowshipRepository;
 import com.solinia.solinia.Repositories.JsonGodRepository;
+import com.solinia.solinia.Repositories.JsonImportItemsRepository;
+import com.solinia.solinia.Repositories.JsonImportNPCsRepository;
 import com.solinia.solinia.Repositories.JsonZoneRepository;
 import com.solinia.solinia.Repositories.JsonItemRepository;
 import com.solinia.solinia.Repositories.JsonLootDropRepository;
@@ -443,6 +445,15 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			playerstatesrepo.setJsonFile(getDataFolder() + "/" + "playerstates.json");
 			playerstatesrepo.reload();
 
+			JsonImportItemsRepository importitemsrepo = new JsonImportItemsRepository();
+			importitemsrepo.setJsonFile(getDataFolder() + "/" + "importitems");
+			importitemsrepo.reload();
+
+			JsonImportNPCsRepository importnpcsrepo = new JsonImportNPCsRepository();
+			importnpcsrepo.setJsonFile(getDataFolder() + "/" + "importnpcs");
+			importnpcsrepo.reload();
+
+			
 			PlayerManager playerManager = new PlayerManager();
 			EntityManager entityManager = new EntityManager(this, new MythicMobsNPCEntityProvider());
 
@@ -450,7 +461,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
 					aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo,
 					accountclaimsrepo, zonesrepo, craftrepo, worldrepo, godrepo, fellowshiprepo, playerstatesrepo,
-					configSettings);
+					configSettings, importitemsrepo, importnpcsrepo);
 
 			ChannelManager channelManager = new ChannelManager();
 
@@ -575,6 +586,8 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	}
 
 	private void setupCommands() {
+		this.getCommand("listimportnpcs").setExecutor(new CommandListImportNPCs(this));
+		this.getCommand("listimportitems").setExecutor(new CommandListImportItems(this));
 		this.getCommand("bank").setExecutor(new CommandBank());
 		this.getCommand("assist").setExecutor(new CommandAssist());
 		this.getCommand("saydiscord").setExecutor(new CommandSayDiscord());
@@ -587,6 +600,8 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		this.getCommand("forcerace").setExecutor(new CommandForceRace());
 		this.getCommand("autoattack").setExecutor(new CommandAutoAttack());
 		this.getCommand("creategod").setExecutor(new CommandCreateGod());
+		this.getCommand("importnpc").setExecutor(new CommandImportNPC());
+		this.getCommand("importitem").setExecutor(new CommandImportItem());
 		this.getCommand("listgods").setExecutor(new CommandListGods());
 		this.getCommand("editgod").setExecutor(new CommandEditGod());
 		this.getCommand("mentor").setExecutor(new CommandMentor());

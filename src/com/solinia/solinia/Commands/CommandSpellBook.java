@@ -22,7 +22,6 @@ import com.solinia.solinia.Models.PacketOpenSpellbook;
 import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
-import com.solinia.solinia.Models.SpellbookPage;
 import com.solinia.solinia.Utils.ForgeUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.MathUtils;

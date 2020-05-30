@@ -12,7 +12,6 @@ import com.solinia.solinia.Models.Solinia3UIChannelNames;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 import com.solinia.solinia.Utils.ForgeUtils;
 import com.solinia.solinia.Utils.MathUtils;
-import com.solinia.solinia.Utils.Utils;
 
 public class CommandOpenSpellbook implements CommandExecutor {
 	@Override

@@ -12,7 +12,6 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
-import com.solinia.solinia.Utils.Utils;
 
 public class CommandSetLanguage implements CommandExecutor {
 

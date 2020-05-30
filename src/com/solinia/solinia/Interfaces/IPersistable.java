@@ -1,7 +1,6 @@
 package com.solinia.solinia.Interfaces;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.UUID;
 
 public interface IPersistable extends Serializable {

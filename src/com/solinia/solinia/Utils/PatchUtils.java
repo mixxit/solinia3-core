@@ -4,22 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftInventory;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-
-import com.solinia.solinia.Managers.StateManager;
-
-
-import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Factories.SoliniaNPCMerchantFactory;
-import com.solinia.solinia.Interfaces.ISoliniaClass;
-import com.solinia.solinia.Interfaces.ISoliniaItem;
-import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
-import com.solinia.solinia.Interfaces.ISoliniaNPCMerchant;
-import com.solinia.solinia.Interfaces.ISoliniaSpell;
-
 import net.minecraft.server.v1_14_R1.NBTTagCompound;
 import net.minecraft.server.v1_14_R1.NBTTagList;
 import net.minecraft.server.v1_14_R1.TileEntityChest;

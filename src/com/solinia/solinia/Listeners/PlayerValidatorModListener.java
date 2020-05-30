@@ -8,7 +8,6 @@ import com.solinia.solinia.Events.PlayerValidatedModEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Utils.PlayerUtils;
-import com.solinia.solinia.Utils.Utils;
 
 public class PlayerValidatorModListener implements Listener {
 	Solinia3CorePlugin plugin;

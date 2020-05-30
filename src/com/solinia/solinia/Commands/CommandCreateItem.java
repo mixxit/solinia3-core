@@ -63,7 +63,7 @@ public class CommandCreateItem implements CommandExecutor {
         
         try
         {
-        	ISoliniaItem item = SoliniaItemFactory.CreateItem(itemstack);
+        	ISoliniaItem item = SoliniaItemFactory.CreateItem(itemstack, true);
         	sender.sendMessage("New Item Created with ID: " + item.getId());
         	sender.sendMessage("Use /edititem ID to further edit this item");
         } catch (Exception e)

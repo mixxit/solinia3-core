@@ -14,9 +14,6 @@ import com.solinia.solinia.Models.HINT;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
-import com.solinia.solinia.Utils.TextUtils;
-import com.solinia.solinia.Utils.Utils;
-
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class ChannelManager implements IChannelManager {

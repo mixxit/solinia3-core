@@ -9,7 +9,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -30,7 +29,6 @@ import com.solinia.solinia.Models.PlayerState;
 import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
-import com.solinia.solinia.Utils.Utils;
 
 public class PlayerManager implements IPlayerManager {
 	private ConcurrentHashMap<UUID, String> playerVersion = new ConcurrentHashMap<UUID, String>();

@@ -11,7 +11,6 @@ import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Utils.SkillUtils;
-import com.solinia.solinia.Utils.Utils;
 
 public class CommandSpecialise implements CommandExecutor {
 	@Override

@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.NPCUtils;
-import com.solinia.solinia.Utils.Utils;
 
 public class CommandCommit implements CommandExecutor {
 	@Override

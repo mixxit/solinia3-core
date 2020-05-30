@@ -12,7 +12,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Utils.EntityUtils;
-import com.solinia.solinia.Utils.Utils;
 
 public class EntityAutoAttackTimer extends BukkitRunnable {
 	@Override

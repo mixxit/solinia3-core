@@ -10,7 +10,6 @@ import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Utils.ItemStackUtils;
-import com.solinia.solinia.Utils.Utils;
 
 public class CommandSolItemInfo implements CommandExecutor {
 	@Override
