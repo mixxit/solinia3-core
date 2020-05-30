@@ -351,4 +351,8 @@ public interface ISoliniaNPC extends IPersistable {
 	int getInternalPoisonresist();
 
 	int getInternalMagicresist();
+
+	boolean isCanSeeInvis();
+
+	void setCanSeeInvis(boolean canSeeInvis);
 }

@@ -62,6 +62,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	private String feetitem;
 	private String handitem;
 	private String offhanditem;
+	private boolean canSeeInvis = false;
 	private boolean boss = false;
 	private boolean heroic = false;
 	private boolean raidboss = false;
@@ -431,7 +432,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "AI" + ChatColor.RESET);
-		sender.sendMessage("- undead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET + " " + "plant: "
+		sender.sendMessage("- canseeinvis: "+ ChatColor.GOLD + isCanSeeInvis() + ChatColor.RESET +" undead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET + " " + "plant: "
 				+ ChatColor.GOLD + isPlant() + ChatColor.RESET + " " + "animal: " + ChatColor.GOLD + isAnimal()
 				+ ChatColor.RESET);
 		sender.sendMessage("- pet: " + ChatColor.GOLD + isCorePet() + ChatColor.RESET + " " + "petcontrollable: "
@@ -532,6 +533,9 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			if (value.length() > 25)
 				throw new InvalidNpcSettingException("Name is longer than 25 characters");
 			setName(value);
+			break;
+		case "canseeinvis":
+			setCanSeeInvis(Boolean.parseBoolean(value));
 			break;
 		case "mctype":
 			if (!value.toLowerCase().equals("skeleton"))
@@ -2237,5 +2241,15 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	@Override
 	public void setAtk(int atk) {
 		this.atk = atk;
+	}
+
+	@Override
+	public boolean isCanSeeInvis() {
+		return canSeeInvis;
+	}
+
+	@Override
+	public void setCanSeeInvis(boolean canSeeInvis) {
+		this.canSeeInvis = canSeeInvis;
 	}
 }

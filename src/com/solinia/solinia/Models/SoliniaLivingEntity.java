@@ -12242,4 +12242,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		return false;
 	}
+
+	@Override
+	public boolean canSeeInvis() {
+		boolean canSeeInvis = hasSpellEffectType(SpellEffectType.SeeInvis);
+		if (!canSeeInvis && this.isUndead())
+		{
+			if (!canSeeInvis)
+				canSeeInvis = this.getNPC().isUndead();
+		}
+		
+		if (!canSeeInvis && this.isNPC())
+		{
+			if (this.getNPC() != null)
+				canSeeInvis = this.getNPC().isCanSeeInvis();
+		}
+		return false;
+	}
 }

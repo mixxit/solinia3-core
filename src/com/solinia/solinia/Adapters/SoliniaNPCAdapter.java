@@ -35,6 +35,9 @@ public class SoliniaNPCAdapter {
 		npc.setAtk((int)entity.getATK());
 		npc.setAccuracyRating((int)entity.getAccuracy());
 		npc.setAvoidanceRating((int)entity.getAvoidance());
+		npc.setCanSeeInvis(false);
+		if ((int)entity.getSee_invis() > 0)
+			npc.setCanSeeInvis(true);
 		return npc;
 	}
 }

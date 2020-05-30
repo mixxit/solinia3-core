@@ -246,7 +246,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				}
 			}
 
-			if (!solEntity.isUndead() && !solEntity.hasSpellEffectType(SpellEffectType.SeeInvis) && !(event.getEntity() instanceof Player) && !solEntity.isAnimal()
+			if (!solEntity.isUndead() && !solEntity.canSeeInvis() && !solEntity.hasSpellEffectType(SpellEffectType.SeeInvis) && !(event.getEntity() instanceof Player) && !solEntity.isAnimal()
 					&& event.getTarget() instanceof LivingEntity) {
 				if (StateManager.getInstance().getEntityManager().hasEntityEffectType((LivingEntity) event.getTarget(),
 						SpellEffectType.Invisibility)

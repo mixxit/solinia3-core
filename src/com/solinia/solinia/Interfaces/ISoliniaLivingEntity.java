@@ -539,4 +539,6 @@ public interface ISoliniaLivingEntity  {
 
 	int getResistCap(SpellResistType type);
 
+	public boolean canSeeInvis();
+
 }
