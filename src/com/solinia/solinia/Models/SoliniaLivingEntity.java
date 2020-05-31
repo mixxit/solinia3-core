@@ -7291,13 +7291,25 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					if (spell.getBuffduration() < 150)
 						continue;
 					
+					boolean noStack = false;
+					boolean foundBefore = false;
 					// this is just me so lets see if my spell can stack against me
 					for (SoliniaActiveSpell activeSpell : StateManager.getInstance().getEntityManager().getActiveEntitySpells(getBukkitLivingEntity()).getActiveSpells())
 					{
+						if (activeSpell.getSpellId() == spell.getId())
+						{
+							foundBefore = true;
+							continue;
+						}
+						
 						int stackableResponse = StateManager.getInstance().getEntityManager().getActiveEntitySpells(getBukkitLivingEntity()).checkStackConflict(activeSpell.getSpell(),getBukkitLivingEntity().getUniqueId(),spell,getBukkitLivingEntity(),getBukkitLivingEntity());
 						if(stackableResponse == -1)
-							continue;
+							noStack = true;
 					}
+					if (foundBefore)
+						continue;
+					if (noStack)
+						continue;
 				}
 				
 				// TODO Check mana
