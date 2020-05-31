@@ -592,8 +592,8 @@ public class ItemStackAdapter {
 		
 		try {
 			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(soliniaItem.getFocusEffectId());
-			
-			loreTxt.add(ChatColor.WHITE + "Focus Effect: " + ChatColor.YELLOW+ spell.getName() + " " + ChatColor.RESET);
+			if (spell != null)
+				loreTxt.add(ChatColor.WHITE + "Focus Effect: " + ChatColor.YELLOW+ spell.getName() + " " + ChatColor.RESET);
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
