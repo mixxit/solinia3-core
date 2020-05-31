@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNpcSpellListSettingException;
+import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.NPCSpellList;
 
@@ -38,8 +39,13 @@ public class CommandEditNpcSpellList implements CommandExecutor {
 			return false;
 		}
 
+		if (args.length == 0)
+		{
+			return false;
+		}
+
 		int npcspelllistid = Integer.parseInt(args[0]);
-		
+
 		if (args.length == 1)
 		{
 			try
@@ -57,7 +63,6 @@ public class CommandEditNpcSpellList implements CommandExecutor {
 				sender.sendMessage(e.getMessage());
 			}
 		}
-
 		
 		if (args.length < 3)
 		{
@@ -69,27 +74,23 @@ public class CommandEditNpcSpellList implements CommandExecutor {
 		
 		String value = args[2];
 		
-		// for 'text' based npc settings like trigger texts etc, get the whole thing as a string
-		if (args.length > 3)
-		{
-			value = "";
-			int current = 0;
-			for(String entry : args)
-			{
-				current++;
-				if (current <= 2)
-					continue;
-				
-				value = value + entry + " ";
-			}
-			
-			value = value.trim();
-		}
-		
 		if (npcspelllistid < 1)
 		{
 			sender.sendMessage("Invalid npcspelllistid id");
 			return false;
+		}
+		
+		String[] additional = new String[0];
+		if (args.length > 3)
+		{
+			additional = new String[args.length - 3];
+			for(int i = 0; i < args.length; i++)
+			{
+				if (i < 3)
+					continue;
+				
+				additional[i-3] = args[i];
+			}
 		}
 		
 		try
@@ -101,7 +102,7 @@ public class CommandEditNpcSpellList implements CommandExecutor {
 				return false;
 			}
 
-			StateManager.getInstance().getConfigurationManager().getNPCSpellList(npcspelllistid).editSetting(setting,value);
+			StateManager.getInstance().getConfigurationManager().getNPCSpellList(npcspelllistid).editSetting(setting,value, additional);
 			sender.sendMessage("Updating setting on npcspelllist");
 			
 		} catch (InvalidNpcSpellListSettingException ne)

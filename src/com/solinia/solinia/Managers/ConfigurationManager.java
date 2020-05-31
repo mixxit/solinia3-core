@@ -171,6 +171,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	private ConfigSettings configSettings = new ConfigSettings();
 	private JsonImportItemsRepository importItemsRepository;
 	private JsonImportNPCsRepository importNPCsRepository;
+	private boolean npcspellsChanged = false;
 
 	public ConfigurationManager(IRepository<ISoliniaRace> raceContext, IRepository<ISoliniaClass> classContext,
 			IRepository<ISoliniaItem> itemContext, IRepository<ISoliniaSpell> spellContext,
@@ -261,8 +262,12 @@ public class ConfigurationManager implements IConfigurationManager {
 		
 		timeToComplete = TimedCommit(this.characterlistsRepository);
 		System.out.println("CharacterLists Save: " + timeToComplete);
-		timeToComplete = TimedCommit(this.npcspelllistsRepository);
-		System.out.println("NPCSpellLists Save: " + timeToComplete);
+		if (isNPCSpellsChanged() == true)
+		{
+			timeToComplete = TimedCommit(this.npcspelllistsRepository);
+			System.out.println("NPCSpellLists Save: " + timeToComplete);
+			this.npcspellsChanged = false;
+		}
 		timeToComplete = TimedCommit(this.accountClaimsRepository);
 		System.out.println("AccountClaims Save: " + timeToComplete);
 		timeToComplete = TimedCommit(this.zonesRepository);
@@ -1569,6 +1574,16 @@ public class ConfigurationManager implements IConfigurationManager {
 			return false;
 		
 		return true;
+	}
+	
+	@Override
+	public boolean isNPCSpellsChanged() {
+		return npcspellsChanged;
+	}
+
+	@Override
+	public void setNPCSpellsChanged(boolean npcspellsChanged) {
+		this.npcspellsChanged  = npcspellsChanged;
 	}
 	
 	@Override

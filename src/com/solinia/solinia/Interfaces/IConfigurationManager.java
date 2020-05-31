@@ -644,4 +644,8 @@ public interface IConfigurationManager {
 	EQItem getImportItems(int id);
 
 	EQMob getImportNPCs(int id);
+
+	boolean isNPCSpellsChanged();
+
+	void setNPCSpellsChanged(boolean npcspellsChanged);
 }
