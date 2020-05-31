@@ -7125,13 +7125,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			engagedBeneficialOtherChance = 0;
 			engagedDetrimentalOtherChance = 90;
 		}
-
+		
+		// if already casting abort
+		if (this.isCasting())
+			return;
 
 		// Try self buff, then nearby then target detrimental
 		DebugUtils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity(), "attempting to cast self buff");
 		if (!aiCastSpell(plugin, npc, this.getBukkitLivingEntity(), engagedBeneficialSelfChance,beneficialSelfSpells, npcEffectiveLevel)) {
 			DebugUtils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity(), "attempting to cast other buff");
-			if (!aiCheckCloseBeneficialSpells(plugin, npc, engagedBeneficialOtherChance, StateManager.getInstance().getEntityManager().getAIBeneficialBuffSpellRange(),beneficialOtherSpells, npcEffectiveLevel)) {
+			if (castingAtEntity != null && !aiCheckCloseBeneficialSpells(plugin, npc, engagedBeneficialOtherChance, StateManager.getInstance().getEntityManager().getAIBeneficialBuffSpellRange(),beneficialOtherSpells, npcEffectiveLevel)) {
 				DebugUtils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity(), "attempting to cast detrimental");
 				if (castingAtEntity != null && !aiCastSpell(plugin, npc, castingAtEntity, engagedDetrimentalOtherChance, detrimentalSpells, npcEffectiveLevel)) {
 					DebugUtils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity(), "Cannot cast at all");
@@ -7198,25 +7201,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return true;
 		}
 		return false;
-	}
-
-	@Override
-	public boolean aiDoSpellCast(Plugin plugin, ISoliniaSpell spell, ISoliniaLivingEntity target, int manaCost) {
-		// TODO Spell Casting Times
-		// if(!spell.isBardSong()) {
-		// SetCurrentSpeed(0);
-		// }
-
-		boolean success = false;
-		if (getMana() > spell.getActSpellCost(this)) {
-			success = spell.tryApplyOnEntity(this.getBukkitLivingEntity(), target.getBukkitLivingEntity(), true, "");
-		}
-
-		if (success) {
-			this.increaseMana(-spell.getActSpellCost(this));
-		}
-
-		return success;
 	}
 
 	@Override
@@ -7589,6 +7573,55 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public boolean aiDoSpellCast(Plugin plugin, ISoliniaSpell spell, ISoliniaLivingEntity target, int manaCost) {
+		// TODO Spell Casting Times
+		// if(!spell.isBardSong()) {
+		// SetCurrentSpeed(0);
+		// }
+
+		/*boolean success = false;
+		if (getMana() > spell.getActSpellCost(this)) {
+			success = spell.tryApplyOnEntity(this.getBukkitLivingEntity(), target.getBukkitLivingEntity(), true, "");
+		}
+
+		if (success) {
+			this.increaseMana(-spell.getActSpellCost(this));
+		}
+
+		return success;*/
+		
+		if (this.getBukkitLivingEntity() == null || this.getBukkitLivingEntity().isDead())
+			return false;
+
+		if (target.getBukkitLivingEntity() == null || target.getBukkitLivingEntity().isDead())
+			return false;
+
+		// if already casting abort
+		if (this.isCasting())
+			return false;
+		
+		if
+		(
+			!this.IsValidSpell(spell.getId()) ||
+			isStunned() ||
+			isFeared() ||
+			isMezzed() //||
+//			(IsSilenced() && !IsDiscipline(spell_id)) ||
+//			(IsAmnesiad() && IsDiscipline(spell_id))
+		)
+			return false;
+		
+		CastingSpell castingSpell = new CastingSpell(this.getBukkitLivingEntity().getUniqueId(), spell.getId(), true, false,
+				true, "", target.getBukkitLivingEntity().getUniqueId());
+		
+		try {
+			return StateManager.getInstance().getEntityManager().startCasting(this.getBukkitLivingEntity(), castingSpell);
+		} catch (CoreStateInitException e) {
+			return false;
+		}
 	}
 	
 
@@ -12285,5 +12318,216 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				canSeeInvis = this.getNPC().isCanSeeInvis();
 		}
 		return false;
+	}
+
+	@Override
+	public void finishCasting(CastingSpell castingSpell) {
+		if (getBukkitLivingEntity() == null || getBukkitLivingEntity().isDead())
+			return;
+		
+		if (isPlayer())
+			ChatUtils.SendHint(getBukkitLivingEntity(), HINT.FINISH_ABILITY, "", false);
+		
+		this.castingComplete(castingSpell);
+	}
+
+	private void castingComplete(CastingSpell castingSpell) {
+		Entity entity = Bukkit.getEntity(castingSpell.livingEntityUUID);
+
+		if (entity == null)
+			return;
+
+		if (entity.isDead())
+			return;
+
+		if (castingSpell.getSpell() == null)
+			return;
+
+		/*
+		 * if (castingSpell.getItem() == null) return;
+		 */
+
+		doCastSpell(castingSpell.getSpell(), castingSpell.useMana, castingSpell.useReagents,
+				castingSpell.ignoreProfessionAndLevel, castingSpell.getRequiredWeaponSkillType(), castingSpell.getNPCTarget());
+	}
+
+	@Override
+	public void doCastSpell(ISoliniaSpell spell, boolean useMana, boolean useReagents,
+			boolean ignoreProfessionAndLevel, String requiredWeaponSkillType, Entity npcTargetEntity) {
+		
+		if (getBukkitLivingEntity() == null || getBukkitLivingEntity().isDead())
+			return;
+		
+		DebugUtils.DebugLog("SoliniaLivingEntity", "doCastSpell", getBukkitLivingEntity(), "Start doCastSpell");
+		
+		if (this.isPlayer() && !ignoreProfessionAndLevel && spell.isAASpell() && !canUseAASpell(spell)) {
+			getBukkitLivingEntity().sendMessage("You require the correct AA to use this spell");
+			return;
+		}
+
+		LivingEntity targetmob = null;
+
+		if (this.isPlayer() && getEntityTarget() == null) {
+			if (SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEClientV1)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AreaClientOnly)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Directional)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Group)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupClientAndPet)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupNoPets)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupTeleport)
+					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)) {
+				setEntityTarget(getBukkitLivingEntity());
+				DebugUtils.DebugLog("SoliniaLivingEntity", "doCastSpell", getBukkitLivingEntity(), "Set target to self");
+
+			} else {
+				DebugUtils.DebugLog("SoliniaLivingEntity", "doCastSpell", getBukkitLivingEntity(), "Not target");
+				ChatUtils.SendHint(getBukkitLivingEntity(), HINT.NEED_TARGET, "spellitem", false);
+				return;
+			}
+		}
+
+		targetmob = getEntityTarget();
+		if (!this.isPlayer())
+		{
+			if (npcTargetEntity == null)
+				return;
+			
+			if (!(npcTargetEntity instanceof LivingEntity))
+				return;
+			
+			targetmob = (LivingEntity)npcTargetEntity;
+		}
+			
+		if (this.isPlayer() && targetmob != null) {
+			double distanceOverLimit = EntityUtils.DistanceOverAggroLimit((LivingEntity) getBukkitLivingEntity(), targetmob);
+
+			if (distanceOverLimit > 0) {
+				DebugUtils.DebugLog("SoliniaLivingEntity", "doCastSpell", getBukkitLivingEntity(), "Too far to interact");
+				getBukkitLivingEntity().sendMessage("You were too far to interact with that entity");
+				return;
+			}
+		}
+
+		if (this.isPlayer() && !ignoreProfessionAndLevel && spell.getAllowedClasses().size() > 0) {
+			DebugUtils.DebugLog("SoliniaLivingEntity", "doCastSpell", getBukkitLivingEntity(), "Allowed classes over 0 and not ignoring profession and level");
+
+			if (getClassObj() == null) {
+				DebugUtils.DebugLog("SoliniaLivingEntity", "doCastSpell", getBukkitLivingEntity(), "Had no class");
+				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + " * This effect cannot be used by your profession");
+				return;
+			}
+
+			boolean foundprofession = false;
+			String professions = "";
+			int foundlevel = 0;
+			for (SoliniaSpellClass spellclass : spell.getAllowedClasses()) {
+				if (spellclass.getClassname().toUpperCase().equals(getClassObj().getName().toUpperCase())) {
+					foundprofession = true;
+					foundlevel = spellclass.getMinlevel();
+					break;
+				}
+				professions += spellclass.getClassname() + " ";
+			}
+
+			if (foundprofession == false) {
+				DebugUtils.DebugLog("SoliniaLivingEntity", "doCastSpell", getBukkitLivingEntity(), "No profession found");
+				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + " * This effect can only be used by " + professions);
+				return;
+			} else {
+				DebugUtils.DebugLog("SoliniaLivingEntity", "doCastSpell", getBukkitLivingEntity(), "Found profession");
+				if (foundlevel > 0) {
+					Double level = (double) getMentorLevel();
+					if (level < foundlevel) {
+						DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitLivingEntity(), "Missing needed level");
+						getBukkitLivingEntity().sendMessage(ChatColor.GRAY + " * This effect requires level " + foundlevel);
+						return;
+					}
+				}
+			}
+
+		}
+
+		try {
+			if (useMana && spell.getActSpellCost(this) > getMana()) {
+				DebugUtils.DebugLog("SoliniaLivingEntity", "doCastSpell", getBukkitLivingEntity(), "No mana");
+				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "Insufficient Mana [E]");
+				return;
+			}
+
+			if (!spell.isBardSong() && this.isPlayer()) {
+				if (!hasReagents(spell))
+				{
+					DebugUtils.DebugLog("SoliniaLivingEntity", "doCastSpell", getBukkitLivingEntity(), "No reagents");
+					return;
+				}
+			}
+			
+			if (targetmob != null && getBukkitLivingEntity() != null && spell != null)
+			{
+				// dont check these ones this early
+				if (SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard)
+						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster)
+						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEClientV1)
+						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AreaClientOnly)
+						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Directional)
+						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)
+						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AETarget)
+						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AETargetHateList
+								)
+						)
+				{
+					// dont check
+				} else {
+					Tuple<Boolean,String> result = SoliniaSpell.isValidEffectForEntity(targetmob, getBukkitLivingEntity(), spell);
+					if (!result.a())
+					{
+						ChatUtils.SendHint(getBukkitLivingEntity(), HINT.SPELL_INVALIDEFFECT, result.b(), false);
+						return;
+					}
+					
+				}
+			}
+		} catch (CoreStateInitException e) {
+			return;
+		}
+		if (getBukkitLivingEntity() != null && !getBukkitLivingEntity().isDead())
+			if (targetmob != null && !targetmob.isDead()) {
+				boolean success = spell.tryCast(getBukkitLivingEntity(), targetmob, useMana, useReagents, requiredWeaponSkillType);
+				DebugUtils.DebugLog("SoliniaLivingEntity", "doCastSpell", getBukkitLivingEntity(), "Cast success for spell id ["+spell.getId()+"] state: " + success);
+				if (success == true) {
+					DebugUtils.DebugLog("SoliniaLivingEntity", "doCastSpell", getBukkitLivingEntity(), "Trying to increase skill");
+					tryIncreaseSkill(SkillUtils.getSkillType(spell.getSkill()), 1);
+				}
+				return;
+			} else {
+				boolean success = spell.tryCast(getBukkitLivingEntity(), getBukkitLivingEntity(), useMana, useReagents, requiredWeaponSkillType);
+				if (success == true) {
+					DebugUtils.DebugLog("SoliniaLivingEntity", "doCastSpell", getBukkitLivingEntity(), "Trying to increase skill non dead/null mob");
+					tryIncreaseSkill(SkillUtils.getSkillType(spell.getSkill()), 1);
+				}
+				return;
+			}
+	}
+	
+	private boolean canUseAASpell(ISoliniaSpell spell) {
+		if (this.isPlayer())
+		{
+			if (this.getPlayer() != null)
+				return this.getPlayer().canUseAASpell(spell);
+		}
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private boolean hasReagents(ISoliniaSpell spell) {
+		if (this.isPlayer())
+		{
+			if (this.getPlayer() != null)
+				return this.getPlayer().hasReagents(spell);
+		}
+		return true;
 	}
 }

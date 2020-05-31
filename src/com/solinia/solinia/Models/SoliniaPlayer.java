@@ -1325,7 +1325,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 			
 			if (!spell.isBardSong())
-			if (!this.hasReagents(spell,getBukkitPlayer()))
+			if (!this.hasReagents(spell))
 			{
 				DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer(),
 						"SoliniaSpell in slot: " + spellId + " Missing reagents");
@@ -1447,7 +1447,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 			
 			if (!spell.isBardSong())
-			if (!this.hasReagents(spell,getBukkitPlayer()))
+			if (!this.hasReagents(spell))
 			{
 				DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer(),
 						"SoliniaSpell in slot: " + spellId + " Missing reagents");
@@ -2063,10 +2063,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void startCasting(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents,
 			boolean ignoreProfessionAndLevel, String requiredWeaponSkillType) {
+		
 		try {
 
 			CastingSpell castingSpell = new CastingSpell(player.getUniqueId(), spell.getId(), useMana, useReagents,
-					ignoreProfessionAndLevel, requiredWeaponSkillType);
+					ignoreProfessionAndLevel, requiredWeaponSkillType,null);
 			StateManager.getInstance().getEntityManager().startCasting((LivingEntity) player, castingSpell);
 		} catch (CoreStateInitException e) {
 
@@ -2100,249 +2101,67 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		
 		return false;
 	}
-
-	@Override
-	public void castingComplete(CastingSpell castingSpell) {
-		Entity entity = Bukkit.getEntity(castingSpell.livingEntityUUID);
-
-		if (entity == null)
-			return;
-
-		if (!(entity instanceof Player))
-			return;
-
-		Player player = (Player) entity;
-
-		if (player.isDead())
-			return;
-
-		if (castingSpell.getSpell() == null)
-			return;
-
-		/*
-		 * if (castingSpell.getItem() == null) return;
-		 */
-
-		doCastSpell(castingSpell.getSpell(), player, castingSpell.useMana, castingSpell.useReagents,
-				castingSpell.ignoreProfessionAndLevel, castingSpell.getRequiredWeaponSkillType());
-	}
-
-	@Override
-	public void doCastSpell(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents,
-			boolean ignoreProfessionAndLevel, String requiredWeaponSkillType) {
-		
-		DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Start doCastSpell");
-		
-		if (!ignoreProfessionAndLevel && spell.isAASpell() && !canUseAASpell(spell)) {
-			player.sendMessage("You require the correct AA to use this spell");
-			return;
-		}
-
-		LivingEntity targetmob = null;
-
-		if (getEntityTarget() == null) {
-			if (SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Self)
-					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard)
-					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster)
-					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEClientV1)
-					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AreaClientOnly)
-					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Directional)
-					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Group)
-					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupClientAndPet)
-					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupNoPets)
-					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.GroupTeleport)
-					|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)) {
-				setEntityTarget(getBukkitPlayer());
-				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Set target to self");
-
-			} else {
-				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Not target");
-				ChatUtils.SendHint(getBukkitPlayer(), HINT.NEED_TARGET, "spellitem", false);
-				return;
-			}
-		}
-
-		targetmob = getEntityTarget();
-
-		if (targetmob != null) {
-			double distanceOverLimit = EntityUtils.DistanceOverAggroLimit((LivingEntity) getBukkitPlayer(), targetmob);
-
-			if (distanceOverLimit > 0) {
-				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Too far to interact");
-				getBukkitPlayer().sendMessage("You were too far to interact with that entity");
-				return;
-			}
-		}
-
-		if (!ignoreProfessionAndLevel && spell.getAllowedClasses().size() > 0) {
-			DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Allowed classes over 0 and not ignoring profession and level");
-
-			if (getClassObj() == null) {
-				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Had no class");
-				player.sendMessage(ChatColor.GRAY + " * This effect cannot be used by your profession");
-				return;
-			}
-
-			boolean foundprofession = false;
-			String professions = "";
-			int foundlevel = 0;
-			for (SoliniaSpellClass spellclass : spell.getAllowedClasses()) {
-				if (spellclass.getClassname().toUpperCase().equals(getClassObj().getName().toUpperCase())) {
-					foundprofession = true;
-					foundlevel = spellclass.getMinlevel();
-					break;
-				}
-				professions += spellclass.getClassname() + " ";
-			}
-
-			if (foundprofession == false) {
-				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "No profession found");
-				player.sendMessage(ChatColor.GRAY + " * This effect can only be used by " + professions);
-				return;
-			} else {
-				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Found profession");
-				if (foundlevel > 0) {
-					Double level = (double) getMentorLevel();
-					if (level < foundlevel) {
-						DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Missing needed level");
-						player.sendMessage(ChatColor.GRAY + " * This effect requires level " + foundlevel);
-						return;
-					}
-				}
-			}
-
-		}
-
-		try {
-			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) player);
-			if (solentity == null)
-			{
-				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Player had no solinialivingentity object");
-				return;
-			}
-
-			if (useMana && spell.getActSpellCost(solentity) > SoliniaPlayerAdapter.Adapt(player).getMana()) {
-				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "No mana");
-				player.sendMessage(ChatColor.GRAY + "Insufficient Mana [E]");
-				return;
-			}
-
-			if (!spell.isBardSong()) {
-				if (!hasReagents(spell,player))
-				{
-					DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "No reagents");
-					return;
-				}
-			}
-			
-			if (targetmob != null && player != null && spell != null)
-			{
-				// dont check these ones this early
-				if (SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEBard)
-						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AECaster)
-						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AEClientV1)
-						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AreaClientOnly)
-						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.Directional)
-						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.UndeadAE)
-						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AETarget)
-						|| SpellUtils.getSpellTargetType(spell.getTargettype()).equals(SpellTargetType.AETargetHateList
-								)
-						)
-				{
-					// dont check
-				} else {
-					Tuple<Boolean,String> result = SoliniaSpell.isValidEffectForEntity(targetmob, player, spell);
-					if (!result.a())
-					{
-						ChatUtils.SendHint(player, HINT.SPELL_INVALIDEFFECT, result.b(), false);
-						return;
-					}
-					
-				}
-			}
-		} catch (CoreStateInitException e) {
-			return;
-		}
-		if (player != null && !player.isDead())
-			if (targetmob != null && !targetmob.isDead()) {
-				boolean success = spell.tryCast(player, targetmob, useMana, useReagents, requiredWeaponSkillType);
-				DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Cast success for spell id ["+spell.getId()+"] state: " + success);
-				if (success == true) {
-					DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Trying to increase skill");
-					tryIncreaseSkill(SkillUtils.getSkillType(spell.getSkill()), 1);
-				}
-				return;
-			} else {
-				boolean success = spell.tryCast(player, player, useMana, useReagents, requiredWeaponSkillType);
-				if (success == true) {
-					DebugUtils.DebugLog("SoliniaPlayer", "doCastSpell", getBukkitPlayer(), "Trying to increase skill non dead/null mob");
-					tryIncreaseSkill(SkillUtils.getSkillType(spell.getSkill()), 1);
-				}
-				return;
-			}
-	}
 	
 	@Override
-	public boolean hasReagents(ISoliniaSpell spell, Player player)
+	public boolean hasReagents(ISoliniaSpell spell)
 	{
+		if (this.getBukkitPlayer() == null || this.getBukkitPlayer().isDead())
+			return false;
+		
 		try
 		{
 			if (spell.getComponents1() > 0) {
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 						.getItem(spell.getComponents1());
 				if (item == null || !item.isReagent()) {
-					player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
+					getBukkitPlayer().sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
 							+ spell.getId() + "-ID" + spell.getComponents1());
 					return false;
 				}
-				if (!solPlayer.hasSufficientReagents(spell.getComponents1(), spell.getComponentCounts1())) {
-					ChatUtils.SendHint(player,HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
+				if (!hasSufficientReagents(spell.getComponents1(), spell.getComponentCounts1())) {
+					ChatUtils.SendHint(getBukkitPlayer(),HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
 					return false;
 				}
 			}
 	
 			if (spell.getComponents2() > 0) {
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 						.getItem(spell.getComponents2());
 				if (item == null || !item.isReagent()) {
-					player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
+					getBukkitPlayer().sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
 							+ spell.getId() + "-ID" + spell.getComponents2());
 					return false;
 				}
-				if (!solPlayer.hasSufficientReagents(spell.getComponents2(), spell.getComponentCounts2())) {
-					ChatUtils.SendHint(player,HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
+				if (!hasSufficientReagents(spell.getComponents2(), spell.getComponentCounts2())) {
+					ChatUtils.SendHint(getBukkitPlayer(),HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
 					return false;
 				}
 			}
 	
 			if (spell.getComponents3() > 0) {
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 						.getItem(spell.getComponents3());
 				if (item == null || !item.isReagent()) {
-					player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
+					getBukkitPlayer().sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
 							+ spell.getId() + "-ID" + spell.getComponents3());
 					return false;
 				}
-				if (!solPlayer.hasSufficientReagents(spell.getComponents3(), spell.getComponentCounts3())) {
-					ChatUtils.SendHint(player,HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
+				if (!hasSufficientReagents(spell.getComponents3(), spell.getComponentCounts3())) {
+					ChatUtils.SendHint(getBukkitPlayer(),HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
 					return false;
 				}
 			}
 	
 			if (spell.getComponents4() > 0) {
-				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 						.getItem(spell.getComponents4());
 				if (item == null || !item.isReagent()) {
-					player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
+					getBukkitPlayer().sendMessage(ChatColor.RED + "ERROR: " + ChatColor.YELLOW + "ERROR-ALERT-ADMIN-SPELL"
 							+ spell.getId() + "-ID" + spell.getComponents4());
 					return false;
 				}
-				if (!solPlayer.hasSufficientReagents(spell.getComponents4(), spell.getComponentCounts4())) {
-					ChatUtils.SendHint(player,HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
+				if (!hasSufficientReagents(spell.getComponents4(), spell.getComponentCounts4())) {
+					ChatUtils.SendHint(getBukkitPlayer(),HINT.INSUFFICIENT_REAGENTS,item.getDisplayname(),false);
 					return false;
 				}
 			}

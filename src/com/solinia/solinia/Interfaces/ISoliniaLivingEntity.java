@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.DamageHitInfo;
 import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.FocusEffect;
@@ -544,5 +545,10 @@ public interface ISoliniaLivingEntity  {
 	int getMPRegen();
 
 	int getHPRegen();
+
+	public void finishCasting(CastingSpell castingSpell);
+
+	void doCastSpell(ISoliniaSpell spell, boolean useMana, boolean useReagents, boolean ignoreProfessionAndLevel,
+			String requiredWeaponSkillType, Entity npcTargetEntity);
 
 }

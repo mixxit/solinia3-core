@@ -315,8 +315,6 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 
 	void setFeigned(boolean feigned);
 
-	void castingComplete(CastingSpell castingSpell);
-
 	void toggleAutoAttack();
 
 	public boolean hasSufficientBandageReagents(int count);
@@ -433,9 +431,6 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 
 	Location getLastLocation();
 
-
-	void doCastSpell(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents,
-			boolean ignoreProfessionAndLevel, String requiredWeaponSkillType);
 
 	void startCasting(ISoliniaSpell spell, Player player, boolean useMana, boolean useReagents,
 			boolean ignoreProfessionAndLevel,String requiredWeaponSkillType);
@@ -580,7 +575,7 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 
 	public void grantFellowshipXPBonusToFellowship(Double experience);
 
-	boolean hasReagents(ISoliniaSpell spell, Player player);
+	boolean hasReagents(ISoliniaSpell spell);
 
 	boolean understandsLanguage(SkillType languageSkillType);
 

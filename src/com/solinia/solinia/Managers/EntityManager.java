@@ -1634,12 +1634,12 @@ public class EntityManager implements IEntityManager {
 	}
 	
 	@Override
-	public void startCasting(LivingEntity livingEntity, CastingSpell castingSpell) {
+	public boolean startCasting(LivingEntity livingEntity, CastingSpell castingSpell) {
 		interruptCasting(livingEntity);
 		try {
 			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(livingEntity);
 			if (solLivingEntity == null)
-				return;
+				return false;
 
 			solLivingEntity.BreakInvis();
 
@@ -1651,13 +1651,14 @@ public class EntityManager implements IEntityManager {
 					solPlayer.emote("* " + solPlayer.getFullName() + "'s spell fizzles", false);
 					solPlayer.reducePlayerMana(
 							castingSpell.getSpell().getActSpellCost(solPlayer.getSoliniaLivingEntity()));
-					return;
+					return false;
 				}
 
 				ChatUtils.SendHint(livingEntity, HINT.OTHER_BEGIN_ABILITY, solLivingEntity.getName()+"^"+castingSpell.getSpell().getName(),true);
 
 				playSpellCastingSoundEffect(livingEntity, castingSpell.getSpell());
-				playSpellCastingSpellEffect(livingEntity, castingSpell.getSpell());
+				if (!castingSpell.getSpell().isCombatSkill())
+					playSpellCastingSpellEffect(livingEntity, castingSpell.getSpell());
 
 				entitySpellCasting.put(livingEntity.getUniqueId(), castingSpell);
 
@@ -1665,11 +1666,15 @@ public class EntityManager implements IEntityManager {
 				ChatUtils.SendHint(livingEntity, HINT.OTHER_BEGIN_ABILITY, solLivingEntity.getName()+"^"+castingSpell.getSpell().getName(),true);
 
 				playSpellCastingSoundEffect(livingEntity, castingSpell.getSpell());
-				playSpellCastingSpellEffect(livingEntity, castingSpell.getSpell());
+				//playSpellCastingSpellEffect(livingEntity, castingSpell.getSpell());
+
+				entitySpellCasting.put(livingEntity.getUniqueId(), castingSpell);
 			}
 		} catch (CoreStateInitException e) {
 
 		}
+		
+		return true;
 	}
 	
 	private void playSpellCastingSpellEffect(LivingEntity livingEntity, ISoliniaSpell spell) {
@@ -1911,17 +1916,16 @@ public class EntityManager implements IEntityManager {
 		if (entitySpellCasting.get(entityUUID) != null)
 		{
 			Entity entity = Bukkit.getEntity(entityUUID);
-			if (entity instanceof Player && (!((Player)entity).isDead()))
+			if (entity != null && entity instanceof LivingEntity && !entity.isDead())
 			{
-				Player player = (Player)entity;
-				// Do casting animation
-				ChatUtils.SendHint(player, HINT.FINISH_ABILITY, "", false);
-				try {
-					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
-					solPlayer.castingComplete(entitySpellCasting.get(entityUUID));
-				} catch (CoreStateInitException e) {
+				try
+				{
+				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity)entity);
+				solLivingEntity.finishCasting(entitySpellCasting.get(entityUUID));
+				} catch (CoreStateInitException e)
+				{
+					
 				}
-				
 			}
 
 			entitySpellCasting.remove(entityUUID);

@@ -110,7 +110,7 @@ public interface IEntityManager {
 
 	void setFeignedDeath(UUID entityUuid, boolean feigned);
 
-	void startCasting(LivingEntity livingEntity, CastingSpell castingSpell);
+	boolean startCasting(LivingEntity livingEntity, CastingSpell castingSpell);
 
 	CastingSpell getCasting(LivingEntity livingEntity);
 	
