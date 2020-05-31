@@ -6456,7 +6456,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int bonuses = 0;
 		if (filter > -1)
 		{
-			bonuses = this.getAABonuses(SpellEffectType.RaiseStatCap) + this.getSpellBonuses(SpellEffectType.RaiseStatCap);;
+			bonuses = this.getAABonuses(SpellEffectType.RaiseStatCap, filter) + this.getSpellBonuses(SpellEffectType.RaiseStatCap, filter);
+			bonuses += this.getAABonuses(SpellEffectType.RaiseStatCap,13); // all
 		}
 
 		if (bonuses == 0) {
@@ -8499,9 +8500,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		int bonuses = 0;
 		if (filter > -1)
 		{
-			bonuses = this.getAABonuses(SpellEffectType.RaiseStatCap,filter) + this.getSpellBonuses(SpellEffectType.RaiseStatCap,filter);
+			int aabonus = this.getAABonuses(SpellEffectType.RaiseStatCap,filter);
+			aabonus += this.getAABonuses(SpellEffectType.RaiseStatCap,13); // all
+			bonuses = aabonus + this.getSpellBonuses(SpellEffectType.RaiseStatCap,filter);
 		}
 
+		
 		if (bonuses == 0) {
 			return baseMaxStat;
 		} else {
@@ -11607,7 +11611,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		String strmaxhp = "MaxHP: " + ChatColor.RED + getBukkitLivingEntity().getHealth() + "/" + getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + ChatColor.RESET;
 		String strmaxmp = "MaxMP: " + ChatColor.AQUA +getMana() + "/" + getMaxMP() + " (Items:" + getItemMana()+")" + ChatColor.RESET;
 		String hpregen = "HPRegen:" + ChatColor.GOLD + this.getHPRegen() + ChatColor.RESET;
-		String mpregen = "HPRegen:" + ChatColor.GOLD + this.getMPRegen() + ChatColor.RESET;
+		String mpregen = "MPRegen:" + ChatColor.GOLD + this.getMPRegen() + ChatColor.RESET;
 		targetMessage.sendMessage(strmaxhp + " " + hpregen);
 		targetMessage.sendMessage(strmaxmp + " " + mpregen);
         String resistsstr = "RESISTS: Fire: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_FIRE) + ChatColor.RESET + 
