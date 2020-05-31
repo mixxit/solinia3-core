@@ -7278,6 +7278,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if ((iSpellTypes & spelllistentry.getType()) == spelllistentry.getType()) {
 				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
 						.getSpell(spelllistentry.getSpellid());
+				
+				if (spell == null)
+					continue;
+				
+				// Lets not cast anything thats really short lasting if we are outside of combat
+				if (!this.isInCombat())
+					if (spell.getBuffduration() < 50)
+						continue;
+				
 				// TODO Check mana
 				int mana_cost = spell.getActSpellCost(this);
 				if (mana_cost < 0)
