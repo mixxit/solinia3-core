@@ -3270,7 +3270,13 @@ public class SoliniaSpell implements ISoliniaSpell {
 	@Override
 	public boolean tryApplyOnEntity(LivingEntity sourceEntity, LivingEntity targetentity, boolean sendMessages, String requiredWeaponSkillType, boolean racialPassive) {
 		// Entity was targeted for this spell but is that the final location? 
+		if (sourceEntity == null || targetentity == null)
+			return false;
+		
+		if (sourceEntity.isDead() || targetentity.isDead())
+			return false;
 
+		DebugUtils.DebugLog("SoliniaSpell", "tryApplyOnEntity", targetentity, "Try to apply on me (the target) - " + this.getName() + " " + SpellUtils.getSpellTargetType(getTargettype()).name());
 		try {
 			switch (SpellUtils.getSpellTargetType(getTargettype())) {
 			case Self:
@@ -3390,22 +3396,22 @@ public class SoliniaSpell implements ISoliniaSpell {
 			case GroupTeleport:
 				boolean successGroupTeleport = false;
 
-				if (!(sourceEntity instanceof Player))
-					return false;
+				if (sourceEntity instanceof Player)
+				{
+					ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) sourceEntity);
+					ISoliniaGroup group = player.getGroup();
 
-				ISoliniaPlayer player = SoliniaPlayerAdapter.Adapt((Player) sourceEntity);
-				ISoliniaGroup group = player.getGroup();
+					if (group != null) {
+						for (Entity e : sourceEntity.getNearbyEntities(10, 10, 10)) {
+							if (!(e instanceof Player))
+								continue;
 
-				if (group != null) {
-					for (Entity e : sourceEntity.getNearbyEntities(10, 10, 10)) {
-						if (!(e instanceof Player))
-							continue;
-
-						if (group.getMembers().contains(e.getUniqueId())) {
-							boolean loopSuccess3 = StateManager.getInstance().getEntityManager()
-									.addActiveEntitySpell((LivingEntity) e, this, sourceEntity, sendMessages, requiredWeaponSkillType);
-							if (loopSuccess3 == true)
-								successGroupTeleport = true;
+							if (group.getMembers().contains(e.getUniqueId())) {
+								boolean loopSuccess3 = StateManager.getInstance().getEntityManager()
+										.addActiveEntitySpell((LivingEntity) e, this, sourceEntity, sendMessages, requiredWeaponSkillType);
+								if (loopSuccess3 == true)
+									successGroupTeleport = true;
+							}
 						}
 					}
 				}
