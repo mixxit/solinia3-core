@@ -1663,10 +1663,13 @@ public class EntityManager implements IEntityManager {
 				entitySpellCasting.put(livingEntity.getUniqueId(), castingSpell);
 
 			} else {
-				ChatUtils.SendHint(livingEntity, HINT.OTHER_BEGIN_ABILITY, solLivingEntity.getName()+"^"+castingSpell.getSpell().getName(),true);
+				if (solLivingEntity.IsPet())
+					ChatUtils.SendHint(livingEntity, HINT.PET_BEGIN_ABILITY, solLivingEntity.getName()+"^"+castingSpell.getSpell().getName(),true);
+				else
+					ChatUtils.SendHint(livingEntity, HINT.NPC_BEGIN_ABILITY, solLivingEntity.getName()+"^"+castingSpell.getSpell().getName(),true);
 
-				playSpellCastingSoundEffect(livingEntity, castingSpell.getSpell());
-				//playSpellCastingSpellEffect(livingEntity, castingSpell.getSpell());
+				//playSpellCastingSoundEffect(livingEntity, castingSpell.getSpell());
+				playSpellCastingSpellEffect(livingEntity, castingSpell.getSpell());
 
 				entitySpellCasting.put(livingEntity.getUniqueId(), castingSpell);
 			}

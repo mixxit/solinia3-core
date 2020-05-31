@@ -215,6 +215,14 @@ public class ChatUtils {
 		case INTERRUPTED:
 			message = referenceCode + "'s casting was interrupted";
 			break;
+		case PET_BEGIN_ABILITY:
+			String[] potherBeginAbility = referenceCode.split("\\^");
+			message = potherBeginAbility[0] + " begins their ability [" + potherBeginAbility[1] + "]";
+			break;
+		case NPC_BEGIN_ABILITY:
+			String[] notherBeginAbility = referenceCode.split("\\^");
+			message = notherBeginAbility[0] + " begins their ability [" + notherBeginAbility[1] + "]";
+			break;
 		case OTHER_BEGIN_ABILITY:
 			String[] otherBeginAbility = referenceCode.split("\\^");
 			message = otherBeginAbility[0] + " begins their ability [" + otherBeginAbility[1] + "]";
@@ -514,6 +522,10 @@ public class ChatUtils {
 		case SPELL_WORN_OFF_OF:
 			return HintSetting.Chat;
 		case INSUFFICIENT_LEVEL_GEAR:
+			return HintSetting.Chat;
+		case NPC_BEGIN_ABILITY:
+			return HintSetting.Chat;
+		case PET_BEGIN_ABILITY:
 			return HintSetting.Chat;
 		case OTHER_BEGIN_ABILITY:
 			return HintSetting.Chat;
