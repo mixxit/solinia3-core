@@ -541,4 +541,8 @@ public interface ISoliniaLivingEntity  {
 
 	public boolean canSeeInvis();
 
+	int getMPRegen();
+
+	int getHPRegen();
+
 }

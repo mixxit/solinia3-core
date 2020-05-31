@@ -11573,12 +11573,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void sendStats(LivingEntity targetMessage) {
 		targetMessage.sendMessage("STATS:");
 		targetMessage.sendMessage("----------------------------");
-		String strlevel = "Level: " + ChatColor.GOLD + getMentorLevel() + " / " + getActualLevel() + " SpellCastingLvl: " + getEffectiveLevel(true)+ ChatColor.RESET;
+		String strlevel = "Level: " + ChatColor.GOLD + getMentorLevel() + " / " + getActualLevel() + " SCL: " + getEffectiveLevel(true)+ ChatColor.RESET;
 
 		String strclass = "";
 		if (getClassObj() != null)
 		{
-			strclass = "Class: " + ChatColor.GOLD + getClassObj().getName() + ChatColor.RESET;
+			strclass = "Class: " + ChatColor.GOLD + getClassObj().getShortName() + ChatColor.RESET;
 		} else {
 			strclass = "Class: " + ChatColor.GOLD + "Unknown" + ChatColor.RESET;
 		}
@@ -11586,7 +11586,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		String strrace = "";
 		if (getRace() != null)
 		{
-			strrace = "Race: " + ChatColor.GOLD + getRace().getName() + ChatColor.RESET;
+			strrace = "Race: " + ChatColor.GOLD + getRace().getShortName() + ChatColor.RESET;
 		} else {
 			strrace = "Race: " + ChatColor.GOLD + "Unknown" + ChatColor.RESET;
 		}
@@ -11606,7 +11606,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				);
 		String strmaxhp = "MaxHP: " + ChatColor.RED + getBukkitLivingEntity().getHealth() + "/" + getBukkitLivingEntity().getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + ChatColor.RESET;
 		String strmaxmp = "MaxMP: " + ChatColor.AQUA +getMana() + "/" + getMaxMP() + " (Items:" + getItemMana()+")" + ChatColor.RESET;
-		targetMessage.sendMessage(strmaxhp + " " + strmaxmp);
+		String hpregen = "HPRegen:" + ChatColor.GOLD + this.getHPRegen() + ChatColor.RESET;
+		String mpregen = "HPRegen:" + ChatColor.GOLD + this.getMPRegen() + ChatColor.RESET;
+		targetMessage.sendMessage(strmaxhp + " " + hpregen);
+		targetMessage.sendMessage(strmaxmp + " " + mpregen);
         String resistsstr = "RESISTS: Fire: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_FIRE) + ChatColor.RESET + 
         		" Cold: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_COLD) + ChatColor.RESET + 
         		" Magic: " + ChatColor.GOLD + getResists(SpellResistType.RESIST_MAGIC) + ChatColor.RESET + 
@@ -12031,11 +12034,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		return true;
 	}
-
+	
 	@Override
-	public void doHPRegenTick() {
+	public int getHPRegen()
+	{
 		if (getBukkitLivingEntity() == null || getBukkitLivingEntity().isDead())
-			return;
+			return 0;
 
 		int sleephpregen = 0;
 		// Sleep regen
@@ -12076,6 +12080,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		hpregen += sleephpregen;
+		
+		return hpregen;
+	}
+
+	@Override
+	public void doHPRegenTick() {
+		if (getBukkitLivingEntity() == null || getBukkitLivingEntity().isDead())
+			return;
+		int hpregen = getHPRegen();
 
 		// Process HP Regeneration
 		if (hpregen > 0) {
@@ -12086,81 +12099,91 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 
 	}
+	
+	@Override
+	public int getMPRegen()
+	{
+		if (getBukkitLivingEntity() == null || getBukkitLivingEntity().isDead())
+			return 0;
+		
+		// Apply Crouch Mana Regen Bonus
+				int manaregen = 1;
+
+				if (this.isNPC())
+				{
+					ISoliniaNPC npc = this.getNPC();
+					if(npc != null)
+						manaregen += npc.getNPCMPRegen();
+				}
+				
+				int sleepmpregen = 0;
+				// Sleep regen
+				if (getBukkitLivingEntity().isSleeping()) {
+					sleepmpregen += 50;
+				}
+
+				manaregen += sleepmpregen;
+
+				// a players mana regen based on if they are meditating (sneaking)
+				manaregen += getMeditatingManaBonus();
+
+				ISoliniaAAAbility aa = null;
+				try {
+					if (hasAaRanks()) {
+						for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
+								.getAAbilitiesBySysname("MENTALCLARITY")) {
+							if (!hasAAAbility(ability.getId()))
+								continue;
+
+							aa = ability;
+						}
+					}
+
+				} catch (CoreStateInitException e) {
+
+				}
+
+				int aamanaregenrank = 0;
+
+				if (aa != null) {
+					if (hasAaRanks())
+						aamanaregenrank = SpellUtils.getRankPositionOfAAAbility(getBukkitLivingEntity(), aa);
+					manaregen += aamanaregenrank;
+				}
+
+				ISoliniaAAAbility emaa = null;
+				try {
+					if (hasAaRanks()) {
+						for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
+								.getAAbilitiesBySysname("MENTALCLARITY")) {
+							if (!hasAAAbility(ability.getId()))
+								continue;
+
+							emaa = ability;
+						}
+					}
+				} catch (CoreStateInitException e) {
+
+				}
+
+				int emaamanaregenrank = 0;
+
+				if (emaa != null) {
+					if (hasAaRanks())
+						emaamanaregenrank = SpellUtils.getRankPositionOfAAAbility(getBukkitLivingEntity(), emaa);
+					manaregen += emaamanaregenrank;
+				}
+			return manaregen;
+	}
 
 	@Override
 	public void doMPRegenTick() {
 		if (getBukkitLivingEntity() == null || getBukkitLivingEntity().isDead())
 			return;
 
-		// Apply Crouch Mana Regen Bonus
-		int manaregen = 1;
-
-		if (this.isNPC())
-		{
-			ISoliniaNPC npc = this.getNPC();
-			if(npc != null)
-				manaregen += npc.getNPCMPRegen();
-		}
 		
-		int sleepmpregen = 0;
-		// Sleep regen
-		if (getBukkitLivingEntity().isSleeping()) {
-			sleepmpregen += 50;
-		}
 
-		manaregen += sleepmpregen;
-
-		// a players mana regen based on if they are meditating (sneaking)
-		manaregen += getMeditatingManaBonus();
-
-		ISoliniaAAAbility aa = null;
-		try {
-			if (hasAaRanks()) {
-				for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
-						.getAAbilitiesBySysname("MENTALCLARITY")) {
-					if (!hasAAAbility(ability.getId()))
-						continue;
-
-					aa = ability;
-				}
-			}
-
-		} catch (CoreStateInitException e) {
-
-		}
-
-		int aamanaregenrank = 0;
-
-		if (aa != null) {
-			if (hasAaRanks())
-				aamanaregenrank = SpellUtils.getRankPositionOfAAAbility(getBukkitLivingEntity(), aa);
-			manaregen += aamanaregenrank;
-		}
-
-		ISoliniaAAAbility emaa = null;
-		try {
-			if (hasAaRanks()) {
-				for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager()
-						.getAAbilitiesBySysname("MENTALCLARITY")) {
-					if (!hasAAAbility(ability.getId()))
-						continue;
-
-					emaa = ability;
-				}
-			}
-		} catch (CoreStateInitException e) {
-
-		}
-
-		int emaamanaregenrank = 0;
-
-		if (emaa != null) {
-			if (hasAaRanks())
-				emaamanaregenrank = SpellUtils.getRankPositionOfAAAbility(getBukkitLivingEntity(), emaa);
-			manaregen += emaamanaregenrank;
-		}
-
-		increaseMana(manaregen);
+		increaseMana(getMPRegen());
 		
 		this.setLastUpdatedTimeNow();
 	}
