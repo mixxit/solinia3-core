@@ -54,6 +54,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	private String mctype = "SKELETON"; // do not use zombie, it ignores assist rules
 	private int level = 1;
 	private int factionid;
+	private boolean eventUsable = false;
 	private boolean usedisguise = false;
 	private String disguisetype;
 	private String headitem;
@@ -426,6 +427,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	    		;
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
+		sender.sendMessage("- eventusable: " + ChatColor.GOLD + isEventUsable() + ChatColor.RESET);
 		sender.sendMessage("- timefrom: " + ChatColor.GOLD + getTimefrom() + ChatColor.RESET +  "- timeto: " + ChatColor.GOLD + getTimeto() + ChatColor.RESET + " - randomspawn: "
 				+ ChatColor.GOLD + isRandomSpawn() + ChatColor.RESET + " chancetorespawnondeath: " + ChatColor.GOLD
 				+ getChanceToRespawnOnDeath() + ChatColor.RESET);
@@ -562,6 +564,9 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			}
 		case "level":
 			setLevel(Integer.parseInt(value));
+			break;
+		case "eventusable":
+			setEventUsable(Boolean.parseBoolean(value));
 			break;
 		case "chancetorespawnondeath":
 			setChanceToRespawnOnDeath(Integer.parseInt(value));
@@ -2251,5 +2256,15 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	@Override
 	public void setCanSeeInvis(boolean canSeeInvis) {
 		this.canSeeInvis = canSeeInvis;
+	}
+
+	@Override
+	public boolean isEventUsable() {
+		return eventUsable;
+	}
+
+	@Override
+	public void setEventUsable(boolean eventUsable) {
+		this.eventUsable = eventUsable;
 	}
 }

@@ -76,6 +76,9 @@ public class CastingSpell {
 	
 	public Entity getNPCTarget()
 	{
+		if (this.npcTargetUUID == null)
+			return null;
+		
 		return Bukkit.getEntity(this.npcTargetUUID);
 	}
 	

@@ -11,6 +11,10 @@ commands:
     description: Displays char creation
     usage: /opencharcreation
     aliases: []
+  event:
+    description: GM Event system
+    usage: /event
+    aliases: []
   topplayers:
     description: Top players
     usage: /topplayers

@@ -355,4 +355,8 @@ public interface ISoliniaNPC extends IPersistable {
 	boolean isCanSeeInvis();
 
 	void setCanSeeInvis(boolean canSeeInvis);
+
+	boolean isEventUsable();
+
+	void setEventUsable(boolean eventUsable);
 }
