@@ -174,6 +174,7 @@ public interface IEntityManager {
 
 	void removeSpellEffects(UUID uuid, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects);
 	void removeSpellEffectsExcept(UUID uuid,  boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects, List<SpellEffectType> exclude);
+	void removeSpellEffectsExcept(UUID uuid,  boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects, List<SpellEffectType> exclude, boolean removeBeneficial);
 
 	ConcurrentHashMap<UUID, Timestamp> getLastMeleeAttack();
 

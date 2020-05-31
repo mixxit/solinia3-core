@@ -576,13 +576,20 @@ public class EntityManager implements IEntityManager {
 	@Override
 	public void removeSpellEffectsExcept(UUID uuid, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects,
 			List<SpellEffectType> exclude) {
+		removeSpellEffectsExcept(uuid, forceDoNotLoopBardSpell, removeNonCombatEffects,
+				exclude, true);
+	}
+	
+	@Override
+	public void removeSpellEffectsExcept(UUID uuid, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects,
+			List<SpellEffectType> exclude, boolean removeBeneficial) {
 
 		// We should never do this again
 		// as we want to handle it in the removeAllSpells section of the entity spells
 		// - entitySpells.remove(uuid);
 
 		if (entitySpells.get(uuid) != null)
-			entitySpells.get(uuid).removeAllSpellsExcept(plugin, forceDoNotLoopBardSpell, removeNonCombatEffects, exclude);
+			entitySpells.get(uuid).removeAllSpellsExcept(plugin, forceDoNotLoopBardSpell, removeNonCombatEffects, exclude, removeBeneficial);
 		
 		try
 		{
@@ -757,12 +764,14 @@ public class EntityManager implements IEntityManager {
 					continue;
 				}
 				
+				/*
 				Creature creatureThatWillCast = (Creature)entityThatWillCast;
 				if (creatureThatWillCast.getTarget() == null)
 				{
 					DebugUtils.DebugLog("SoliniaLivingEntity", "doNPCSpellCast", livingEntityThatWillCast, "I have no target");
 					continue;
 				}
+				*/
 				
 				if (!EntityUtils.isLivingEntityNPC(livingEntityThatWillCast))
 				{
@@ -777,9 +786,15 @@ public class EntityManager implements IEntityManager {
 					
 					completedNpcsIds.add(solLivingEntityThatWillCast.getNpcid());
 					
-					ISoliniaLivingEntity solCreatureThatWillCastsTarget = SoliniaLivingEntityAdapter.Adapt(creatureThatWillCast.getTarget());
-					if (RaycastUtils.isEntityInLineOfSight(solLivingEntityThatWillCast, solCreatureThatWillCastsTarget, true))
-						solLivingEntityThatWillCast.doSpellCast(plugin, creatureThatWillCast.getTarget());
+					Creature creatureThatWillCast = (Creature)entityThatWillCast;
+					if (creatureThatWillCast.getTarget() != null)
+					{
+						ISoliniaLivingEntity solCreatureThatWillCastsTarget = SoliniaLivingEntityAdapter.Adapt(creatureThatWillCast.getTarget());
+						if (RaycastUtils.isEntityInLineOfSight(solLivingEntityThatWillCast, solCreatureThatWillCastsTarget, true))
+							solLivingEntityThatWillCast.doSpellCast(plugin, creatureThatWillCast.getTarget());
+					} else {
+						solLivingEntityThatWillCast.doSpellCast(plugin, null);
+					}
 					
 				} catch (CoreStateInitException e) {
 					// TODO Auto-generated catch block

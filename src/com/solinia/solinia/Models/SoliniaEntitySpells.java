@@ -715,10 +715,17 @@ public class SoliniaEntitySpells {
 	public void removeAllSpells(Plugin plugin, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects) {
 		removeAllSpellsExcept(plugin, forceDoNotLoopBardSpell, removeNonCombatEffects, new ArrayList<SpellEffectType>());
 	}
-	
-	public void removeAllSpellsExcept(Plugin plugin, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects, List<SpellEffectType> exclude) {
+	public void removeAllSpellsExcept(Plugin plugin, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects, List<SpellEffectType> exclude) 
+	{
+		removeAllSpellsExcept(plugin, forceDoNotLoopBardSpell, removeNonCombatEffects, exclude, true);
+	}
+		
+	public void removeAllSpellsExcept(Plugin plugin, boolean forceDoNotLoopBardSpell, boolean removeNonCombatEffects, List<SpellEffectType> exclude, boolean removeBeneficial) {
 		List<Integer> removeSpells = new ArrayList<Integer>();
 		for (SoliniaActiveSpell activeSpell : getActiveSpells()) {
+			if (activeSpell.getSpell().isBeneficial())
+				continue;
+
 			boolean isExcluded = false;
 			
 			for(SpellEffectType typeToExclude : exclude)

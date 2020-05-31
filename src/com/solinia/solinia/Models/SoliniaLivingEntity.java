@@ -7133,7 +7133,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			DebugUtils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity(), "attempting to cast other buff");
 			if (!aiCheckCloseBeneficialSpells(plugin, npc, engagedBeneficialOtherChance, StateManager.getInstance().getEntityManager().getAIBeneficialBuffSpellRange(),beneficialOtherSpells, npcEffectiveLevel)) {
 				DebugUtils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity(), "attempting to cast detrimental");
-				if (!aiCastSpell(plugin, npc, castingAtEntity, engagedDetrimentalOtherChance, detrimentalSpells, npcEffectiveLevel)) {
+				if (castingAtEntity != null && !aiCastSpell(plugin, npc, castingAtEntity, engagedDetrimentalOtherChance, detrimentalSpells, npcEffectiveLevel)) {
 					DebugUtils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity(), "Cannot cast at all");
 				}
 			}
@@ -7602,7 +7602,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		DebugUtils.DebugLog("SoliniaLivingEntity", "doSpellCast", this.getBukkitLivingEntity(), "Start doSpellCast");
 		
-		if (castingAtEntity == null || this.livingentity == null)
+		if (this.livingentity == null)
 			return;
 
 		ISoliniaNPC npc;
@@ -10704,7 +10704,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			typesToExclude.add(SpellEffectType.ChangeFrenzyRad);
 			typesToExclude.add(SpellEffectType.ChangeAggro);
 			typesToExclude.add(SpellEffectType.AddFaction);
-			StateManager.getInstance().getEntityManager().removeSpellEffectsExcept(this.getBukkitLivingEntity().getUniqueId(), true, true, typesToExclude);
+			StateManager.getInstance().getEntityManager().removeSpellEffectsExcept(this.getBukkitLivingEntity().getUniqueId(), true, true, typesToExclude, false);
 		} catch (CoreStateInitException e)
 		{
 			
