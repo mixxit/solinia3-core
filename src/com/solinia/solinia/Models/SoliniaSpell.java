@@ -4401,7 +4401,19 @@ public class SoliniaSpell implements ISoliniaSpell {
 					if (target.equals(source))
 						return new Tuple<Boolean,String>(false,"Target of spell is source");
 				}
-	
+				
+				if (effect.getSpellEffectType().equals(SpellEffectType.Charm)) {
+					if (target instanceof Player)
+						return new Tuple<Boolean,String>(false,"Target of spell is player");
+				}
+				
+				if (!SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
+					if (effect.getSpellEffectType().equals(SpellEffectType.Charm)) {
+						// If the effect is a charm, cancel out
+						if (target.equals(source))
+							return new Tuple<Boolean,String>(false,"Target of spell is source");
+					}
+				
 				if (!SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.Self) && !SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AECaster) && !SpellUtils.getSpellTargetType(soliniaSpell.getTargettype()).equals(SpellTargetType.AEClientV1))
 				if (effect.getSpellEffectType().equals(SpellEffectType.Stun)) {
 					// If the effect is a stun, cancel out
