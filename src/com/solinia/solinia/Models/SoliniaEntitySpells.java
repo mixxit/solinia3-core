@@ -300,7 +300,7 @@ public class SoliniaEntitySpells {
 		}
 	}
 	
-	private int checkStackConflict(ISoliniaSpell activeSpell, UUID activeSpellSourceUuid, ISoliniaSpell newSpell, LivingEntity targetEntity, LivingEntity sourceEntity)
+	public int checkStackConflict(ISoliniaSpell activeSpell, UUID activeSpellSourceUuid, ISoliniaSpell newSpell, LivingEntity targetEntity, LivingEntity sourceEntity)
 	{
 		if (!newSpell.isBuffSpell() || newSpell.getBuffduration() < 1)
 			return 0;
