@@ -7284,8 +7284,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				
 				// Lets not cast anything thats really short lasting if we are outside of combat
 				if (!this.isInCombat())
-					if (spell.getBuffduration() < 50)
+				{
+					if (!spell.isBeneficial())
 						continue;
+					
+					if (spell.getBuffduration() < 150)
+						continue;
+				}
 				
 				// TODO Check mana
 				int mana_cost = spell.getActSpellCost(this);
