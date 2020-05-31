@@ -297,14 +297,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public void updateDisplayName() {
+		// already the same just ignore it
+		
+		if (
+				getBukkitPlayer().getDisplayName().equals(getFullName()) &&
+				getBukkitPlayer().getCustomName().equals(getFullName())
+				)
+			return;
+		
 		if (getBukkitPlayer() != null) {
 			getBukkitPlayer().setDisplayName(getFullName());
 			getBukkitPlayer().setCustomName(getFullName());
 			getBukkitPlayer().setPlayerListName(getFullName());
 
 			if (this.getGroup() != null) {
-				StateManager.getInstance().removePlayerFromGroup(this.getBukkitPlayer());
-			} else {
 				PartyWindowUtils.UpdateGroupWindow(getBukkitPlayer().getUniqueId(), this.getGroup(), false, false);
 			}
 			this.setLastUpdatedTimeNow();
