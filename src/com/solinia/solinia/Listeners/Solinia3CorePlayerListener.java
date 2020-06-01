@@ -1619,14 +1619,25 @@ public class Solinia3CorePlayerListener implements Listener {
 					{
 						event.getView().getPlayer().sendMessage("Merchants are not interested in this item [null type]");
 						EntityUtils.CancelEvent(event);
+						return;
 					}
 					
 					ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
 							.getItem(event.getCurrentItem());
-					if (item == null && event.getCurrentItem().getType() != null && !ItemStackUtils.getAllowedVanillaItemStacks().contains(event.getCurrentItem().getType())) {
-						event.getView().getPlayer().sendMessage("Merchants are not interested in this item");
-						EntityUtils.CancelEvent(event);
-						return;
+					if (item == null) {
+						if (event.getCurrentItem() == null || event.getCurrentItem().getType() == null)
+						{
+							event.getView().getPlayer().sendMessage("Merchants are not interested in this item [null type]");
+							EntityUtils.CancelEvent(event);
+							return;
+						}
+						
+						if (!ItemStackUtils.getAllowedVanillaItemStacks().contains(event.getCurrentItem().getType()))
+						{
+							event.getView().getPlayer().sendMessage("Merchants are not interested in this item");
+							EntityUtils.CancelEvent(event);
+							return;
+						}
 					}
 
 					if (item != null && item.isTemporary()) {
