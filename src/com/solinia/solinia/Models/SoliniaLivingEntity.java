@@ -12343,7 +12343,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (!canSeeInvis && this.isUndead())
 		{
 			if (!canSeeInvis)
-				canSeeInvis = this.getNPC().isUndead();
+				canSeeInvis = this.isUndead();
 		}
 		
 		if (!canSeeInvis && this.isNPC())
