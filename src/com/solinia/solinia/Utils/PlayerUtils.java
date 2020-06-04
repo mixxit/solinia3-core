@@ -25,6 +25,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Commands.CommandToday;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.SoliniaItemException;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
@@ -643,6 +644,20 @@ public class PlayerUtils {
 		
 		if (solplayer.getGodId() > 0)
 			worship = "I worship: " + solplayer.getGod().getName() + System.lineSeparator();
+		String ageinfo = "Age: ???";
+		if (solplayer.getBirthday() != null)
+		{
+			int age = 0;
+			
+			String text = "2020-01-01 00:00:00.00";
+			LocalDateTime fromDate = Timestamp.valueOf(text).toLocalDateTime();
+			LocalDateTime toDate = solplayer.getBirthday().toLocalDateTime();
+			
+			int characterbirthyear = CommandToday.getUTYear(fromDate, toDate);
+			int currentutyear = CommandToday.getCurrentUTYear();
+			
+			ageinfo = "Age: " + (currentutyear-characterbirthyear);
+		}
 		String backstory = "My back story is a mystery" + System.lineSeparator();
 		if (solplayer.getBackStory() != null && !solplayer.getBackStory().equals(""))
 		backstory = "Backstory:" + solplayer.getBackStory() + System.lineSeparator();
@@ -674,7 +689,7 @@ public class PlayerUtils {
 		
 		String details = 
 				ChatColor.GOLD + solplayer.getFullName().toUpperCase() + " Level " + lvl + " " + racename + " " + classname + ChatColor.RESET + System.lineSeparator() + 
-				backstory +
+				ageinfo + " " + backstory +
 				inspiration;
 		
 		if (showPersonality)

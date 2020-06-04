@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -38,22 +40,45 @@ public class CommandBirthday implements CommandExecutor {
 			return false;
 		}
 		
-		LocalDateTime birthday = LocalDate.parse(args[0]).atStartOfDay();
-		
 		try
 		{
+			if (args[0].equals("reset"))
+			{
+				ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
+				solPlayer.setBirthday(null);
+				sender.sendMessage("You have reset your birthday");
+				return true;
+			}
+			
+
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			LocalDateTime birthday = LocalDate.parse(args[0],format).atStartOfDay();
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
 			if (solPlayer.getBirthday() != null)
 			{
 				sender.sendMessage("You have already set your birthday");
+				SendPlayerBirthday((Player)sender);
+				return true;
+			}
+
+			LocalDateTime today = LocalDateTime.now();
+			if (birthday.isAfter(today))
+			{
+				sender.sendMessage("You cannot set your birthday in the future");
 				return true;
 			}
 			
 			solPlayer.setBirthday(Timestamp.valueOf(birthday));
+			sender.sendMessage("Birthday set");
+			SendPlayerBirthday((Player)sender);
+			return true;
 		
 		} catch (CoreStateInitException e)
 		{
 			
+		} catch (DateTimeParseException de)
+		{
+			sender.sendMessage("Invalid date/time format " + args[0]);
 		}
 
 		return true;
@@ -65,7 +90,7 @@ public class CommandBirthday implements CommandExecutor {
 			ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt((Player)sender);
 			if (solPlayer.getBirthday() == null)
 			{
-				sender.sendMessage("You have not set your birthday");
+				sender.sendMessage("No birthday set");
 				return;
 			}
 			
@@ -76,7 +101,7 @@ public class CommandBirthday implements CommandExecutor {
 			int characterbirthyear = CommandToday.getUTYear(fromDate, toDate);
 			int currentutyear = CommandToday.getCurrentUTYear();
 			
-			sender.sendMessage("You were born in " + characterbirthyear + " UT making you  " + (currentutyear-characterbirthyear) + " years old");
+			sender.sendMessage("Born in " + characterbirthyear + " UT making the character " + (currentutyear-characterbirthyear) + " years old");
 		
 		} catch (CoreStateInitException e)
 		{

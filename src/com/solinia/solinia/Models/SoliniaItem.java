@@ -654,6 +654,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 		if (isConsumable == true && getAwardsInspiration() > 0)
 		{
 			SoliniaPlayerAdapter.Adapt(player).setInspiration(SoliniaPlayerAdapter.Adapt(player).getInspiration() + getAwardsInspiration());
+			player.sendMessage("Granted " + player.getName() + " " + getAwardsInspiration() + " inspiration from item");
 			return true;
 		}
 		
