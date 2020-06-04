@@ -4495,6 +4495,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 			}
 		} catch (Exception e)
 		{
+			e.printStackTrace();
 			return new Tuple<Boolean,String>(false, "Exception: " + e.getStackTrace() + " " + e.getMessage());
 		}
 

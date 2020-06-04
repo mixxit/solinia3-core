@@ -10,21 +10,20 @@ import org.bukkit.command.CommandSender;
 public class CommandToday implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
-		
-		String text = "2020-01-01 00:00:00.00";
-		LocalDateTime fromDate = Timestamp.valueOf(text).toLocalDateTime();
-		
-		LocalDateTime toDate = LocalDateTime.now();
-		ZoneId zoneId = ZoneId.systemDefault();
-		
-		long from = fromDate.atZone(zoneId).toEpochSecond();
-		long to = toDate.atZone(zoneId).toEpochSecond();
-		
-		sender.sendMessage("It is currently the Year " + getCurrentYear(fromDate, toDate) + " UT");
+		sender.sendMessage("It is currently the Year " + getCurrentUTYear() + " UT");
 		return true;
 	}
+	
+	public static int getCurrentUTYear()
+	{
+		String text = "2020-01-01 00:00:00.00";
+		LocalDateTime fromDate = Timestamp.valueOf(text).toLocalDateTime();
+		LocalDateTime toDate = LocalDateTime.now();
+		
+		return getUTYear(fromDate, toDate);
+	}
 
-	public static int getCurrentYear(LocalDateTime fromDate, LocalDateTime toDate)
+	public static int getUTYear(LocalDateTime fromDate, LocalDateTime toDate)
 	{
 		int baseYear = 197134;
 		

@@ -46,12 +46,12 @@ public class MiscTests {
 		String toDateStr = "2020-01-01 00:00:00.00";
 		LocalDateTime toDate = Timestamp.valueOf(toDateStr).toLocalDateTime();
 
-		assertEquals(197134, CommandToday.getCurrentYear(fromDate, toDate));
+		assertEquals(197134, CommandToday.getUTYear(fromDate, toDate));
 
 		toDateStr = "2020-02-13 00:00:00.00";
 		toDate = Timestamp.valueOf(toDateStr).toLocalDateTime();
 
-		assertEquals(197135, CommandToday.getCurrentYear(fromDate, toDate));
+		assertEquals(197135, CommandToday.getUTYear(fromDate, toDate));
 	}
 	
 	@Test
@@ -62,7 +62,7 @@ public class MiscTests {
 		String toDateStr = "2020-03-25 00:00:00.00";
 		LocalDateTime toDate = Timestamp.valueOf(toDateStr).toLocalDateTime();
 
-		assertEquals(197135, CommandToday.getCurrentYear(fromDate, toDate));
+		assertEquals(197135, CommandToday.getUTYear(fromDate, toDate));
 	}
 	
 	

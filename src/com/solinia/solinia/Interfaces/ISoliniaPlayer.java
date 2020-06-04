@@ -658,4 +658,6 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	List<SoliniaAARankEffect> getRanksEffectsOfEffectType(int effectId, boolean enforceMentorLevelReq);
 	public void stopTracking();
 	void resetPlayerStatus(Plugin plugin);
+	Timestamp getBirthday();
+	void setBirthday(Timestamp birthday);
 }

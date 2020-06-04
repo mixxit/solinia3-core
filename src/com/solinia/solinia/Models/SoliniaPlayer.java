@@ -77,6 +77,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private Timestamp lastUpdatedTime;
 	private Timestamp lastChat;
 	private Timestamp lastOpenedCharCreation;
+	private Timestamp birthday;
 	private int motherCharacterId = 0;
 	private int characterFellowshipId = 0;
 	private int spouseCharacterId = 0;
@@ -1846,6 +1847,19 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			// try consume language primer
 			if (!item.getLanguagePrimer().equals("")) {
+				item.useItemOnEntity(getBukkitPlayer(), getBukkitPlayer(), item.isConsumable());
+				if (item.isConsumable()) {
+					// To prevent a trap you must cancel event here
+					EntityUtils.CancelEvent(cancellableEvent);
+					// cant be stacked so no need to test stacking
+					getBukkitPlayer().getInventory().setItemInMainHand(null);
+					getBukkitPlayer().updateInventory();
+				}
+				return;
+			}
+			
+			// try consume inspiration points
+			if (item.getAwardsInspiration() > 0) {
 				item.useItemOnEntity(getBukkitPlayer(), getBukkitPlayer(), item.isConsumable());
 				if (item.isConsumable()) {
 					// To prevent a trap you must cancel event here
@@ -5837,5 +5851,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		setPassiveEnabled(true);
 		StopSinging();
 		stopTracking();
+	}
+
+	@Override
+	public Timestamp getBirthday() {
+		return birthday;
+	}
+
+	@Override
+	public void setBirthday(Timestamp birthday) {
+		this.birthday = birthday;
 	}
 }

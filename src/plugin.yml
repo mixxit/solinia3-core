@@ -166,6 +166,10 @@ commands:
     description: Gives a head from minecraft-heads.com
     usage: /givehead player headurl
     aliases: []
+  birthday:
+    description: Sets a characters date of birth using the Earth Date (auto converts)
+    usage: /birthday 20/12/2020
+    aliases: []
   pray:
     description: Makes a prayer to the gods
     usage: /pray <prayer>

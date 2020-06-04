@@ -143,6 +143,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	private int baneDmgRace = 0;
 	private int baneDmgBodyAmount = 0;
 	private int baneDmgRaceAmount = 0;
+	private int awardsInspiration = 0;
 	
 	@Override
 	public ItemStack asItemStack() {
@@ -643,10 +644,16 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 			System.out.println("Granted " + player.getName() + " experience bonus from item [" + SoliniaPlayerAdapter.Adapt(player).getExperienceBonusExpires().toString() + "]");
 			return true;
 		}
-		
+						
 		if (isConsumable == true && isDistiller())
 		{
 			SoliniaPlayerAdapter.Adapt(player).DistillOffhand();
+			return true;
+		}
+		
+		if (isConsumable == true && getAwardsInspiration() > 0)
+		{
+			SoliniaPlayerAdapter.Adapt(player).setInspiration(SoliniaPlayerAdapter.Adapt(player).getInspiration() + getAwardsInspiration());
 			return true;
 		}
 		
@@ -713,6 +720,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 		sender.sendMessage("- displayname: " + ChatColor.GOLD + getDisplayname() + ChatColor.RESET + " tier: " + ChatColor.GOLD + getTier() + ChatColor.RESET);
 		sender.sendMessage("- lastupdated: " + ChatColor.GOLD + this.getLastUpdatedTimeAsString() + ChatColor.RESET + " appearanceid: " + ChatColor.GOLD + this.getAppearanceId() + ChatColor.RESET);
 		sender.sendMessage("- worth: " + ChatColor.GOLD + getWorth() + ChatColor.RESET + " inspirationworth: " + ChatColor.GOLD + getInspirationWorth() + ChatColor.RESET + " placeable: " + ChatColor.GOLD + isPlaceable() + ChatColor.RESET);
+		sender.sendMessage("- awardsinspiration: " + ChatColor.GOLD + getAwardsInspiration() + ChatColor.RESET);
 		sender.sendMessage("- color (blocktype): " + ChatColor.GOLD + getColor() + ChatColor.RESET + " dye (armour color): " + ChatColor.GOLD + getDye() + ChatColor.RESET);
 		String leathercolor = "NONE";
 		if (getLeatherRgbDecimal() > 0)
@@ -814,6 +822,9 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 				if (ItemStackUtils.getWorthOfVanillaMaterial(material) > worth)
 					throw new InvalidItemSettingException("Item worth must be same or higher than vanilla price of " + worth);
 			setWorth(worth);
+			break;
+		case "awardsinspiration":
+			setAwardsInspiration(Integer.parseInt(value));
 			break;
 		case "inspirationworth":
 			setInspirationWorth(Integer.parseInt(value));
@@ -2016,5 +2027,15 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	@Override
 	public void setAttack(int attack) {
 		this.attack = attack;
+	}
+
+	@Override
+	public int getAwardsInspiration() {
+		return awardsInspiration;
+	}
+
+	@Override
+	public void setAwardsInspiration(int awardsInspiration) {
+		this.awardsInspiration = awardsInspiration;
 	}
 }
