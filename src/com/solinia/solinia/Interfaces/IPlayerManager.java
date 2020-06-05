@@ -46,4 +46,6 @@ public interface IPlayerManager {
 	List<Integer> getCharacterIdsOnline();
 	List<ISoliniaPlayer> getSoliniaPlayersOnline();
 	void resetPlayerVersion(UUID playerUUID);
+	void doAutoCastTimers();
+	void setPlayerAutoCast(UUID playerUUID, int slot);
 }

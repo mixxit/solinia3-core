@@ -150,10 +150,15 @@ commands:
     aliases:
     - showhint
   cast:
-    description: Casts a spell from memory slot 1 to 0
+    description: Casts a spell from memory slot 1 to 10
     usage: /cast <memoryslot>
     aliases:
     - castslot
+  autocast:
+    description: Auto casts a spell from memory slot 1 to 10 (0 = off)
+    usage: /autocast <memoryslot>
+    aliases:
+    - autocastslot
   importnpc:
     description: Imports an NPC file
     usage: /importnpc <npcfileid>

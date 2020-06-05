@@ -39,6 +39,7 @@ public class PlayerManager implements IPlayerManager {
 	private ConcurrentHashMap<UUID, Timestamp> playerLastSummonSteed = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, DebuggerSettings> playerDebugger = new ConcurrentHashMap<UUID, DebuggerSettings>();
 	private ConcurrentHashMap<UUID, Integer> playerLastZoneId = new ConcurrentHashMap<UUID, Integer>();
+	private ConcurrentHashMap<UUID, Integer> playerAutoCast = new ConcurrentHashMap<UUID, Integer>();
 	
 	@Override
 	public void setActiveCharacter(UUID playerUuid, int characterId) {
@@ -532,5 +533,41 @@ public class PlayerManager implements IPlayerManager {
 			characterIdsOnline.add(player.getId());
 		
 		return characterIdsOnline;
+	}
+
+	public ConcurrentHashMap<UUID, Integer> getPlayerAutoCast() {
+		return playerAutoCast;
+	}
+
+	@Override
+	public void setPlayerAutoCast(UUID playerUUID, int slot) {
+		this.playerAutoCast.put(playerUUID, slot);
+	}
+
+	@Override
+	public void doAutoCastTimers() {
+		try
+		{
+			for(Player player : Bukkit.getOnlinePlayers())
+			{
+				if (getPlayerAutoCast().get(player.getUniqueId()) == null)
+					continue;
+				
+				if (getPlayerAutoCast().get(player.getUniqueId()) == 0)
+					continue;
+				
+				try
+				{
+					ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(player);
+					solPlayer.tryCastFromMemorySlot(getPlayerAutoCast().get(player.getUniqueId()));
+				} catch (CoreStateInitException e)
+				{
+					
+				}
+			}
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

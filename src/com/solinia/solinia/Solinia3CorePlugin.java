@@ -68,6 +68,7 @@ import com.solinia.solinia.Repositories.JsonSpawnGroupRepository;
 import com.solinia.solinia.Repositories.JsonSpellRepository;
 import com.solinia.solinia.Repositories.JsonWorldRepository;
 import com.solinia.solinia.Timers.AttendenceXpBonusTimer;
+import com.solinia.solinia.Timers.AutoCastTimer;
 import com.solinia.solinia.Timers.CastingTimer;
 import com.solinia.solinia.Timers.ClientVersionTimer;
 import com.solinia.solinia.Timers.EntityAutoAttackTimer;
@@ -107,6 +108,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	private StateCommitTimer commitTimer;
 	private PlayerTickTimer playerTickTimer;
 	private SoliniaLivingEntityRegenTickTimer regenTickTimer;
+	private AutoCastTimer autoCastTickTimer;
 	private PlayerEquipmentTickTimer playerEquipmentTickTimer;
 	private ZoneTickTimer zoneTickTimer;
 	private SpellTickTimer spellTickTimer;
@@ -490,6 +492,9 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 
 		zoneTickTimer = new ZoneTickTimer();
 		zoneTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
+		
+		autoCastTickTimer = new AutoCastTimer();
+		autoCastTickTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);
 
 		soliniaLivingEntityUpdateTargetWindowTimer = new SoliniaLivingEntityUpdateTargetWindowTimer();
 		soliniaLivingEntityUpdateTargetWindowTimer.runTaskTimer(this, 1 * 20L, 1 * 20L);
@@ -764,6 +769,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		this.getCommand("stand").setExecutor(new CommandStand());
 		this.getCommand("togglehint").setExecutor(new CommandToggleHint());
 		this.getCommand("birthday").setExecutor(new CommandBirthday(this));
+		this.getCommand("autocast").setExecutor(new CommandAutoCast());
 	}
 
 	private void createConfigDir() {

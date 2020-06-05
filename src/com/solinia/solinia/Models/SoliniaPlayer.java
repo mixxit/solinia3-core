@@ -3822,6 +3822,15 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		}
 	}
+	
+	@Override
+	public void setAutoCast(int slotId) {
+		try {
+			StateManager.getInstance().getPlayerManager().setPlayerAutoCast(this.getBukkitPlayer().getUniqueId(), slotId);
+		} catch (CoreStateInitException e) {
+
+		}
+	}
 
 	@Override
 	public boolean bindWound(ISoliniaLivingEntity solLivingEntity) {

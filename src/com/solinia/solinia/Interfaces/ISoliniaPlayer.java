@@ -660,4 +660,5 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	void resetPlayerStatus(Plugin plugin);
 	Timestamp getBirthday();
 	void setBirthday(Timestamp birthday);
+	public void setAutoCast(int slotId);
 }
