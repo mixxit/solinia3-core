@@ -7258,32 +7258,37 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		
 		List<Integer> activeSpellIds = tar.getActiveSpells().stream().map(e -> e.getSpellId()).collect(Collectors.toList());
-	
+
 		spells = spells.stream().filter(e -> !activeSpellIds.contains(e.getSpellid())).collect(Collectors.toList());
 
-		Collections.sort(spells, new Comparator<NPCSpellListEntry>() {
+		Collections.shuffle(spells);
+		
+		/*Seems to always cast the same spell so lets just take this out for now
+		 * 
+		 * Collections.sort(spells, new Comparator<NPCSpellListEntry>() {
 			public int compare(NPCSpellListEntry o1, NPCSpellListEntry o2) {
 				if (o1.getPriority() == o2.getPriority())
 					return 0;
 
 				return o1.getPriority() > o2.getPriority() ? -1 : 1;
 			}
-		});
+		});*/
 
-		DebugUtils.DebugLog("SoliniaLivingEntity", "aiDoSpellCast", this.getBukkitLivingEntity(),"preparing for spell size; " + spells.size());
+		
+		
 		// AI has spells?
 		if (spells.size() == 0) {
-			DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"NPC: " + npc + this.getBukkitLivingEntity().getUniqueId().toString()
+			DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"NPC: " + npc + this.getBukkitLivingEntity().getUniqueId()
 					+ " cannot cast a spell as I have no spells");
 			return false;
 		}
 
 		for (NPCSpellListEntry spelllistentry : spells) {
-			// Does spell types contain spelltype
 			if ((iSpellTypes & spelllistentry.getType()) == spelllistentry.getType()) {
-				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager()
-						.getSpell(spelllistentry.getSpellid());
-				
+				// Does spell types contain spelltype
+				ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spelllistentry.getSpellid());
+
+				DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"SpellID: " + spelllistentry.getSpellid());
 				if (spell == null)
 				{
 					DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"Spell doesnt exist");
@@ -11637,7 +11642,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public boolean isEngaged() {
-		
+		if (this.hasHate())
+			return true;
+
+		if (this.getReverseAggroCount() > 0)
+			return true;
+
 		return false;
 	}
 
