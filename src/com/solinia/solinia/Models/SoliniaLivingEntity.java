@@ -7237,6 +7237,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (!cast_only_option && iChance < 100) {
 			int roll = MathUtils.RandomBetween(0, 100);
 			if (roll >= iChance) {
+				DebugUtils.DebugLog("SoliniaLivingEntity", "aiDoSpellCast", this.getBukkitLivingEntity(),"roll failure");
 				return false;
 			}
 		}
@@ -7266,6 +7267,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		});
 
+		DebugUtils.DebugLog("SoliniaLivingEntity", "aiDoSpellCast", this.getBukkitLivingEntity(),"preparing for spell size; " + spells.size());
 		// AI has spells?
 		if (spells.size() == 0) {
 			DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"NPC: " + npc + this.getBukkitLivingEntity().getUniqueId().toString()
