@@ -7131,6 +7131,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return;
 
 		// Try self buff, then nearby then target detrimental
+		
+		DebugUtils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity(), "My target is currently null: " + (castingAtEntity == null));
+		
 		DebugUtils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity(), "attempting to cast self buff");
 		if (!aiCastSpell(plugin, npc, this.getBukkitLivingEntity(), engagedBeneficialSelfChance,beneficialSelfSpells, npcEffectiveLevel)) {
 			DebugUtils.DebugLog("SoliniaLivingEntity", "aiEngagedCastCheck", this.getBukkitLivingEntity(), "attempting to cast other buff");

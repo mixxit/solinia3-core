@@ -786,12 +786,11 @@ public class EntityManager implements IEntityManager {
 					
 					completedNpcsIds.add(solLivingEntityThatWillCast.getNpcid());
 					
-					Creature creatureThatWillCast = (Creature)entityThatWillCast;
-					if (creatureThatWillCast.getTarget() != null)
+					if (solLivingEntityThatWillCast.getAttackTarget() != null)
 					{
-						ISoliniaLivingEntity solCreatureThatWillCastsTarget = SoliniaLivingEntityAdapter.Adapt(creatureThatWillCast.getTarget());
+						ISoliniaLivingEntity solCreatureThatWillCastsTarget = SoliniaLivingEntityAdapter.Adapt(solLivingEntityThatWillCast.getAttackTarget());
 						if (RaycastUtils.isEntityInLineOfSight(solLivingEntityThatWillCast, solCreatureThatWillCastsTarget, true))
-							solLivingEntityThatWillCast.doSpellCast(plugin, creatureThatWillCast.getTarget());
+							solLivingEntityThatWillCast.doSpellCast(plugin, solLivingEntityThatWillCast.getAttackTarget());
 					} else {
 						solLivingEntityThatWillCast.doSpellCast(plugin, null);
 					}
