@@ -673,7 +673,8 @@ public class Solinia3CorePlayerListener implements Listener {
 				if (solplayer.getClassObj().isSneakFromCrouch()) {
 					event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,
 							new TextComponent(ChatColor.GRAY + "* You sneak, hiding from enemies not currently engaged"));
-					solplayer.clearTargetsAgainstMeWithoutEffect(SpellEffectType.Invisibility);
+					// Wording is Not Currently Engaged
+					//solplayer.clearTargetsAgainstMeWithoutEffect(SpellEffectType.Invisibility);
 				}
 			}
 		} catch (CoreStateInitException e) {
