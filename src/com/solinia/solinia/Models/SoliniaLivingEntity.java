@@ -7285,7 +7285,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						.getSpell(spelllistentry.getSpellid());
 				
 				if (spell == null)
+				{
+					DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"Spell doesnt exist");
 					continue;
+				}
 				
 				// Lets not cast anything thats really short lasting if we are outside of combat
 				if (!this.isInCombat())
