@@ -7290,6 +7290,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				// Lets not cast anything thats really short lasting if we are outside of combat
 				if (!this.isInCombat())
 				{
+					DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"Not in combat, falling back on non combat logic");
+					
 					if (!spell.isBeneficial())
 						continue;
 					
@@ -7322,6 +7324,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (mana_cost < 0)
 					mana_cost = 0;
 
+				DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"Spell Cost: " + mana_cost);
+				
 				ISoliniaLivingEntity soltarget = SoliniaLivingEntityAdapter.Adapt(target);
 				LocalDateTime datetime = LocalDateTime.now();
 				Timestamp nowtimestamp = Timestamp.valueOf(datetime);
@@ -7497,9 +7501,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 					break;
 				case SpellType.Charm:
+					DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"Skipping charm");
 					// TODO Charms
 					break;
 				case SpellType.Pet:
+					DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"Skipping pet");
 					// TODO Pets
 					break;
 				case SpellType.Lifetap:
@@ -7575,12 +7581,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 					break;
 				default:
+					DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"Unknown spell type!");
 					// unknown spell type
 					break;
 				}
 			}
 		}
 
+		DebugUtils.DebugLog("SoliniaLivingEntity","aiCastSpell",this.getBukkitLivingEntity(),"Reached end without success");
 		return false;
 	}
 	
