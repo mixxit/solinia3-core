@@ -7829,6 +7829,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return 1;
 
 		double statHp = EntityUtils.getStatMaxHP(getClassObj(), getMentorLevel(), getStamina());
+		if (this.isNPC())
+			statHp = statHp / 4;
+		
 		double itemHp = getItemHp();
 		double totalHp = statHp + itemHp;
 		

@@ -2,6 +2,8 @@ package com.solinia.solinia.Utils;
 
 import java.io.IOException;
 
+import org.bukkit.Bukkit;
+
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
@@ -27,7 +29,7 @@ public class NPCUtils {
 
 	public static void RecommitSpawnGroups() {
 		try {
-			System.out.println("Recommiting all SpawnGroups via provider");
+			Bukkit.broadcastMessage("Recommiting all SpawnGroups via provider - this may cause lag");
 			for (ISoliniaSpawnGroup spawngroup : StateManager.getInstance().getConfigurationManager().getSpawnGroups()) {
 				try {
 					
@@ -44,7 +46,7 @@ public class NPCUtils {
 	
 	public static void RecommitNpcs() {
 		try {
-			System.out.println("Recommiting all NPCs via provider");
+			Bukkit.broadcastMessage("Recommiting all NPCs via provider - this may cause lag");
 			for (ISoliniaNPC npc : StateManager.getInstance().getConfigurationManager().getNPCs()) {
 				try {
 					npc.editSetting("name", npc.getName());
@@ -74,7 +76,7 @@ public class NPCUtils {
 
 		public static int getHeroicDamageMultiplier() {
 			// TODO Auto-generated method stub
-			return 110;
+			return 20;
 		}
 
 		public static int getHeroicHPMultiplier() {
@@ -92,9 +94,9 @@ public class NPCUtils {
 		public static int getBossDamageMultiplier(boolean heroicBoss) {
 			// TODO Auto-generated method stub
 			if (heroicBoss)
-				return 125;
+				return 40;
 			else
-				return 115;
+				return 30;
 		}
 
 		public static int getBossHPMultiplier(boolean heroicBoss) {
@@ -113,7 +115,7 @@ public class NPCUtils {
 		}
 
 		public static int getRaidHeroicDamageMultiplier() {
-			return 120;
+			return 40;
 		}
 
 		public static int getRaidHeroicHPMultiplier() {
@@ -130,7 +132,7 @@ public class NPCUtils {
 
 		public static int getRaidBossDamageMultiplier() {
 			// TODO Auto-generated method stub
-			return 150;
+			return 60;
 		}
 
 		public static int getRaidBossHPMultiplier() {
