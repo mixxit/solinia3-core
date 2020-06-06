@@ -5871,4 +5871,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void setBirthday(Timestamp birthday) {
 		this.birthday = birthday;
 	}
+
+	@Override
+	public double getStatMaxHP(int stamina) {
+		return EntityUtils.getStatMaxHP(false, this.getClassObj(), this.getMentorLevel(), stamina);
+	}
 }

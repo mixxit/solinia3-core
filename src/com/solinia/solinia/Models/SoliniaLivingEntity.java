@@ -7821,6 +7821,17 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		DebugUtils.DebugLog("SoliniaLivingEntity", "getProcChances", this.getBukkitLivingEntity(), "Proc chance "+ProcChance+" ("+ProcBonus+" from bonuses)");
 			return ProcChance;
 	}
+	
+	@Override
+	public double getStatMaxHP(int stamina) {
+		if (this.isPlayer() && this.getPlayer() != null)
+			return this.getPlayer().getStatMaxHP(stamina);
+		
+		if (this.isNPC() && this.getNPC() != null)
+			return this.getNPC().getStatMaxHP(stamina);
+		
+		return 4;
+	}
 
 	@Override
 	public double getMaxHP() {
@@ -7828,9 +7839,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (getNpcid() < 1 && !isPlayer())
 			return 1;
 
-		double statHp = EntityUtils.getStatMaxHP(getClassObj(), getMentorLevel(), getStamina());
-		if (this.isNPC())
-			statHp = statHp / 4;
+		double statHp = getStatMaxHP(getStamina());
 		
 		double itemHp = getItemHp();
 		double totalHp = statHp + itemHp;

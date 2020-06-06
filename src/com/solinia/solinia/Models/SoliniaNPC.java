@@ -177,6 +177,12 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	}
 
 	@Override
+	public double getStatMaxHP(int stamina)
+	{
+		return EntityUtils.getStatMaxHP(true, getClassObj(), getLevel(), stamina);
+	}
+	
+	@Override
 	public void setLevel(int level) {
 		this.level = level;
 	}

@@ -119,9 +119,7 @@ public class CommandSolNPCInfo implements CommandExecutor {
 			if(player.isOp() && solLivingEntity.isNPC())
 			{
 				ISoliniaNPC npc = solLivingEntity.getNPC();
-				double hp = EntityUtils.getStatMaxHP(npc.getClassObj(), npc.getLevel(), 75);
-				if (solLivingEntity.isNPC())
-					hp = hp / 4;
+				double hp = solLivingEntity.getStatMaxHP(75);
 				
 				if (npc.isHeroic()) {
 					hp += (NPCUtils.getHeroicHPMultiplier() * npc.getLevel());

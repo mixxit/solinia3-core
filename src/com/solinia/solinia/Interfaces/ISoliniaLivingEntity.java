@@ -551,4 +551,6 @@ public interface ISoliniaLivingEntity  {
 	void doCastSpell(ISoliniaSpell spell, boolean useMana, boolean useReagents, boolean ignoreProfessionAndLevel,
 			String requiredWeaponSkillType, Entity npcTargetEntity);
 
+	public double getStatMaxHP(int stamina);
+
 }

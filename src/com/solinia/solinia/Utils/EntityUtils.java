@@ -306,7 +306,39 @@ public class EntityUtils {
 	private static final List<Material> DONT_STAND_ON;
 	private static final List<Material> HALF_HEIGHT;
 	private static final List<Material> HEIGHT_AND_HALF;
-	public static double getStatMaxHP(ISoliniaClass classObj, int tmplevel, int stamina) {
+	
+	public static int getEntityTier(int level)
+	{
+		int tier = (int) Math.floor((level / 10)+1);
+		if (tier < 1)
+			tier = 1;
+		
+		return tier;
+	}
+	
+	public static int getLevelTierHPDivider(int tier)
+	{
+		switch(tier)
+		{
+			case 0:
+			case 1:
+			case 2:
+				return 4;
+			case 3:
+			case 4:
+				return 3;
+			case 5:
+			case 6:
+				return 2;
+			case 7:
+			case 8:
+				return 1;
+			default:
+				return 1;
+		}
+	}
+	
+	public static double getStatMaxHP(boolean isNpc, ISoliniaClass classObj, int tmplevel, int stamina) {
 		// level multiplier
 		double multiplier = 1;
 
@@ -399,7 +431,13 @@ public class EntityUtils {
 		double hpmain = (stamina / 12) * tmplevel;
 
 		double calculatedhp = hp + hpmain;
-		return (int) Math.floor(calculatedhp);
+		int preTierFilteringHp = (int) Math.floor(calculatedhp);
+		
+		if (!isNpc)
+			return preTierFilteringHp;
+		
+		int divider = getLevelTierHPDivider(tmplevel);
+		return (int) Math.floor(preTierFilteringHp/divider);
 	}
 
 

@@ -359,4 +359,6 @@ public interface ISoliniaNPC extends IPersistable {
 	boolean isEventUsable();
 
 	void setEventUsable(boolean eventUsable);
+
+	double getStatMaxHP(int stamina);
 }
