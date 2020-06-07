@@ -15,8 +15,6 @@ public interface ISoliniaGroup {
 
 	UUID getOwner();
 
-	List<UUID> getMembers();
-
 	void sendGroupMessage(Player player, String string);
 
 	void setId(UUID newgroupid);
@@ -26,5 +24,9 @@ public interface ISoliniaGroup {
 	UUID getId();
 
 	List<UUID> getMembersWithoutPlayer(Player player);
+
+	List<UUID> getMembersWithoutPets();
+
+	List<UUID> getUnmodifiableGroupMembersForBuffs(boolean includePets, boolean filterOutNonPetAffinityPets);
 
 }

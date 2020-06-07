@@ -3406,7 +3406,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 							if (!(e instanceof Player))
 								continue;
 
-							if (group.getMembers().contains(e.getUniqueId())) {
+							// players only
+							if (group.getMembersWithoutPets().contains(e.getUniqueId())) {
 								boolean loopSuccess3 = StateManager.getInstance().getEntityManager()
 										.addActiveEntitySpell((LivingEntity) e, this, sourceEntity, sendMessages, requiredWeaponSkillType);
 								if (loopSuccess3 == true)
@@ -3437,12 +3438,12 @@ public class SoliniaSpell implements ISoliniaSpell {
 				ISoliniaGroup groupClient = playerGroupClient.getGroup();
 
 				if (groupClient != null) {
-					for (UUID uuidClient : playerGroupClient.getGroup().getMembers()) {
-						Entity e = Bukkit.getEntity(uuidClient);
-						if (!(e instanceof Player))
+					for (UUID uuidPlayerOrPet : playerGroupClient.getGroup().getUnmodifiableGroupMembersForBuffs(true,false)) {
+						Entity e = Bukkit.getEntity(uuidPlayerOrPet);
+						if (e == null)
 							continue;
 
-						if (groupClient.getMembers().contains(e.getUniqueId())) {
+						if (groupClient.getUnmodifiableGroupMembersForBuffs(true,false).contains(e.getUniqueId())) {
 							boolean loopSuccess3 = StateManager.getInstance().getEntityManager()
 									.addActiveEntitySpell((LivingEntity) e, this, sourceEntity, sendMessages, requiredWeaponSkillType);
 							if (loopSuccess3 == true)
@@ -3475,7 +3476,9 @@ public class SoliniaSpell implements ISoliniaSpell {
 						if (!(e instanceof Player))
 							continue;
 
-						if (groupTeleport.getMembers().contains(e.getUniqueId())) {
+						// This is group so doesnt normally apply to pets
+						// However if the target has pet affiniy, go for it
+						if (groupTeleport.getUnmodifiableGroupMembersForBuffs(true,true).contains(e.getUniqueId())) {
 							boolean loopSuccess3 = StateManager.getInstance().getEntityManager()
 									.addActiveEntitySpell((LivingEntity) e, this, sourceEntity, sendMessages, requiredWeaponSkillType);
 							if (loopSuccess3 == true)
@@ -4204,8 +4207,8 @@ public class SoliniaSpell implements ISoliniaSpell {
 				if (source instanceof Player && target instanceof Player && soliniaSpell.isDetrimental()) {
 					ISoliniaPlayer solsourceplayer = SoliniaPlayerAdapter.Adapt((Player) source);
 					if (solsourceplayer.getGroup() != null) {
-						if (solsourceplayer.getGroup().getMembers().contains(target.getUniqueId())) {
-							return new Tuple<Boolean,String>(false,"Group contains target");
+						if (solsourceplayer.getGroup().getUnmodifiableGroupMembersForBuffs(true,false).contains(target.getUniqueId())) {
+							return new Tuple<Boolean,String>(false,"Detrimental against group member");
 						}
 					}
 				}
@@ -4470,7 +4473,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 							if (solplayertarget.getGroup() == null)
 								return new Tuple<Boolean,String>(false,"Group not found");
 	
-							if (!(solplayertarget.getGroup().getMembers().contains(source.getUniqueId())))
+							if (!(solplayertarget.getGroup().getUnmodifiableGroupMembersForBuffs(false,false).contains(source.getUniqueId())))
 								return new Tuple<Boolean,String>(false,"Group member not found");
 						}
 					}

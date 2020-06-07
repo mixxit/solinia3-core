@@ -711,7 +711,7 @@ public class CoreState {
 
 	public ISoliniaGroup getGroupByMember(UUID uniqueId) {
 		for (Map.Entry<UUID, ISoliniaGroup> entry : groups.entrySet()) {
-			if (entry.getValue().getMembers().contains(uniqueId))
+			if (entry.getValue().getUnmodifiableGroupMembersForBuffs(false,false).contains(uniqueId))
 				return groups.get(entry.getKey());
 		}
 		
@@ -748,7 +748,7 @@ public class CoreState {
 		SoliniaGroup group = new SoliniaGroup();
 		group.setId(newgroupid);
 		group.setOwner(leader.getUniqueId());
-		group.getMembers().add(leader.getUniqueId());
+		group.getMembersWithoutPets().add(leader.getUniqueId());
 		groups.put(newgroupid, group);
 		return groups.get(newgroupid);
 	}
@@ -771,7 +771,7 @@ public class CoreState {
 	
 	public void sendGroupPacketToAllPlayers(ISoliniaGroup group)
 	{
-		for(UUID uuid : group.getMembers())
+		for(UUID uuid : group.getMembersWithoutPets())
 		{
 			PartyWindowUtils.UpdateGroupWindow(uuid,group, false, false);
 		}
@@ -806,7 +806,7 @@ public class CoreState {
 
 		System.out.println("group: " + group.getId() + " lost a member: " + player.getDisplayName());
 		sendGroupMessage(player, "has left the group!");
-		group.getMembers().remove(player.getUniqueId());
+		group.getMembersWithoutPets().remove(player.getUniqueId());
 		
 		PartyWindowUtils.UpdateGroupWindow(player.getUniqueId(), null, false, true);
 		sendGroupPacketToAllPlayers(group);
@@ -814,8 +814,8 @@ public class CoreState {
 		try
 		{
 			if (playerCharacterId > 0)
-			for (int i = 0; i < group.getMembers().size(); i++) {
-				UUID member = group.getMembers().get(i);
+			for (int i = 0; i < group.getMembersWithoutPets().size(); i++) {
+				UUID member = group.getMembersWithoutPets().get(i);
 				Player memberPlayer = Bukkit.getPlayer(member);
 				if (memberPlayer != null) {
 					ISoliniaPlayer playerMember = SoliniaPlayerAdapter.Adapt(memberPlayer);
@@ -829,11 +829,11 @@ public class CoreState {
 		}
 
 		if (group.getOwner().equals(player.getUniqueId())) {
-			if (group.getMembers().size() > 0) {
+			if (group.getMembersWithoutPets().size() > 0) {
 				boolean foundnewowner = false;
 
-				for (int i = 0; i < group.getMembers().size(); i++) {
-					UUID newowner = group.getMembers().get(i);
+				for (int i = 0; i < group.getMembersWithoutPets().size(); i++) {
+					UUID newowner = group.getMembersWithoutPets().get(i);
 					Player newownerplayer = Bukkit.getPlayer(newowner);
 					if (newownerplayer != null) {
 						group.setOwner(newowner);
@@ -931,13 +931,15 @@ public class CoreState {
 			return;
 		}
 
-		if (group.getMembers().size() > 5) {
+		// players only
+		if (group.getMembersWithoutPets().size() > 5) {
 			removePlayerGroupInvite(player);
 			player.sendMessage("That group is now full");
 			return;
 		}
 
-		group.getMembers().add(player.getUniqueId());
+		// players only
+		group.getMembersWithoutPets().add(player.getUniqueId());
 		System.out.println("group: " + group.getId() + " gained a member: " + player.getDisplayName());
 		
 		PartyWindowUtils.UpdateGroupWindowForEveryone(player.getUniqueId(),group, false);
@@ -973,8 +975,9 @@ public class CoreState {
 				type = "[" + ChatColor.LIGHT_PURPLE + "M" + ChatColor.RESET + "]";
 			}
 	
-			if (group.getMembers().size() > 0) {
-				for (UUID memberid : group.getMembers()) {
+			// players only
+			if (group.getMembersWithoutPets().size() > 0) {
+				for (UUID memberid : group.getMembersWithoutPets()) {
 					Player groupplayer = Bukkit.getPlayer(memberid);
 					if (groupplayer != null) {
 						groupplayer.sendMessage(type + " " + ChatColor.WHITE + solplayer.getFullName() + ChatColor.RESET + " ["+ChatColor.RED + (int)player.getHealth()+ ChatColor.RESET + "/" +ChatColor.BLUE + solplayer.getMana() + ChatColor.RESET+ "]: " + ChatColor.AQUA + message);
@@ -1131,7 +1134,8 @@ public class CoreState {
 			return;
 		}
 
-		if (invitergroup.getMembers().size() > 5) {
+		// players only
+		if (invitergroup.getMembersWithoutPets().size() > 5) {
 			leader.sendMessage("You cannot invite that player, your group is already full");
 			return;
 		}

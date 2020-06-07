@@ -589,7 +589,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 				ISoliniaPlayer solsourceplayer = SoliniaPlayerAdapter.Adapt(player);
 				if (solsourceplayer.getGroup() != null)
 				{
-					if (solsourceplayer.getGroup().getMembers().contains(targetentity.getUniqueId()))
+					if (solsourceplayer.getGroup().getUnmodifiableGroupMembersForBuffs(true,false).contains(targetentity.getUniqueId()))
 					{
 						return false;
 					}

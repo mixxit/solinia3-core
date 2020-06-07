@@ -76,9 +76,9 @@ public class CommandFollow implements CommandExecutor {
 					return true;
 				}
 				
-				if (!solPlayer.getGroup().getMembers().contains(targetmob.getUniqueId()))
+				if (!solPlayer.getGroup().getMembersWithoutPets().contains(targetmob.getUniqueId()))
 				{
-					player.sendMessage("That player isn't in your group");
+					player.sendMessage("That target isn't in your group (or isnt a player)");
 					return true;
 				}
 				

@@ -553,4 +553,6 @@ public interface ISoliniaLivingEntity  {
 
 	public double getStatMaxHP(int stamina);
 
+	public ISoliniaLivingEntity getPet();
+
 }

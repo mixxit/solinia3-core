@@ -147,7 +147,7 @@ public class PartyWindowUtils {
 			SendGroupToMember(player, group,updatemana, sendEmptyGroup);
 			// Now send to groupies, remember to change the party members nad Me
 			if (group != null)
-			for (UUID groupmemberuuid : group.getMembers()) {
+			for (UUID groupmemberuuid : group.getMembersWithoutPets()) {
 				Player sendToPlayer = Bukkit.getPlayer(groupmemberuuid);
 				SendGroupToMember(sendToPlayer, group, updatemana, sendEmptyGroup);
 			}
@@ -160,7 +160,8 @@ public class PartyWindowUtils {
 	public static void UpdateGroupWindowForEveryone(UUID uniqueId, ISoliniaGroup group, boolean updatemana) {
 		PartyWindowUtils.UpdateGroupWindow(uniqueId, group, updatemana, false);
 		if (group != null) {
-			for (UUID uuid : group.getMembers()) {
+			// players only
+			for (UUID uuid : group.getMembersWithoutPets()) {
 				PartyWindowUtils.UpdateGroupWindow(uuid, group,updatemana, false);
 			}
 		}

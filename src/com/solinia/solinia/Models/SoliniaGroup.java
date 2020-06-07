@@ -1,13 +1,20 @@
 package com.solinia.solinia.Models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
+import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
+import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 
 public class SoliniaGroup implements ISoliniaGroup {
@@ -34,8 +41,8 @@ public class SoliniaGroup implements ISoliniaGroup {
 			return;
 		}
 
-		if (group.getMembers().size() > 0) {
-			for (UUID memberid : group.getMembers()) {
+		if (group.getMembersWithoutPets().size() > 0) {
+			for (UUID memberid : group.getMembersWithoutPets()) {
 				Player member = Bukkit.getPlayer(memberid);
 				if (member != null) {
 					String leader = "";
@@ -57,7 +64,7 @@ public class SoliniaGroup implements ISoliniaGroup {
 	}
 
 	@Override
-	public List<UUID> getMembers() {
+	public List<UUID> getMembersWithoutPets() {
 		return this.members;
 	}
 	
@@ -98,6 +105,47 @@ public class SoliniaGroup implements ISoliniaGroup {
 	@Override
 	public UUID getId() {
 		return this.id;
+	}
+
+	@Override
+	public final List<UUID> getUnmodifiableGroupMembersForBuffs(boolean includePets, boolean filterOutNonPetAffinityPets) {
+		List<UUID> uuids = new ArrayList<UUID>(); // players first
+		for(UUID playerUuid : this.getMembersWithoutPets())
+		{
+			Entity entity = Bukkit.getEntity(playerUuid);
+			if (entity == null)
+				continue;
+			
+			if (!(entity instanceof Player))
+				continue;
+			
+			Player player = ((Player)entity);
+			uuids.add(player.getUniqueId());
+			
+			if (!includePets)
+				continue;
+			
+			try
+			{
+				ISoliniaLivingEntity solplayerle = SoliniaLivingEntityAdapter.Adapt(player);
+				if (solplayerle == null)
+					continue;
+				
+				if (solplayerle.getPet() == null || solplayerle.getPet().getBukkitLivingEntity() == null)
+					continue;
+				
+				if (filterOutNonPetAffinityPets)
+				if (solplayerle.getAABonuses(SpellEffectType.GivePetGroupTarget) == 0)
+					continue;
+				
+				uuids.add(solplayerle.getPet().getBukkitLivingEntity().getUniqueId());
+			} catch (CoreStateInitException e)
+			{
+				
+			}
+		}
+		Collections.unmodifiableList(uuids);
+		return uuids;
 	}
 
 }

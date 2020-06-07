@@ -43,7 +43,7 @@ public class CommandGroupChat implements CommandExecutor {
 				return true;
 			}
 			
-			if (solplayer.getGroup().getMembers().size() < 2)
+			if (solplayer.getGroup().getMembersWithoutPets().size() < 2)
 			{
 				player.sendMessage("There is only 1 person in the group");
 				return true;

@@ -187,8 +187,8 @@ public class Solinia3CoreItemPickupListener implements Listener {
 					if (item.getAllowedClassNamesUpper().size() > 0)
 		        	{
 		        		ISoliniaPlayer solPlayer = SoliniaPlayerAdapter.Adapt(e.getPlayer());
-		        		if (solPlayer.getGroup() != null && solPlayer.getGroup().getMembers() != null)
-		        			for(UUID playerUuid : solPlayer.getGroup().getMembers())
+		        		if (solPlayer.getGroup() != null && solPlayer.getGroup().getMembersWithoutPets() != null)
+		        			for(UUID playerUuid : solPlayer.getGroup().getMembersWithoutPets())
 		        			{
 		        				if (playerUuid.equals(e.getPlayer().getUniqueId()))
 		        					continue;

@@ -4445,28 +4445,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public boolean isInGroup(LivingEntity targetentity) {
-		try {
-			if (getGroup() != null) {
-				// If group members contain entity
-				if (targetentity instanceof Player) {
-					if (getGroup().getMembers().contains(targetentity.getUniqueId()))
-						return true;
-					else
-						return false;
-				}
-
-				// Must be npc, check if pet
-				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(targetentity);
-				if (solLivingEntity != null && solLivingEntity.isCurrentlyNPCPet()
-						&& solLivingEntity.getOwnerEntity() != null) {
-					if (getGroup().getMembers().contains(solLivingEntity.getOwnerEntity().getUniqueId())) {
-						return true;
-					}
-				}
-			}
-
-		} catch (CoreStateInitException e) {
-
+		if (getGroup() != null) {
+			// If group members contain entity
+			if (getGroup().getUnmodifiableGroupMembersForBuffs(true,false).contains(targetentity.getUniqueId()))
+				return true;
+			else
+				return false;
 		}
 		return false;
 	}
@@ -5406,7 +5390,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (group != null) {
 
 				List<Integer> levelRanges = new ArrayList<Integer>();
-				for (UUID member : group.getMembers()) {
+				// xp to players only
+				for (UUID member : group.getMembersWithoutPets()) {
 					ISoliniaPlayer playerchecked = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(member));
 					int checkedlevel = playerchecked.getMentorLevel();
 					levelRanges.add(checkedlevel);
@@ -5441,12 +5426,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					} 
 
 				} else {
-					double experienceReward = experience / group.getMembers().size();
-					double groupBonus = (experienceReward/100)*(group.getMembers().size()*10);
+					// we only only count player xp
+					double experienceReward = experience / group.getMembersWithoutPets().size();
+					double groupBonus = (experienceReward/100)*(group.getMembersWithoutPets().size()*10);
 					
 					List<Integer> awardsFellowshipIds = new ArrayList<Integer>();
 					
-					for (UUID member : group.getMembers()) {
+					// players get xp only
+					for (UUID member : group.getMembersWithoutPets()) {
 						Player tgtplayer = Bukkit.getPlayer(member);
 						if (tgtplayer != null) {
 							ISoliniaPlayer tgtsolplayer = SoliniaPlayerAdapter.Adapt(tgtplayer);

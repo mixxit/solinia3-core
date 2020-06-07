@@ -1777,6 +1777,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 	}
 	
+	@Override
 	public ISoliniaLivingEntity getPet()
 	{
 		if (this.getBukkitLivingEntity() == null)
@@ -8877,7 +8878,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			ISoliniaGroup group = StateManager.getInstance().getGroupByMember(this.getOwnerEntity().getUniqueId());
 			if (group != null) {
-				if (group.getMembers().contains(uniqueId))
+				if (group.getUnmodifiableGroupMembersForBuffs(true,false).contains(uniqueId))
 					return;
 			}
 		}
