@@ -111,6 +111,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	private int leatherRgbDecimal = -1;
 	private String requiredWeaponSkillType = "";
 	private int inspirationWorth = 0;
+	private boolean makesHotzone = false;
 	
 	private boolean artifact = false;
 	private boolean artifactFound = false;
@@ -651,6 +652,12 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 			return true;
 		}
 		
+		if (isConsumable == true && this.isMakesHotzone())
+		{
+			SoliniaPlayerAdapter.Adapt(player).MakeHotzone();
+			return true;
+		}
+		
 		if (isConsumable == true && getAwardsInspiration() > 0)
 		{
 			SoliniaPlayerAdapter.Adapt(player).setInspiration(SoliniaPlayerAdapter.Adapt(player).getInspiration() + getAwardsInspiration());
@@ -763,7 +770,7 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 		sender.sendMessage("----------------------------");
 		sender.sendMessage("- equipmentslot: " + ChatColor.GOLD + getEquipmentSlot().name() + ChatColor.RESET + " itemtype: " + ChatColor.GOLD + getItemType().name() + ChatColor.RESET);
 		sender.sendMessage("- identifymessage: " + ChatColor.GOLD + getIdentifyMessage() + ChatColor.RESET);
-		sender.sendMessage("- bookauthor: " + ChatColor.GOLD + getBookAuthor() + ChatColor.RESET);
+		sender.sendMessage("- makeshotzone: " + ChatColor.GOLD + this.isMakesHotzone() + ChatColor.RESET + " bookauthor: " + ChatColor.GOLD + getBookAuthor() + ChatColor.RESET);
 		String allowedClassNames = "";
 		for(String classname : this.getAllowedClassNamesUpper())
 		{
@@ -809,6 +816,9 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 			break;
 		case "bookauthor":
 			setBookAuthor(value);
+			break;
+		case "makeshotzone":
+			setMakesHotzone(Boolean.parseBoolean(value));
 			break;
 		case "attackspeedpct":
 			setAttackspeed(Integer.parseInt(value));
@@ -2038,5 +2048,15 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	@Override
 	public void setAwardsInspiration(int awardsInspiration) {
 		this.awardsInspiration = awardsInspiration;
+	}
+
+	@Override
+	public boolean isMakesHotzone() {
+		return makesHotzone;
+	}
+
+	@Override
+	public void setMakesHotzone(boolean makesHotzone) {
+		this.makesHotzone = makesHotzone;
 	}
 }

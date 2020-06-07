@@ -442,4 +442,8 @@ public interface ISoliniaItem extends IPersistable {
 	int getAwardsInspiration();
 
 	void setAwardsInspiration(int awardsInspiration);
+
+	boolean isMakesHotzone();
+
+	void setMakesHotzone(boolean makesHotzone);
 }

@@ -662,4 +662,5 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	void setBirthday(Timestamp birthday);
 	public void setAutoCast(int slotId);
 	public double getStatMaxHP(int stamina);
+	public void MakeHotzone();
 }

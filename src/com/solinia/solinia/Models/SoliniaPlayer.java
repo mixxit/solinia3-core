@@ -5876,4 +5876,29 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public double getStatMaxHP(int stamina) {
 		return EntityUtils.getStatMaxHP(false, this.getClassObj(), this.getMentorLevel(), stamina);
 	}
+
+	@Override
+	public void MakeHotzone() {
+    	SoliniaZone solZone = getZone();
+		
+		try {
+			if (solZone == null)
+			{
+				getBukkitPlayer().sendMessage("Not in a zone");
+				return;
+			}
+			
+			if (solZone.isHotzone())
+			{
+				getBukkitPlayer().sendMessage("Not in a zone that can be set as hotzone");
+				return;
+			}
+			
+			StateManager.getInstance().forceHotzone(solZone.getId(), false);
+			getBukkitPlayer().sendMessage("Hot zone set");
+		} catch (Exception e) {
+			getBukkitPlayer().sendMessage(e.getMessage() + " "+ e.getStackTrace());
+			return;
+		}
+	}
 }
