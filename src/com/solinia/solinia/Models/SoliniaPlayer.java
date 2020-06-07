@@ -2222,6 +2222,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					"checkDoesntFizzle was never fizzle as player is an Op");
 			return true;
 		}
+		
+		if (SkillUtils.getSkillType(spell.getSkill()).equals(SkillType.None))
+			return true;
 
 		// todo fizzle free features
 
