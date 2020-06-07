@@ -113,6 +113,13 @@ public class CoreState {
 	
 	public void forceHotzone(int hotzone, boolean clear) throws Exception
 	{
+		// BTW Clear no longer applies
+		if (this.currentHotZones.contains(hotzone))
+		{
+			// already a hotzone
+			return;
+		}
+		
 		try {
 			for(SoliniaZone zone : StateManager.getInstance().getConfigurationManager().getZones())
 			{
@@ -121,12 +128,21 @@ public class CoreState {
 				
 				if (zone.getId() == hotzone)
 				{
-					if (clear == true)
-					this.currentHotZones.clear();
+					if (this.currentHotZones.size() == 0 || this.currentHotZones.size() == 1)
+					{
+						this.currentHotZones.add(hotzone);
+						System.out.println("Hotzone set to: " + zone.getName());
+						return;
+					}
 					
-					this.currentHotZones.add(zone.getId());
-					System.out.println("Hotzone set to: " + zone.getName());
-					return;
+					if (this.currentHotZones.size() == 2)
+					{
+						// shuffle up
+						this.currentHotZones.set(0, this.currentHotZones.get(1));
+						this.currentHotZones.set(1, zone.getId());
+						System.out.println("Hotzone set to: " + zone.getName() + "[Shuffle up]");
+						return;
+					}
 				}
 				
 			}

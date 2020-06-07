@@ -1884,6 +1884,20 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 			
+			if (item.isMakesHotzone())
+			{
+				item.useItemOnEntity(getBukkitPlayer(), getBukkitPlayer(), item.isConsumable());
+				if (item.isConsumable()) {
+					// To prevent a trap you must cancel event here
+					EntityUtils.CancelEvent(cancellableEvent);
+					// cant be stacked so no need to test stacking
+					getBukkitPlayer().getInventory().setItemInMainHand(null);
+					getBukkitPlayer().updateInventory();
+				}
+				return;
+			}
+			
+			
 			if (StateManager.getInstance().getEntityManager().getEntitySpellCooldown(this.getBukkitPlayer(),
 					item.getAbilityid()) != null) {
 				LocalDateTime datetime = LocalDateTime.now();
@@ -5878,11 +5892,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 			
-			if (solZone.isHotzone())
+			if (!solZone.isHotzone())
 			{
 				getBukkitPlayer().sendMessage("Not in a zone that can be set as hotzone");
 				return;
 			}
+			
+			
 			
 			StateManager.getInstance().forceHotzone(solZone.getId(), false);
 			getBukkitPlayer().sendMessage("Hot zone set");
