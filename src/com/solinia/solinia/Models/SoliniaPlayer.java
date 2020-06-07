@@ -1135,6 +1135,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void tryIncreaseSkill(SkillType skillType, int skillupamount) {
 		SoliniaPlayerSkill skill = getSkill(skillType);
 		int currentskill = 0;
+		
 		if (skill != null) {
 			currentskill = skill.getValue();
 

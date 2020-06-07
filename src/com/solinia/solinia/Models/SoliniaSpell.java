@@ -3450,6 +3450,16 @@ public class SoliniaSpell implements ISoliniaSpell {
 								successGroupClient = true;
 						}
 					}
+				} else {
+					// pet affinity only
+					if (playerGroupClient.getSoliniaLivingEntity() != null && playerGroupClient.getSoliniaLivingEntity().getPet() != null && playerGroupClient.getSoliniaLivingEntity().getPet().getBukkitLivingEntity() != null)
+					{
+						boolean loopSuccess3 = StateManager.getInstance().getEntityManager()
+								.addActiveEntitySpell((LivingEntity) playerGroupClient.getSoliniaLivingEntity().getPet().getBukkitLivingEntity(), this, sourceEntity, sendMessages, requiredWeaponSkillType);
+						if (loopSuccess3 == true)
+							successGroupClient = true;
+					}
+
 				}
 
 				boolean selfSuccessClient = StateManager.getInstance().getEntityManager()
@@ -3473,14 +3483,23 @@ public class SoliniaSpell implements ISoliniaSpell {
 
 				if (groupTeleport != null) {
 					for (Entity e : sourceEntity.getNearbyEntities(10, 10, 10)) {
-						if (!(e instanceof Player))
-							continue;
-
 						// This is group so doesnt normally apply to pets
 						// However if the target has pet affiniy, go for it
 						if (groupTeleport.getUnmodifiableGroupMembersForBuffs(true,true).contains(e.getUniqueId())) {
 							boolean loopSuccess3 = StateManager.getInstance().getEntityManager()
 									.addActiveEntitySpell((LivingEntity) e, this, sourceEntity, sendMessages, requiredWeaponSkillType);
+							if (loopSuccess3 == true)
+								successGroup = true;
+						}
+					}
+				} else {
+					// pet affinity only
+					if (playerGroupTeleport.getSoliniaLivingEntity() != null && playerGroupTeleport.getSoliniaLivingEntity().getPet() != null && playerGroupTeleport.getSoliniaLivingEntity().getPet().getBukkitLivingEntity() != null)
+					{
+						if (playerGroupTeleport.getSoliniaLivingEntity().getAABonuses(SpellEffectType.GivePetGroupTarget) > 0)
+						{
+							boolean loopSuccess3 = StateManager.getInstance().getEntityManager()
+									.addActiveEntitySpell((LivingEntity) playerGroupTeleport.getSoliniaLivingEntity().getPet().getBukkitLivingEntity(), this, sourceEntity, sendMessages, requiredWeaponSkillType);
 							if (loopSuccess3 == true)
 								successGroup = true;
 						}
