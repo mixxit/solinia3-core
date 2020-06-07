@@ -1815,7 +1815,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 
 			// Not a clicky!
-			if (!item.isThrowing() && !item.isDistiller() && item.getLanguagePrimer().equals("") && (item.getAbilityid() < 1) && item.getAwardsInspiration() < 1)
+			if (!item.isThrowing() && !item.isMakesHotzone() && !item.isDistiller() && item.getLanguagePrimer().equals("") && (item.getAbilityid() < 1) && item.getAwardsInspiration() < 1)
 				return;
 
 			if (item.isThrowing()) {

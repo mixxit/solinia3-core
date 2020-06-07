@@ -462,7 +462,7 @@ public class ItemStackAdapter {
 			loretxt.add("Language Primer: " + soliniaItem.getLanguagePrimer());
 		}
 		
-		if (!soliniaItem.isMakesHotzone())
+		if (soliniaItem.isMakesHotzone())
 		{
 			loretxt.add("Makes hotzone on consume");
 		}
