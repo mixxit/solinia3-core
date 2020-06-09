@@ -5052,7 +5052,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				String className = "WARRIOR";
 
 				for (Integer rankId : aa) {
-					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 							.getAAAbility(rank.getAbilityid());
 					if (aaAbility.getClasses().contains(className)) {
@@ -5072,7 +5072,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				String className = "CLERIC";
 
 				for (Integer rankId : aa) {
-					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 							.getAAAbility(rank.getAbilityid());
 					if (aaAbility.getClasses().contains(className)) {
@@ -5092,7 +5092,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				String className = "PALADIN";
 
 				for (Integer rankId : aa) {
-					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 							.getAAAbility(rank.getAbilityid());
 					if (aaAbility.getClasses().contains(className)) {
@@ -5112,7 +5112,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				String className = "RANGER";
 
 				for (Integer rankId : aa) {
-					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 							.getAAAbility(rank.getAbilityid());
 					if (aaAbility.getClasses().contains(className)) {
@@ -5132,7 +5132,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				String className = "SHADOWKNIGHT";
 
 				for (Integer rankId : aa) {
-					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 							.getAAAbility(rank.getAbilityid());
 					if (aaAbility.getClasses().contains(className)) {
@@ -5152,7 +5152,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				String className = "DRUID";
 
 				for (Integer rankId : aa) {
-					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 							.getAAAbility(rank.getAbilityid());
 					if (aaAbility.getClasses().contains(className)) {
@@ -5172,7 +5172,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				String className = "MONK";
 
 				for (Integer rankId : aa) {
-					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 							.getAAAbility(rank.getAbilityid());
 					if (aaAbility.getClasses().contains(className)) {
@@ -5192,7 +5192,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				String className = "BARD";
 
 				for (Integer rankId : aa) {
-					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 							.getAAAbility(rank.getAbilityid());
 					if (aaAbility.getClasses().contains(className)) {
@@ -5212,7 +5212,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				String className = "ROGUE";
 
 				for (Integer rankId : aa) {
-					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 							.getAAAbility(rank.getAbilityid());
 					if (aaAbility.getClasses().contains(className)) {
@@ -5232,7 +5232,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				String className = "SHAMAN";
 
 				for (Integer rankId : aa) {
-					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 							.getAAAbility(rank.getAbilityid());
 					if (aaAbility.getClasses().contains(className)) {
@@ -5252,7 +5252,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				String className = "NECROMANCER";
 
 				for (Integer rankId : aa) {
-					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 							.getAAAbility(rank.getAbilityid());
 					if (aaAbility.getClasses().contains(className)) {
@@ -5272,7 +5272,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				String className = "WIZARD";
 
 				for (Integer rankId : aa) {
-					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 							.getAAAbility(rank.getAbilityid());
 					if (aaAbility.getClasses().contains(className)) {
@@ -5292,7 +5292,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				String className = "MAGICIAN";
 
 				for (Integer rankId : aa) {
-					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 							.getAAAbility(rank.getAbilityid());
 					if (aaAbility.getClasses().contains(className)) {
@@ -5312,7 +5312,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				String className = "ENCHANTER";
 
 				for (Integer rankId : aa) {
-					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 							.getAAAbility(rank.getAbilityid());
 					if (aaAbility.getClasses().contains(className)) {
@@ -5332,7 +5332,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				String className = "BEASTLORD";
 
 				for (Integer rankId : aa) {
-					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 							.getAAAbility(rank.getAbilityid());
 					if (aaAbility.getClasses().contains(className)) {
@@ -5352,7 +5352,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				String className = "BERSERKER";
 
 				for (Integer rankId : aa) {
-					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+					ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 					ISoliniaAAAbility aaAbility = StateManager.getInstance().getConfigurationManager()
 							.getAAAbility(rank.getAbilityid());
 					if (aaAbility.getClasses().contains(className)) {
@@ -5386,7 +5386,7 @@ public class SoliniaSpell implements ISoliniaSpell {
 				return getRecastTime();
 
 			for (Integer rankId : rankIds) {
-				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 				if (rank.getRecast_time() > 0)
 					if (solPlayer.hasRank(rank)) {
 						return rank.getRecast_time();

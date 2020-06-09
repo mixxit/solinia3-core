@@ -1273,27 +1273,6 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 	
 	@Override
-	public ISoliniaAARank getAARank(int seekRankId) {
-		ISoliniaAARank aarank = null;
-		try {
-			for (ISoliniaAAAbility ability : StateManager.getInstance().getConfigurationManager().getAAAbilities())
-			{
-				for(ISoliniaAARank seekRank : ability.getRanks())
-				{
-					if (seekRank.getId() != seekRankId)
-						continue;
-					
-					aarank = seekRank;
-					break;
-				}
-			}
-		} catch (CoreStateInitException e) {
-			//
-		}
-		return aarank;
-	}
-
-	@Override
 	public List<ISoliniaAAAbility> getAAAbilities() {
 		return aaabilitiesRepository.query(q -> q.getId() > 0);
 	}

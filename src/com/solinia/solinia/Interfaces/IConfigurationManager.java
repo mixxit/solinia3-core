@@ -364,8 +364,6 @@ public interface IConfigurationManager {
 
 	ISoliniaAAAbility getAAAbility(int Id);
 
-	ISoliniaAARank getAARank(int seekRankId);
-
 	List<ISoliniaPatch> getPatches();
 
 	List<ISoliniaAlignment> getAlignments();

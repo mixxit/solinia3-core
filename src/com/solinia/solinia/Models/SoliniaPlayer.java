@@ -2215,7 +2215,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return true;
 
 			for (Integer rankId : rankIds) {
-				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARank(rankId);
+				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
 				if (this.hasRank(rank))
 					return true;
 			}
@@ -2707,7 +2707,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		try {
 			for (SoliniaAARankEffect rankEffect : getRanksEffects()) {
 				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager()
-						.getAARank(rankEffect.getRankId());
+						.getAARankCache(rankEffect.getRankId());
 				if (rank != null) {
 					if (!aaIds.contains(rank.getAbilityid())) {
 						aaIds.add(rank.getAbilityid());
@@ -2732,7 +2732,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		try {
 			for (SoliniaAARankEffect rankEffect : getRanksEffectsOfEffectType(effectId,true)) {
 				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager()
-						.getAARank(rankEffect.getRankId());
+						.getAARankCache(rankEffect.getRankId());
 				if (rank != null) {
 					if (!aaIds.contains(rank.getAbilityid())) {
 						aaIds.add(rank.getAbilityid());

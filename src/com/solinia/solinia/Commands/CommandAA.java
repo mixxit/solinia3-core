@@ -145,7 +145,7 @@ public class CommandAA implements CommandExecutor {
 				}
 
 				int seekRankId = Integer.parseInt(args[1].toUpperCase());
-				ISoliniaAARank aarank = StateManager.getInstance().getConfigurationManager().getAARank(seekRankId);
+				ISoliniaAARank aarank = StateManager.getInstance().getConfigurationManager().getAARankCache(seekRankId);
 				if (aarank == null) {
 					player.sendMessage("That is not a valid AA rank id - /aa buy aaabilityrankid (see /aa list)");
 					return true;

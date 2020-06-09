@@ -277,34 +277,38 @@ public class SpellUtils {
 	public static List<ISoliniaAARank> getHighestRanksForFocusEffect(ISoliniaPlayer soliniaPlayer,
 			FocusEffect focusEffect) {
 		List<ISoliniaAARank> ranks = new ArrayList<ISoliniaAARank>();
-
+		if (focusEffect == FocusEffect.None)
+			return ranks;
+		
 		for (ISoliniaAAAbility aaAbility : soliniaPlayer.getAAAbilities()) {
 			int currentRank = 0;
 			ISoliniaAARank highestRank = null;
 			
 			for (ISoliniaAARank rank : aaAbility.getRanks()) {
-				if (soliniaPlayer.hasRank(rank))
-					if (rank.getPosition() > currentRank) {
-						currentRank = rank.getPosition();
-						for (SoliniaAARankEffect rankEffect : rank.getEffects())
-						{
-							// we default to 0 (SE_CurrentHP) for the effect, so if there aren't any base1/2 values, we'll just skip it
-							if (rankEffect.getEffectId() == 0 && rankEffect.getBase1() == 0 && rankEffect.getBase2() == 0)
-								continue;
+				if (!soliniaPlayer.hasRank(rank))
+					continue;
+				
+				if (rank.getPosition() > currentRank) {
+					currentRank = rank.getPosition();
+					for (SoliniaAARankEffect rankEffect : rank.getEffects())
+					{
+						// we default to 0 (SE_CurrentHP) for the effect, so if there aren't any base1/2 values, we'll just skip it
+						if (rankEffect.getEffectId() == 0 && rankEffect.getBase1() == 0 && rankEffect.getBase2() == 0)
+							continue;
 
-							SpellEffectType effect = SpellUtils.getSpellEffectType(rankEffect.getEffectId());
-							
-							// IsBlankSpellEffect()
-							if (effect == SpellEffectType.Blank || (effect == SpellEffectType.CHA && rankEffect.getBase1() == 0) || effect == SpellEffectType.StackingCommand_Block ||
-							    effect == SpellEffectType.StackingCommand_Overwrite)
-								continue;
+						SpellEffectType effect = SpellUtils.getSpellEffectType(rankEffect.getEffectId());
+						
+						// IsBlankSpellEffect()
+						if (effect == SpellEffectType.Blank || (effect == SpellEffectType.CHA && rankEffect.getBase1() == 0) || effect == SpellEffectType.StackingCommand_Block ||
+						    effect == SpellEffectType.StackingCommand_Overwrite)
+							continue;
 
-							if (IsFocusEffect(null,0,true,effect) == FocusEffect.None)
-								continue;
-							
-							highestRank = rank;
-						}
+						if (IsFocusEffect(null,0,true,effect) != focusEffect)
+							continue;
+						
+						highestRank = rank;
 					}
+				}
 			}
 
 			if (highestRank != null) {
@@ -595,7 +599,7 @@ public class SpellUtils {
 
 			for (SoliniaAARankEffect effect : player.getRanksEffectsOfEffectType(effectIdLookup,true)) {
 				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager()
-						.getAARank(effect.getRankId());
+						.getAARankCache(effect.getRankId());
 
 				if (rank != null)
 					abilityMaxValue.put(rank.getAbilityid(), effect.getBase1());
