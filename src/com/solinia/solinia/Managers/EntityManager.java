@@ -33,10 +33,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
+import com.solinia.solinia.Events.SoliniaEntitySpellsRemovalEvent;
+import com.solinia.solinia.Events.SoliniaEntitySpellsRunEvent;
+import com.solinia.solinia.Events.SoliniaLivingEntityHPRegenTickEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.IEntityManager;
 import com.solinia.solinia.Interfaces.INPCEntityProvider;
@@ -546,24 +550,43 @@ public class EntityManager implements IEntityManager {
 		
 		for(UUID uuid : uuidRemoval)
 		{
-			removeSpellEffects(uuid, false, false);
-		}
-		
-		
-		for(SoliniaEntitySpells entityEffects : entitySpells.values())
-		{
 			try
 			{
-				entityEffects.run(plugin, true);
-				
-				if (entityEffects.getLivingEntity() != null && entityEffects.getLivingEntity() instanceof Player)
-					SoliniaPlayerAdapter.Adapt((Player)entityEffects.getLivingEntity()).sendEffects();
+				final SoliniaEntitySpellsRemovalEvent soliniaevent = new SoliniaEntitySpellsRemovalEvent(uuid);
+				new BukkitRunnable() {
+	
+					@Override
+					public void run() {
+						Bukkit.getPluginManager().callEvent(soliniaevent);
+					}
+	
+				}.runTaskLater(plugin, 10);
 			} catch (Exception e)
 			{
 				e.printStackTrace();
+				// or do it later, lets not break the timer
 			}
-
-
+		}
+		
+		// Trigger an event as soon as possible
+		for(UUID entityEffectsUUID : entitySpells.keySet())
+		{
+			try
+			{
+				final SoliniaEntitySpellsRunEvent soliniaevent = new SoliniaEntitySpellsRunEvent(entityEffectsUUID);
+				new BukkitRunnable() {
+	
+					@Override
+					public void run() {
+						Bukkit.getPluginManager().callEvent(soliniaevent);
+					}
+	
+				}.runTaskLater(plugin, 10);
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+				// or do it later, lets not break the timer
+			}
 		}
 	}
 	
