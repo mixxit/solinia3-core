@@ -10,7 +10,7 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import org.json.JSONException;
@@ -21,9 +21,9 @@ import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.Solinia3UIPacketDiscriminators;
 
 import io.netty.buffer.Unpooled;
-import net.minecraft.server.v1_14_R1.MinecraftKey;
-import net.minecraft.server.v1_14_R1.PacketDataSerializer;
-import net.minecraft.server.v1_14_R1.PacketPlayOutCustomPayload;
+import net.minecraft.server.v1_15_R1.MinecraftKey;
+import net.minecraft.server.v1_15_R1.PacketDataSerializer;
+import net.minecraft.server.v1_15_R1.PacketPlayOutCustomPayload;
 
 public class ForgeUtils {
 

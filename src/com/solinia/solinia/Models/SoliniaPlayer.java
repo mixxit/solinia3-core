@@ -65,7 +65,7 @@ import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.spawning.spawners.MythicSpawner;
 import net.md_5.bungee.api.ChatMessageType;
-import net.minecraft.server.v1_14_R1.Tuple;
+import net.minecraft.server.v1_15_R1.Tuple;
 import com.solinia.solinia.Utils.SkillUtils;
 import com.solinia.solinia.Utils.SpellUtils;
 public class SoliniaPlayer implements ISoliniaPlayer {

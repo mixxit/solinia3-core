@@ -27,7 +27,7 @@ import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.SpellUtils;
 import me.libraryaddict.disguise.DisguiseAPI;
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_14_R1.Tuple;
+import net.minecraft.server.v1_15_R1.Tuple;
 
 public class SoliniaEntitySpells {
 

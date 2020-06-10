@@ -9,13 +9,13 @@ import org.json.JSONException;
 public class ForgeUtilsTest {
 	@Test
 	public void WhenGettingURLReturnExpectedString() {
-		String expectedVersion = "1.14.4.20190902195348";
+		String expectedVersion = "1.15.2.20190902195348";
 		String actualVersion = "";
 		
 		String versionJsonString = "{\r" + System.lineSeparator() + 
 				"  \"homepage\": \"https://github.com/mixxit/solinia3-ui/releases\",\r" + System.lineSeparator() + 
 				"  \"promos\": {\r" + System.lineSeparator() + 
-				"    \"1.14.4-recommended\": \"1.14.4.20190902195348\"\r" + System.lineSeparator() + 
+				"    \"1.15.2-recommended\": \"1.15.2.20190902195348\"\r" + System.lineSeparator() + 
 				"  }\r" + System.lineSeparator() + 
 				"}";
 		

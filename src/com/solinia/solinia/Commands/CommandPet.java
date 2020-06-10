@@ -33,8 +33,8 @@ import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_14_R1.EntityInsentient;
-import net.minecraft.server.v1_14_R1.GenericAttributes;
+import net.minecraft.server.v1_15_R1.EntityInsentient;
+import net.minecraft.server.v1_15_R1.GenericAttributes;
 
 public class CommandPet implements CommandExecutor {
 
@@ -211,7 +211,7 @@ public class CommandPet implements CommandExecutor {
 				
 				player.sendMessage("Pet Name: " + pet.getName() + " Pet Level: " + petLivingEntity.getMentorLevel());
 				player.sendMessage("Pet HP: " + pet.getHealth() + "/" + pet.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-				EntityInsentient entityhandle = (EntityInsentient) ((org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity) pet).getHandle();
+				EntityInsentient entityhandle = (EntityInsentient) ((org.bukkit.craftbukkit.v1_15_R1.entity.CraftLivingEntity) pet).getHandle();
 				double dmg = entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
 				player.sendMessage("Pet DMG: " + dmg + " (Hand to Hand)");
 				Entity target = ((Creature)pet).getTarget();

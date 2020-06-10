@@ -21,7 +21,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
@@ -76,7 +76,7 @@ import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_14_R1.Tuple;
+import net.minecraft.server.v1_15_R1.Tuple;
 
 public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	LivingEntity livingentity;
@@ -801,7 +801,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	private void sendItemAnimation(ISoliniaLivingEntity other, SkillType skillType) {
 		if (skillType.equals(SkillType.Archery))
 		{
-			net.minecraft.server.v1_14_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
+			net.minecraft.server.v1_15_R1.Entity ep = ((CraftEntity) getBukkitLivingEntity()).getHandle();
 			
 			
 			getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
@@ -10843,7 +10843,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		else
 		{
-			/* Throwing exception java.lang.NoSuchMethodError: net.minecraft.server.v1_14_R1.NavigationAbstract.a(DDD)Lnet/minecraft/server/v1_14_R1/PathEntity;
+			/* Throwing exception java.lang.NoSuchMethodError: net.minecraft.server.v1_15_R1.NavigationAbstract.a(DDD)Lnet/minecraft/server/v1_15_R1/PathEntity;
 			CraftCreature nmsEntity = ((CraftCreature) this.getBukkitLivingEntity());
 	        // Create a path to the location
 	        PathEntity path = nmsEntity.getHandle().getNavigation().a(activeMob.getSpawner().getLocation().getX(), activeMob.getSpawner().getLocation().getY(), activeMob.getSpawner().getLocation().getZ());

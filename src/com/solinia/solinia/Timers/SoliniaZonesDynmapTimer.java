@@ -21,7 +21,7 @@ import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaZone;
 
-import net.minecraft.server.v1_14_R1.Tuple;
+import net.minecraft.server.v1_15_R1.Tuple;
 
 public class SoliniaZonesDynmapTimer extends BukkitRunnable {
 	@Override

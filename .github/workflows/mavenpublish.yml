@@ -18,7 +18,7 @@ jobs:
     - name: BuildTools
       run: |
         wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
-        java -jar BuildTools.jar --rev 1.14.4 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$":
+        java -jar BuildTools.jar --rev 1.14.2 | grep -vE "[^/ ]*/[^/ ]*\s*KB\s*$" | grep -v "^\s*$":
 
     - name: Build with Maven
       env:
@@ -29,5 +29,5 @@ jobs:
         export NOW=$(date +%s)
         echo $NOW
         echo "<settings><servers><server><id>github</id><username>${GITHUB_USERNAME}</username><password>${GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
-        mvn -Drevision=1.14.4-R0.1-$NOW deploy
+        mvn -Drevision=1.15.2-R0.1-$NOW deploy
 

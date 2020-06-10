@@ -11,7 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -36,11 +36,11 @@ import com.solinia.solinia.Models.SkillReward;
 import com.solinia.solinia.Models.SkillType;
 
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_14_R1.AttributeModifier;
-import net.minecraft.server.v1_14_R1.EnumItemSlot;
-import net.minecraft.server.v1_14_R1.GameProfileSerializer;
-import net.minecraft.server.v1_14_R1.GenericAttributes;
-import net.minecraft.server.v1_14_R1.NBTTagCompound;
+import net.minecraft.server.v1_15_R1.AttributeModifier;
+import net.minecraft.server.v1_15_R1.EnumItemSlot;
+import net.minecraft.server.v1_15_R1.GameProfileSerializer;
+import net.minecraft.server.v1_15_R1.GenericAttributes;
+import net.minecraft.server.v1_15_R1.NBTTagCompound;
 
 public class ItemStackUtils {
 
@@ -70,7 +70,7 @@ public class ItemStackUtils {
 			return isDisplayItem;
 
 		// Classic method
-		net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
+		net.minecraft.server.v1_15_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(itemStack);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 
 		String isMerchant = compound.getString("merchant");
@@ -398,9 +398,9 @@ public class ItemStackUtils {
 	public static int getWeaponDamageFromItemStack(ItemStack itemStack, EnumItemSlot itemSlot) {
         double attackDamage = 1.0;
         UUID uuid = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
-        net.minecraft.server.v1_14_R1.ItemStack craftItemStack = CraftItemStack.asNMSCopy(itemStack);
-        net.minecraft.server.v1_14_R1.Item item = craftItemStack.getItem();
-        if(item instanceof net.minecraft.server.v1_14_R1.ItemSword || item instanceof net.minecraft.server.v1_14_R1.ItemTool || item instanceof net.minecraft.server.v1_14_R1.ItemHoe) {
+        net.minecraft.server.v1_15_R1.ItemStack craftItemStack = CraftItemStack.asNMSCopy(itemStack);
+        net.minecraft.server.v1_15_R1.Item item = craftItemStack.getItem();
+        if(item instanceof net.minecraft.server.v1_15_R1.ItemSword || item instanceof net.minecraft.server.v1_15_R1.ItemTool || item instanceof net.minecraft.server.v1_15_R1.ItemHoe) {
             Multimap<String, AttributeModifier> map = item.a(itemSlot);
             Collection<AttributeModifier> attributes = map.get(GenericAttributes.ATTACK_DAMAGE.getName());
             if(!attributes.isEmpty()) {
@@ -537,7 +537,7 @@ public class ItemStackUtils {
 	
 	public static String ConvertItemStackToJsonRegular(ItemStack itemStack) {
         // First we convert the item stack into an NMS itemstack
-        net.minecraft.server.v1_14_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(itemStack);
+        net.minecraft.server.v1_15_R1.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(itemStack);
         NBTTagCompound compound = new NBTTagCompound();
         compound = nmsItemStack.save(compound);
 
@@ -585,7 +585,7 @@ public class ItemStackUtils {
 		String textureValue = "";
 		if (ItemStackUtils.isSkullItem(itemStack))
 	    {
-			net.minecraft.server.v1_14_R1.ItemStack rawItemStack = CraftItemStack.asNMSCopy(itemStack);
+			net.minecraft.server.v1_15_R1.ItemStack rawItemStack = CraftItemStack.asNMSCopy(itemStack);
 	        if (rawItemStack.hasTag()) {
 	            NBTTagCompound tag = rawItemStack.getTag();
 	            if (tag.hasKeyOfType("SkullOwner", 10)) {

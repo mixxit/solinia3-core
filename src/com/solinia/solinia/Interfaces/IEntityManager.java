@@ -18,7 +18,7 @@ import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.UniversalMerchant;
 
-import net.minecraft.server.v1_14_R1.Tuple;
+import net.minecraft.server.v1_15_R1.Tuple;
 
 public interface IEntityManager {
 	ISoliniaLivingEntity getLivingEntity(LivingEntity livingentity);

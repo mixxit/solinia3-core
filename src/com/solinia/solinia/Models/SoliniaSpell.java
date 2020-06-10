@@ -39,7 +39,7 @@ import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.MathUtils;
 import com.solinia.solinia.Models.SpellTargetType;
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_14_R1.Tuple;
+import net.minecraft.server.v1_15_R1.Tuple;
 import com.solinia.solinia.Utils.SkillUtils;
 import com.solinia.solinia.Utils.SpellUtils;
 public class SoliniaSpell implements ISoliniaSpell {

@@ -10,7 +10,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
@@ -96,8 +96,8 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.milkbowl.vault.economy.EconomyResponse;
-import net.minecraft.server.v1_14_R1.EntityHuman;
-import net.minecraft.server.v1_14_R1.GenericAttributes;
+import net.minecraft.server.v1_15_R1.EntityHuman;
+import net.minecraft.server.v1_15_R1.GenericAttributes;
 
 public class Solinia3CorePlayerListener implements Listener {
 
@@ -2127,8 +2127,8 @@ public class Solinia3CorePlayerListener implements Listener {
 	// be sure you cancel event if doing so
 	// java.lang.AssertionError: TRAP could occur
 	// ie
-	// at net.minecraft.server.v1_14_R1.ItemStack.checkEmpty(ItemStack.java:82) ~[spigot-1.14.4.jar:git-Spigot-56f8471-ccd47a5]
-    // at net.minecraft.server.v1_14_R1.ItemStack.setCount(ItemStack.java:851) ~[spigot-1.14.4.jar:git-Spigot-56f8471-ccd47a5]
+	// at net.minecraft.server.v1_15_R1.ItemStack.checkEmpty(ItemStack.java:82) ~[spigot-1.15.2.jar:git-Spigot-56f8471-ccd47a5]
+    // at net.minecraft.server.v1_15_R1.ItemStack.setCount(ItemStack.java:851) ~[spigot-1.15.2.jar:git-Spigot-56f8471-ccd47a5]
 	@EventHandler()
 	public void onPlayerInteract(PlayerInteractEvent event) 
 	{

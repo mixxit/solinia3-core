@@ -29,7 +29,7 @@ import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Models.StatType;
 
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
-import net.minecraft.server.v1_14_R1.Tuple;
+import net.minecraft.server.v1_15_R1.Tuple;
 
 public interface ISoliniaLivingEntity  {
 	public LivingEntity getBukkitLivingEntity();

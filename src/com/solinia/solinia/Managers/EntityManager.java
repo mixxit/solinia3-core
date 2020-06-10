@@ -80,8 +80,8 @@ import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_14_R1.GenericAttributes;
-import net.minecraft.server.v1_14_R1.Tuple;
+import net.minecraft.server.v1_15_R1.GenericAttributes;
+import net.minecraft.server.v1_15_R1.Tuple;
 
 public class EntityManager implements IEntityManager {
 	INPCEntityProvider npcEntityProvider;
@@ -1115,7 +1115,7 @@ public class EntityManager implements IEntityManager {
 			if (!spawnedMob.isDead())
 				spawnedMob.setHealth(maxHp);
 			
-			net.minecraft.server.v1_14_R1.EntityInsentient entityhandle = (net.minecraft.server.v1_14_R1.EntityInsentient) ((org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity) spawnedMob).getHandle();
+			net.minecraft.server.v1_15_R1.EntityInsentient entityhandle = (net.minecraft.server.v1_15_R1.EntityInsentient) ((org.bukkit.craftbukkit.v1_15_R1.entity.CraftLivingEntity) spawnedMob).getHandle();
 			entityhandle.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue((double)npc.getBaseDamage());
 			entityhandle.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue((double)0.4D);
 			owner.sendMessage("New Pet spawned with HP: " + spawnedMob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + " and " + npc.getBaseDamage() + " dmg");

@@ -30,7 +30,7 @@ public class SoliniaResurrectionItem {
 	{
 		ItemStack stack = new ItemStack(Material.NAME_TAG);
 		ItemMeta i = stack.getItemMeta();
-		i.spigot().setUnbreakable(true);
+		i.setUnbreakable(true);
 		i.setDisplayName("Signaculum");
 		List<String> loretxt = new ArrayList<String>();
 		loretxt.add("This signaculum belongs");

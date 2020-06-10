@@ -13,9 +13,9 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
@@ -49,12 +49,12 @@ import com.solinia.solinia.Models.SpellEffectType;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_14_R1.DamageSource;
-import net.minecraft.server.v1_14_R1.EntityLiving;
-import net.minecraft.server.v1_14_R1.EntityPlayer;
-import net.minecraft.server.v1_14_R1.GenericAttributes;
-import net.minecraft.server.v1_14_R1.PacketPlayOutAnimation;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityMetadata;
+import net.minecraft.server.v1_15_R1.DamageSource;
+import net.minecraft.server.v1_15_R1.EntityLiving;
+import net.minecraft.server.v1_15_R1.EntityPlayer;
+import net.minecraft.server.v1_15_R1.GenericAttributes;
+import net.minecraft.server.v1_15_R1.PacketPlayOutAnimation;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntityMetadata;
 
 public class EntityUtils {
 	public static NumHit getNumHitsType(Integer numhitstype) {
@@ -285,7 +285,7 @@ public class EntityUtils {
 		if (distance > 100D)
 			return 100D - distance;
 
-		net.minecraft.server.v1_14_R1.EntityLiving entity = ((org.bukkit.craftbukkit.v1_14_R1.entity.CraftLivingEntity) aggroCheckEntity)
+		net.minecraft.server.v1_15_R1.EntityLiving entity = ((org.bukkit.craftbukkit.v1_15_R1.entity.CraftLivingEntity) aggroCheckEntity)
 				.getHandle();
 		if (entity == null)
 			return 0D;
@@ -3926,7 +3926,7 @@ public class EntityUtils {
 		float soundVolume = 1.0F;
 		if (hpchange < 0)
 		{
-			DamageSource damagesource = net.minecraft.server.v1_14_R1.DamageSource.mobAttack(((EntityLiving)((CraftLivingEntity) sourceEntityOfChange).getHandle()));
+			DamageSource damagesource = net.minecraft.server.v1_15_R1.DamageSource.mobAttack(((EntityLiving)((CraftLivingEntity) sourceEntityOfChange).getHandle()));
 			DamageCause damagecause = DamageCause.ENTITY_ATTACK;
 			EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(sourceEntityOfChange,targetToDamage,damagecause,hpchange);
 			
@@ -3991,7 +3991,7 @@ public class EntityUtils {
 			return;
 		
 		try {
-			((EntityPlayer)((CraftPlayer)packetReceiverPlayer).getHandle()).playerConnection.sendPacket(new PacketPlayOutEntityMetadata(((net.minecraft.server.v1_14_R1.Entity)((CraftEntity)entity).getHandle()).getId(), ((net.minecraft.server.v1_14_R1.Entity)((CraftEntity)entity).getHandle()).getDataWatcher(), true));
+			((EntityPlayer)((CraftPlayer)packetReceiverPlayer).getHandle()).playerConnection.sendPacket(new PacketPlayOutEntityMetadata(((net.minecraft.server.v1_15_R1.Entity)((CraftEntity)entity).getHandle()).getId(), ((net.minecraft.server.v1_15_R1.Entity)((CraftEntity)entity).getHandle()).getDataWatcher(), true));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

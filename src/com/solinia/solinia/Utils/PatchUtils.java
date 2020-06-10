@@ -4,11 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftInventory;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftInventory;
 import org.bukkit.inventory.Inventory;
-import net.minecraft.server.v1_14_R1.NBTTagCompound;
-import net.minecraft.server.v1_14_R1.NBTTagList;
-import net.minecraft.server.v1_14_R1.TileEntityChest;
+import net.minecraft.server.v1_15_R1.NBTTagCompound;
+import net.minecraft.server.v1_15_R1.NBTTagList;
+import net.minecraft.server.v1_15_R1.TileEntityChest;
 
 public class PatchUtils {
 	// Used for one off patching, added in /solinia patch command for console sender
@@ -22,7 +22,7 @@ public class PatchUtils {
 		    NBTTagCompound nbttagcompound = (NBTTagCompound)nbttaglist.get(i);
 		    int j = nbttagcompound.getByte("Slot") & 0xFF;
 		    if(j >= 0 && j < 27) {
-		      tileentitychest.setItem(j, net.minecraft.server.v1_14_R1.ItemStack.a(nbttagcompound));
+		      tileentitychest.setItem(j, net.minecraft.server.v1_15_R1.ItemStack.a(nbttagcompound));
 		    }
 		  }
 		  return new CraftInventory(tileentitychest);

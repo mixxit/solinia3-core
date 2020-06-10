@@ -32,7 +32,7 @@ import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Models.SpellTargetType;
 import com.solinia.solinia.Models.StatType;
 
-import net.minecraft.server.v1_14_R1.Tuple;
+import net.minecraft.server.v1_15_R1.Tuple;
 
 public class SpellUtils {
 

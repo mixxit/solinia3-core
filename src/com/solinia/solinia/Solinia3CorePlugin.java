@@ -171,7 +171,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 				return;
 			} else {
 				System.out.println("Solinia3-Core detected offline, so running fallback expectedClientModVersion");
-				expectedClientModVersion = "1.14.4";
+				expectedClientModVersion = "1.15.2";
 			}
 		}
 

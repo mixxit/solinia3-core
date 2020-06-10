@@ -14,7 +14,7 @@ import com.solinia.solinia.Utils.PlayerUtils;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_14_R1.Tuple;
+import net.minecraft.server.v1_15_R1.Tuple;
 
 public class CommandWho implements CommandExecutor {
 	@Override

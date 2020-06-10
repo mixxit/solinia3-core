@@ -14,7 +14,7 @@ import java.util.UUID;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -44,10 +44,10 @@ import com.solinia.solinia.Utils.SkillUtils;
 import com.solinia.solinia.Utils.SpellUtils;
 import com.solinia.solinia.Utils.TextUtils;
 import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_14_R1.NBTTagCompound;
-import net.minecraft.server.v1_14_R1.NBTTagInt;
-import net.minecraft.server.v1_14_R1.NBTTagList;
-import net.minecraft.server.v1_14_R1.NBTTagString;
+import net.minecraft.server.v1_15_R1.NBTTagCompound;
+import net.minecraft.server.v1_15_R1.NBTTagInt;
+import net.minecraft.server.v1_15_R1.NBTTagList;
+import net.minecraft.server.v1_15_R1.NBTTagString;
 
 public class ItemStackAdapter {
 	public static ItemStack Adapt(ISoliniaItem soliniaItem, long costmultiplier, boolean merchanttag) {
@@ -72,7 +72,7 @@ public class ItemStackAdapter {
 		
 		stack.setItemMeta(itemMeta);
 		
-		net.minecraft.server.v1_14_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
+		net.minecraft.server.v1_15_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
 		NBTTagCompound compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 		nmsStack.setTag(compound);
 		stack = CraftItemStack.asBukkitCopy(nmsStack);
@@ -84,13 +84,13 @@ public class ItemStackAdapter {
 				compound = (nmsStack.hasTag()) ? nmsStack.getTag() : new NBTTagCompound();
 				NBTTagList modifiers = new NBTTagList();
 				NBTTagCompound damagecompound = new NBTTagCompound();
-				damagecompound.set("AttributeName", new NBTTagString("generic.attackDamage"));
-				damagecompound.set("Name", new NBTTagString("generic.attackDamage"));
-				damagecompound.set("Amount", new NBTTagInt(soliniaItem.getItemWeaponDamage(false, null)));
-				damagecompound.set("Operation", new NBTTagInt(0));
-				damagecompound.set("UUIDLeast", new NBTTagInt(894654));
-				damagecompound.set("UUIDMost", new NBTTagInt(2872));
-				damagecompound.set("Slot", new NBTTagString("mainhand"));
+				damagecompound.set("AttributeName", NBTTagString.a("generic.attackDamage"));
+				damagecompound.set("Name", NBTTagString.a("generic.attackDamage"));
+				damagecompound.set("Amount", NBTTagInt.a(soliniaItem.getItemWeaponDamage(false, null)));
+				damagecompound.set("Operation", NBTTagInt.a(0));
+				damagecompound.set("UUIDLeast", NBTTagInt.a(894654));
+				damagecompound.set("UUIDMost", NBTTagInt.a(2872));
+				damagecompound.set("Slot", NBTTagString.a("mainhand"));
 
 				modifiers.add(damagecompound);
 				compound.set("AttributeModifiers", modifiers);
