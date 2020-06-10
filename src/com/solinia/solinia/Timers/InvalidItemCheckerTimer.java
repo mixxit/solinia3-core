@@ -38,14 +38,14 @@ public class InvalidItemCheckerTimer  extends BukkitRunnable {
 				if (itemstack == null)
 					continue;
 				
-		        if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) > 999)
+		        if (itemstack.getEnchantmentLevel(Enchantment.OXYGEN) >= 255)
 		        {
-		        	player.sendMessage(ChatColor.RED + "* You appear to have items in your inventory that contain a respiration enchantment greater than 999, please drop and pick this item back up");
+		        	player.sendMessage(ChatColor.RED + "* You appear to have items in your inventory that contain a respiration enchantment greater than 254, please drop and pick this item back up");
 		        }
 		        
-		        if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) > 999 || itemstack.getEnchantmentLevel(Enchantment.DURABILITY) < 0)
+		        if (itemstack.getEnchantmentLevel(Enchantment.DURABILITY) >= 255 || itemstack.getEnchantmentLevel(Enchantment.DURABILITY) < 0)
 		        {
-		        	player.sendMessage(ChatColor.RED + "* You appear to have items in your inventory that contain a durability enchantment greater than 999 or less than 0, please drop and pick this item back up");
+		        	player.sendMessage(ChatColor.RED + "* You appear to have items in your inventory that contain a durability enchantment greater than 254 or less than 0, please drop and pick this item back up");
 		        }
 			}
 		}

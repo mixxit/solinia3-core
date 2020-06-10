@@ -39,59 +39,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
     @EventHandler
     public void PickupItem(PlayerPickupItemEvent e) {
         ItemStack pickedUpItemStack = e.getItem().getItemStack();
-        
-        // Replace oxygen items with durability items
-        if (pickedUpItemStack.getEnchantmentLevel(Enchantment.OXYGEN) > 999)
-        {
-        	e.getPlayer().sendMessage("Detected an item in the old format, converting to the new format. Please drop all your old items and pick them up if you are having problems with them");
-        	try
-        	{
-	        	ISoliniaItem latestitem = StateManager.getInstance().getConfigurationManager().getItemByOxygen(pickedUpItemStack);
-	            if (pickedUpItemStack != null)
-	            {
-	            	if (latestitem != null)
-	            	{
-	            		ItemStack latestitemstack = latestitem.asItemStack();
-	            		pickedUpItemStack.setItemMeta(latestitemstack.getItemMeta());
-	            	} else {
-	            		// this is an item that is broken       
-	            		e.getPlayer().sendMessage("This item is no longer implemented");
-	            		EntityUtils.CancelEvent(e);
-	            		EntityUtils.RemoveEntity(e.getItem(),"item no longer exists");
-	            	}
-	            }
-        	} catch (CoreStateInitException eOxy)
-        	{
-        		
-        	}
-        }
-        
-        // Validate classic durability items
-        if (pickedUpItemStack.getEnchantmentLevel(Enchantment.DURABILITY) > 999 || pickedUpItemStack.getEnchantmentLevel(Enchantment.DURABILITY) < 0)
-        {
-        	e.getPlayer().sendMessage("Detected an item in the old format, converting to the new format. Please drop all your old items and pick them up if you are having problems with them");
-        	try
-        	{
-	        	ISoliniaItem latestitem = StateManager.getInstance().getConfigurationManager().getItemByDurability(pickedUpItemStack);
-	            if (pickedUpItemStack != null)
-	            {
-	            	if (latestitem != null)
-	            	{
-	            		ItemStack latestitemstack = latestitem.asItemStack();
-	            		pickedUpItemStack.setItemMeta(latestitemstack.getItemMeta());
-	            	} else {
-	            		// this is an item that is broken       
-	            		e.getPlayer().sendMessage("This item is no longer implemented");
-	            		EntityUtils.CancelEvent(e);
-	            		e.getItem().remove();
-	            	}
-	            }
-        	} catch (CoreStateInitException eOxy)
-        	{
-        		
-        	}
-        }
-        
+
         String temporaryGuid = null;
         Integer augmentationItemId = null;
         

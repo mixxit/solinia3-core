@@ -162,7 +162,7 @@ public class CommandTarget implements CommandExecutor {
 				if (!(entity instanceof LivingEntity))
 					continue;
 				
-				if (!entity.getName().equals(target))
+				if (!entity.getName().toUpperCase().equals(target.toUpperCase()))
 					continue;
 				
 				// Skip over existing target

@@ -2,6 +2,7 @@ package com.solinia.solinia.Utils;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -42,8 +43,8 @@ public class InventoryUtils {
 				// System.out.println("Missing start with merchant on identifier");
 				return false;
 			}
-
-			if (identifierStack.getEnchantmentLevel(Enchantment.DURABILITY) != 999) {
+			
+			if (identifierStack.getEnchantmentLevel(Enchantment.DURABILITY) < 255) {
 				return false;
 			}
 		} catch (Exception e) {

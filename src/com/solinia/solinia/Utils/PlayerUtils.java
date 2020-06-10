@@ -381,7 +381,7 @@ public class PlayerUtils {
 
 			// covers cases of special tmp ids
 			int tmpitemid = itemstack.getEnchantmentLevel(Enchantment.DURABILITY);
-			if (tmpitemid == 999)
+			if (tmpitemid >= 255)
 				continue;
 
 			try {

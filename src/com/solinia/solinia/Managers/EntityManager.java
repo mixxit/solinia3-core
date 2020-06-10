@@ -416,7 +416,7 @@ public class EntityManager implements IEntityManager {
 						itemStack.setDurability((short) 3);
 						itemMeta.setDisplayName("MERCHANT: " + universalMerchant.merchantName);
 						itemStack.setItemMeta(itemMeta);
-						itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 999);
+						itemStack.addUnsafeEnchantment(Enchantment.DURABILITY, 255);
 					}
 					
 					// Final Row right
