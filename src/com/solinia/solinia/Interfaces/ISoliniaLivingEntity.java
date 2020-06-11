@@ -555,4 +555,8 @@ public interface ISoliniaLivingEntity  {
 
 	public ISoliniaLivingEntity getPet();
 
+	void increaseMana(int amount);
+
+	void reduceMana(int amount);
+
 }

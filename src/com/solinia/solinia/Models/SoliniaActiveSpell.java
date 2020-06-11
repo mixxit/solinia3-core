@@ -2794,8 +2794,8 @@ public class SoliniaActiveSpell {
 	}
 
 	private void applyCurrentMpSpellEffect(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
-		if (!isOwnerPlayer())
-			return;
+		//if (!isOwnerPlayer())
+		//	return;
 		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
 		if (sourceEntity == null)
 			return;
@@ -2803,6 +2803,10 @@ public class SoliniaActiveSpell {
 		if (!(sourceEntity instanceof LivingEntity))
 			return;
 
+		if (this.getLivingEntity() == null)
+			return;
+
+		
 		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
 
 		int instrument_mod = 0;
@@ -2816,22 +2820,20 @@ public class SoliniaActiveSpell {
 			// just skip it
 		}
 
-		int mpToRemove = soliniaSpell.calcSpellEffectValue(spellEffect, sourceLivingEntity, getLivingEntity(),
+		int mpAmount = soliniaSpell.calcSpellEffectValue(spellEffect, sourceLivingEntity, getLivingEntity(),
 				casterLevel, getTicksLeft(), instrument_mod);
 
 		try {
-			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(this.getOwnerUuid()));
-			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(Bukkit.getPlayer(this.getOwnerUuid()));
+			ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(this.getLivingEntity());
 
-			int amount = (int) Math.round(solplayer.getMana()) + mpToRemove;
-			if (amount > solentity.getMaxMP()) {
-				amount = (int) Math.round(solentity.getMaxMP());
-			}
+			if (mpAmount == 0)
+				return;
 
-			if (amount < 0)
-				amount = 0;
+			if (mpAmount > 0)
+				solentity.increaseMana(mpAmount);
+			else
+				solentity.reduceMana(mpAmount);
 
-			solplayer.setMana(amount);
 		} catch (CoreStateInitException e) {
 			e.printStackTrace();
 		}

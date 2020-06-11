@@ -12290,9 +12290,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	public void doMPRegenTick() {
 		if (getBukkitLivingEntity() == null || getBukkitLivingEntity().isDead())
 			return;
-
 		
-
 		increaseMana(getMPRegen());
 		
 		this.setLastUpdatedTimeNow();
@@ -12310,7 +12308,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return 0;
 	}
 
-	private void increaseMana(int amount) {
+	@Override
+	public void increaseMana(int amount) {
+		if (amount < 0)
+			amount = amount*-1;
+		
 		if (this.isPlayer())
 		{
 			ISoliniaPlayer solPlayer = getSoliniaPlayer();
@@ -12329,8 +12331,56 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return;
 			
 			int currentMana = this.getMana();
+			currentMana = currentMana + amount;
 			
-			StateManager.getInstance().getEntityManager().setNPCMana(this.getBukkitLivingEntity(), npc, currentMana+amount);
+			if (currentMana > getMaxMP()) {
+				currentMana = getMaxMP();
+			}
+
+			if (currentMana < 0)
+				currentMana = 0;
+			
+			StateManager.getInstance().getEntityManager().setNPCMana(this.getBukkitLivingEntity(), npc, currentMana);
+		} catch (CoreStateInitException e) {
+			return;
+		}
+		
+		
+	}
+	
+	@Override
+	public void reduceMana(int amount) {
+		if (amount < 0)
+			amount = amount*-1;
+		
+		if (this.isPlayer())
+		{
+			ISoliniaPlayer solPlayer = getSoliniaPlayer();
+			if (solPlayer != null)
+			{
+				solPlayer.reducePlayerMana(amount);
+			}		
+		}
+		
+		if (this.getNpcid() < 1)
+			return;
+
+		try {
+			ISoliniaNPC npc = getNPC();
+			if (npc == null)
+				return;
+			
+			int currentMana = this.getMana();
+			currentMana = currentMana - amount;
+			
+			if (currentMana > getMaxMP()) {
+				currentMana = getMaxMP();
+			}
+
+			if (currentMana < 0)
+				currentMana = 0;
+			
+			StateManager.getInstance().getEntityManager().setNPCMana(this.getBukkitLivingEntity(), npc, currentMana);
 		} catch (CoreStateInitException e) {
 			return;
 		}

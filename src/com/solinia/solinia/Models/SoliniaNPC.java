@@ -420,7 +420,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		sender.sendMessage("- level: " + ChatColor.GOLD + getLevel() + ChatColor.RESET + " " + "ac: " + ChatColor.GOLD
 				+ getAC() + ChatColor.RESET + " " + "forcedmaxhp: " + ChatColor.GOLD + getForcedMaxHp());
 		sender.sendMessage("- hpregenrate: " + ChatColor.GOLD + getHpRegenRate() + ChatColor.RESET + " " + "manaregenrate: " + ChatColor.GOLD
-				+ getManaRegenRate() + ChatColor.RESET + " " + "mana: " + ChatColor.GOLD + getMana());
+				+ getManaRegenRate() + ChatColor.RESET + " " + " basemana: " + ChatColor.GOLD + getMana());
 		sender.sendMessage("- avoidancerating: " + ChatColor.GOLD + getAvoidanceRating() + ChatColor.RESET + " "
 				+ "accuracyrating: " + ChatColor.GOLD + getNPCDefaultAccuracyRating() + ChatColor.RESET);
 		sender.sendMessage("- mindmg: " + ChatColor.GOLD + getMinInternalDmg() + ChatColor.RESET + " "
@@ -836,7 +836,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			setManaRegenRate(Integer.parseInt(value));
 			requiresreload = false;
 			break;
-		case "mana":
+		case "basemana":
 			setMana(Integer.parseInt(value));
 			requiresreload = false;
 			break;

@@ -355,13 +355,29 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		// TODO Auto-generated method stub
 		return this.mana;
 	}
+	
+	@Override
+	public void reducePlayerMana(int mana) {
+
+		int currentmana = getMana();
+		if ((currentmana - mana) < 1) {
+			currentmana = 0;
+		} else {
+			currentmana = currentmana - mana;
+		}
+
+		setMana(currentmana);
+		this.setLastUpdatedTimeNow();
+
+	}
 
 	@Override
 	public void setMana(int mana) {
 		if (this.mana == mana)
 			return;
-
+		
 		this.mana = mana;
+		//Bukkit.broadcastMessage("PLAYE set mana to " + mana + " on " + getFullName());
 		PartyWindowUtils.UpdateWindow(this.getBukkitPlayer(), true, false);
 		this.setLastUpdatedTimeNow();
 	}
@@ -1230,20 +1246,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		if (value > 0)
 			sendMessage(ChatColor.YELLOW + "* You get better at " + skillType.name().toLowerCase() + " (" + value + ")");
-		this.setLastUpdatedTimeNow();
-
-	}
-
-	@Override
-	public void reducePlayerMana(int mana) {
-
-		int currentmana = getMana();
-		if ((currentmana - mana) < 1) {
-			currentmana = 0;
-		} else {
-			currentmana = currentmana - mana;
-		}
-		setMana(currentmana);
 		this.setLastUpdatedTimeNow();
 
 	}
