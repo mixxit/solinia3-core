@@ -1,7 +1,10 @@
 package com.solinia.solinia.Utils;
 
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftLightningStrike;
 import org.bukkit.entity.Entity;
 
 import com.solinia.solinia.Managers.StateManager;
@@ -24,6 +27,7 @@ import de.slikey.effectlib.effect.TornadoEffect;
 import de.slikey.effectlib.effect.VortexEffect;
 import de.slikey.effectlib.effect.WarpEffect;
 import de.slikey.effectlib.effect.WaveEffect;
+import net.minecraft.server.v1_15_R1.EntityLightning;
 
 public class SpecialEffectUtils {
 
@@ -258,5 +262,20 @@ public class SpecialEffectUtils {
 		if (color != null)
 			effect.color = color;
 		effect.start();
+	}
+
+	public static void playLightningStrike(Entity entity) {
+		try
+		{
+			Location loc = entity.getLocation();
+			net.minecraft.server.v1_15_R1.WorldServer world = ((CraftWorld) loc.getWorld()).getHandle();
+			EntityLightning lightning = new EntityLightning(world, loc.getX(), loc.getY(), loc.getZ(), true, true);
+			world.strikeLightning(lightning);
+		    new CraftLightningStrike(world.getServer(), lightning);
+			return;
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

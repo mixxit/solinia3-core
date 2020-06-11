@@ -6,7 +6,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftLightningStrike;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -32,6 +35,7 @@ import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Models.SpellTargetType;
 import com.solinia.solinia.Models.StatType;
 
+import net.minecraft.server.v1_15_R1.EntityLightning;
 import net.minecraft.server.v1_15_R1.Tuple;
 
 public class SpellUtils {
@@ -48,6 +52,12 @@ public class SpellUtils {
 			SpecialEffectUtils.playLegacy(entity);
 			return;
 		}
+		
+		if (activeSpell.getSpell().getName().toUpperCase().contains("LIGHTNING"))
+		{
+			SpecialEffectUtils.playLightningStrike(entity);
+			return;
+		}
 
 		switch (effectType) {
 		case Summon_Mount_Unclass:
@@ -56,25 +66,25 @@ public class SpellUtils {
 		case Direct_Damage:
 			switch(resistType)
 			{
-			case RESIST_FIRE:
-			SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.ORANGE);
-			break;
-			case RESIST_COLD:
-			SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.AQUA);
-			break;
-			case RESIST_DISEASE:
-			SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.BLACK);
-			break;
-			case RESIST_MAGIC:
-			SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.BLUE);
-			break;
-			case RESIST_POISON:
-			SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.LIME);
-			break;
-			default:
-				SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.RED);
-				break;	
-			}
+				case RESIST_FIRE:
+				SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.ORANGE);
+				break;
+				case RESIST_COLD:
+				SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.AQUA);
+				break;
+				case RESIST_DISEASE:
+				SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.BLACK);
+				break;
+				case RESIST_MAGIC:
+				SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.BLUE);
+				break;
+				case RESIST_POISON:
+				SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.LIME);
+				break;
+				default:
+					SpecialEffectUtils.playCustomStarEffect(entity, Particle.SPELL_MOB, Color.RED);
+					break;	
+				}
 			break;
 		case Heal_Cure:
 			SpecialEffectUtils.playLoveEffect(entity);
