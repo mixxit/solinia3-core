@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Interfaces.IPersistable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
@@ -46,6 +47,7 @@ public class SoliniaRace implements ISoliniaRace,IPersistable {
 	private int passiveAbilityId = 0;
 	private int raceLootTableId = 0;
 	private boolean armouredSkin = false;
+	private int racePetDisguiseId = 0;
 	
 	@Override
 	public String getName() {
@@ -206,6 +208,15 @@ public class SoliniaRace implements ISoliniaRace,IPersistable {
 			sender.sendMessage(
 					"- raceloottableid: " + ChatColor.GOLD + getRaceLootTableId() + " (No Loot Table)" + ChatColor.RESET);
 		}
+		if (getRacePetDisguiseId() != 0) {
+			sender.sendMessage("- racepetdisguiseid: " + ChatColor.GOLD + getRacePetDisguiseId() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getDisguise(getRacePetDisguiseId()).getDisguiseName()
+					+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- racepetdisguiseid: " + ChatColor.GOLD + getRacePetDisguiseId() + " (No Disguise)" + ChatColor.RESET);
+		}
+		
 		sender.sendMessage("----------------------------");
 	}
 	
@@ -251,6 +262,14 @@ public class SoliniaRace implements ISoliniaRace,IPersistable {
 			break;
 		case "armouredskin":
 			setArmouredSkin(Boolean.parseBoolean(value));
+			break;
+		case "racepetdisguiseid":
+			int disguiseid = Integer.parseInt(value);
+			SoliniaDisguise disg = StateManager.getInstance().getConfigurationManager().getDisguise(disguiseid);
+			if (disg == null)
+				throw new InvalidRaceSettingException("racepetdisguiseid does not exist");
+			// fetches custom head texture by existing npc
+			setRacePetDisguiseId(disg.getId());
 			break;
 		case "language":
 			String types = "";
@@ -427,6 +446,31 @@ public class SoliniaRace implements ISoliniaRace,IPersistable {
 	@Override
 	public void setArmouredSkin(boolean armouredSkin) {
 		this.armouredSkin = armouredSkin;
+	}
+
+	@Override
+	public int getRacePetDisguiseId() {
+		return racePetDisguiseId;
+	}
+
+	@Override
+	public void setRacePetDisguiseId(int racePetDisguiseId) {
+		this.racePetDisguiseId = racePetDisguiseId;
+	}
+	
+	@Override
+	public SoliniaDisguise getRacePetDisguise() {
+		if (getRacePetDisguiseId() < 1)
+			return null;
+		
+		SoliniaDisguise disg;
+		try {
+			disg = StateManager.getInstance().getConfigurationManager().getDisguise(getRacePetDisguiseId());
+			return disg;
+		} catch (CoreStateInitException e) {
+		}
+		
+		return null;
 	}
 
 }

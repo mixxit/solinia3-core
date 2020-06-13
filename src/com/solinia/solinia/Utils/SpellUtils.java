@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
-import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftLightningStrike;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -35,7 +31,6 @@ import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Models.SpellTargetType;
 import com.solinia.solinia.Models.StatType;
 
-import net.minecraft.server.v1_15_R1.EntityLightning;
 import net.minecraft.server.v1_15_R1.Tuple;
 
 public class SpellUtils {

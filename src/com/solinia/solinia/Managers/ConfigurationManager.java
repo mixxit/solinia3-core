@@ -26,6 +26,7 @@ import com.solinia.solinia.Exceptions.InvalidAASettingException;
 import com.solinia.solinia.Exceptions.InvalidAlignmentSettingException;
 import com.solinia.solinia.Exceptions.InvalidClassSettingException;
 import com.solinia.solinia.Exceptions.InvalidCraftSettingException;
+import com.solinia.solinia.Exceptions.InvalidDisguiseSettingException;
 import com.solinia.solinia.Exceptions.InvalidFactionSettingException;
 import com.solinia.solinia.Exceptions.InvalidGodSettingException;
 import com.solinia.solinia.Exceptions.InvalidItemSettingException;
@@ -80,6 +81,7 @@ import com.solinia.solinia.Models.RaceClass;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaAlignment;
 import com.solinia.solinia.Models.SoliniaCraft;
+import com.solinia.solinia.Models.SoliniaDisguise;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaGod;
 import com.solinia.solinia.Models.SoliniaMetrics;
@@ -94,6 +96,7 @@ import com.solinia.solinia.Repositories.JsonAccountClaimRepository;
 import com.solinia.solinia.Repositories.JsonAlignmentRepository;
 import com.solinia.solinia.Repositories.JsonCharacterListRepository;
 import com.solinia.solinia.Repositories.JsonCraftRepository;
+import com.solinia.solinia.Repositories.JsonDisguiseRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonFellowshipRepository;
 import com.solinia.solinia.Repositories.JsonGodRepository;
@@ -140,6 +143,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	private IRepository<SoliniaWorld> worldRepository;
 	private IRepository<Fellowship> fellowshipRepository;
 	private IRepository<PlayerState> playerStateRepository;
+	private IRepository<SoliniaDisguise> soliniaDisguiseRepository;
 
 	private List<Bond> bonds = new ArrayList<Bond>();
 	private List<Flaw> flaws = new ArrayList<Flaw>();
@@ -182,7 +186,8 @@ public class ConfigurationManager implements IConfigurationManager {
 			JsonPatchRepository patchesContext, JsonQuestRepository questsContext, JsonAlignmentRepository alignmentsContext, 
 			JsonCharacterListRepository characterlistsContext, JsonNPCSpellListRepository npcspelllistsContext, 
 			JsonAccountClaimRepository accountClaimsContext, JsonZoneRepository zonesContext, JsonCraftRepository craftContext, JsonWorldRepository worldContext,
-			JsonGodRepository godsContext, JsonFellowshipRepository fellowshipContext,JsonPlayerStateRepository playerstateContext, ConfigSettings configSettings, JsonImportItemsRepository importitemsrepo, JsonImportNPCsRepository importnpcsrepo
+			JsonGodRepository godsContext, JsonFellowshipRepository fellowshipContext,JsonPlayerStateRepository playerstateContext, ConfigSettings configSettings, JsonImportItemsRepository importitemsrepo, JsonImportNPCsRepository importnpcsrepo,
+			JsonDisguiseRepository disguiseContext
 			) {
 		this.raceRepository = raceContext;
 		this.classRepository = classContext;
@@ -211,6 +216,7 @@ public class ConfigurationManager implements IConfigurationManager {
 		this.playerStateRepository = playerstateContext;
 		this.importItemsRepository = importitemsrepo;
 		this.importNPCsRepository = importnpcsrepo;
+		this.soliniaDisguiseRepository = disguiseContext;
 		
 		this.setBonds(generateBonds());
 		this.setOaths(generateOaths());
@@ -282,6 +288,8 @@ public class ConfigurationManager implements IConfigurationManager {
 		System.out.println("Fellowship Save: " + timeToComplete);
 		timeToComplete = TimedCommit(this.playerStateRepository);
 		System.out.println("PlayerState Save: " + timeToComplete);
+		timeToComplete = TimedCommit(this.soliniaDisguiseRepository);
+		System.out.println("Disguises Save: " + timeToComplete);
 	}
 	
 	private <T> long TimedCommit(IRepository<T> repository) {
@@ -954,6 +962,12 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 	
 	@Override
+	public void editDisguise(int disguiseid, String setting, String value)
+			throws NumberFormatException, CoreStateInitException, InvalidDisguiseSettingException {
+		getDisguise(disguiseid).editSetting(setting, value);
+	}
+	
+	@Override
 	public void editWorld(int id, String setting, String value)
 			throws NumberFormatException, CoreStateInitException, InvalidWorldSettingException {
 		getWorld(id).editSetting(setting, value);
@@ -1043,6 +1057,16 @@ public class ConfigurationManager implements IConfigurationManager {
 	public SoliniaCraft getCraft(String name) {
 		// TODO Auto-generated method stub
 		List<SoliniaCraft> list = craftRepository.query(q -> q.getRecipeName().equals(name));
+		if (list.size() > 0)
+			return list.get(0);
+
+		return null;
+	}
+	
+	@Override
+	public SoliniaDisguise getDisguise(String name) {
+		// TODO Auto-generated method stub
+		List<SoliniaDisguise> list = soliniaDisguiseRepository.query(q -> q.getDisguiseName().toUpperCase().equals(name.toUpperCase()));
 		if (list.size() > 0)
 			return list.get(0);
 
@@ -1251,6 +1275,11 @@ public class ConfigurationManager implements IConfigurationManager {
 	public SoliniaCraft getCraft(int Id) {
 		return craftRepository.getByKey(Id);
 	}
+
+	@Override
+	public SoliniaDisguise getDisguise(int Id) {
+		return soliniaDisguiseRepository.getByKey(Id);
+	}
 	
 	@Override
 	public SoliniaWorld getWorld(int Id) {
@@ -1410,6 +1439,11 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 	
 	@Override
+	public List<SoliniaDisguise> getSoliniaDisguises() {
+		return soliniaDisguiseRepository.query(q -> q.getId() > 0);
+	}
+	
+	@Override
 	public List<SoliniaZone> getZones(String name) {
 		return zonesRepository.query(q -> q.getName().toUpperCase().equals(name.toUpperCase()));
 	}
@@ -1423,6 +1457,12 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public void addCraft(SoliniaCraft craft) {
 		this.craftRepository.add(craft);
+
+	}
+	
+	@Override
+	public void addDisguise(SoliniaDisguise disguise) {
+		this.soliniaDisguiseRepository.add(disguise);
 
 	}
 	
@@ -1453,6 +1493,17 @@ public class ConfigurationManager implements IConfigurationManager {
 	public int getNextCraftId() {
 		int max = 0;
 		for (SoliniaCraft entity : getCrafts()) {
+			if (entity.getId() > max)
+				max = entity.getId();
+		}
+
+		return max + 1;
+	}
+	
+	@Override
+	public int getNextDisguiseId() {
+		int max = 0;
+		for (SoliniaDisguise entity : getSoliniaDisguises()) {
 			if (entity.getId() > max)
 				max = entity.getId();
 		}
@@ -2374,6 +2425,25 @@ public class ConfigurationManager implements IConfigurationManager {
 		
 		metrics.economySize = economy;
 		return metrics;
+	}
+
+	@Override
+	public void removeClaimedClaims() {
+		List<Integer> toRemoveClaims = new ArrayList<Integer>();
+		for(SoliniaAccountClaim claim : this.getAccountClaims())
+		{
+			if (claim.isClaimed())
+				toRemoveClaims.add(claim.getId());
+		}
+		
+		int remove = 0;
+		for(int idToRemove : toRemoveClaims)
+		{
+			this.accountClaimsRepository.remove(q -> q.getId() == idToRemove);
+			remove++;
+		}
+		
+		System.out.println("Cleaned up " + remove + " claimed claims");
 	}
 
 }

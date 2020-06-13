@@ -55,8 +55,6 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	private int level = 1;
 	private int factionid;
 	private boolean eventUsable = false;
-	private boolean usedisguise = false;
-	private String disguisetype;
 	private String headitem;
 	private String chestitem;
 	private String legsitem;
@@ -105,6 +103,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	private long timeto = Utils.MAXDAYTICK;
 	private boolean isSocial = true;
 	private boolean isBanker = false;
+	private boolean isRacialPet = false;
 	
 	private int hpRegenRate = 0;
 	private int manaRegenRate = 0;
@@ -118,6 +117,8 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	private int coldresist;
 	private int poisonresist;
 	private int magicresist;
+	
+	private int disguiseId = 0;
 
 	@Override
 	public int getId() {
@@ -195,26 +196,6 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	@Override
 	public void setFactionid(int factionid) {
 		this.factionid = factionid;
-	}
-
-	@Override
-	public boolean isUsedisguise() {
-		return usedisguise;
-	}
-
-	@Override
-	public void setUsedisguise(boolean usedisguise) {
-		this.usedisguise = usedisguise;
-	}
-
-	@Override
-	public String getDisguisetype() {
-		return disguisetype;
-	}
-
-	@Override
-	public void setDisguisetype(String disguisetype) {
-		this.disguisetype = disguisetype;
 	}
 
 	@Override
@@ -376,6 +357,16 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	public void setClassid(int classid) {
 		this.classid = classid;
 	}
+	
+	@Override
+	public int getDisguiseId() {
+		return disguiseId;
+	}
+
+	@Override
+	public void setDisguiseId(int disguiseId) {
+		this.disguiseId = disguiseId;
+	}
 
 	@Override
 	public void sendMerchantItemListToPlayer(Player player, int pageno) {
@@ -443,9 +434,10 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		sender.sendMessage("- canseeinvis: "+ ChatColor.GOLD + isCanSeeInvis() + ChatColor.RESET +" undead: " + ChatColor.GOLD + isUndead() + ChatColor.RESET + " " + "plant: "
 				+ ChatColor.GOLD + isPlant() + ChatColor.RESET + " " + "animal: " + ChatColor.GOLD + isAnimal()
 				+ ChatColor.RESET);
-		sender.sendMessage("- pet: " + ChatColor.GOLD + isCorePet() + ChatColor.RESET + " " + "petcontrollable: "
+		sender.sendMessage("petcontrollable: "
 				+ ChatColor.GOLD + isPetControllable() + ChatColor.RESET + " " + "social: "
 						+ ChatColor.GOLD + isSocial());
+		sender.sendMessage("- pet: " + ChatColor.GOLD + isCorePet() + ChatColor.RESET + " - racialpet: " + ChatColor.GOLD + this.isRacialPet + ChatColor.RESET);
 		sender.sendMessage("- summoner: " + ChatColor.GOLD + isSummoner() + ChatColor.RESET + " - guard: "
 				+ ChatColor.GOLD + isGuard() + ChatColor.RESET + " " + "roamer: " + ChatColor.GOLD + isRoamer()
 				+ ChatColor.RESET);
@@ -474,9 +466,17 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		}
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "APPEARANCE" + ChatColor.RESET);
-		sender.sendMessage("- mctype: " + ChatColor.GOLD + getMctype() + ChatColor.RESET + " - usedisguise: "
-				+ ChatColor.GOLD + isUsedisguise() + ChatColor.RESET + " " + "disguisetype: " + ChatColor.GOLD
-				+ getDisguisetype() + ChatColor.RESET);
+		sender.sendMessage("- mctype: " + ChatColor.GOLD + getMctype() + ChatColor.RESET);
+
+		if (getDisguiseId() != 0) {
+			sender.sendMessage("- disguiseid: " + ChatColor.GOLD + getDisguiseId() + " ("
+					+ StateManager.getInstance().getConfigurationManager().getDisguise(getDisguiseId()).getDisguiseName()
+					+ ")" + ChatColor.RESET);
+		} else {
+			sender.sendMessage(
+					"- disguiseid: " + ChatColor.GOLD + getDisguiseId() + " (No Disguise)" + ChatColor.RESET);
+		}
+		
 		TextComponent tc = new TextComponent("- customhead: " + ChatColor.GOLD + isCustomhead() + ChatColor.RESET + " - customheaddata: " + ChatColor.GOLD + "<hover to see>" + ChatColor.RESET);
 		if (this.customheaddata != null && this.customheaddata.length() > 0)
 			tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(this.getCustomheaddata()).create()));
@@ -504,7 +504,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		if (getNpcSpellList() > 0) {
 			NPCSpellList npcSpellList = StateManager.getInstance().getConfigurationManager()
 					.getNPCSpellList(getNpcSpellList());
-			sender.sendMessage("- npcspelllist: " + ChatColor.GOLD + npcSpellList.getName());
+			sender.sendMessage("- npcspelllist: " + ChatColor.GOLD + npcSpellList.getName() + " ["+getNpcSpellList()+"]");
 		} else {
 			sender.sendMessage(
 					"- npcspelllist: " + ChatColor.GOLD + getNpcSpellList() + " (Defaults to class spell list)");
@@ -571,6 +571,9 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		case "level":
 			setLevel(Integer.parseInt(value));
 			break;
+		case "racialpet":
+			setRacialPet(Boolean.parseBoolean(value));
+			break;
 		case "eventusable":
 			setEventUsable(Boolean.parseBoolean(value));
 			break;
@@ -597,8 +600,13 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			setSocial(Boolean.parseBoolean(value));
 			requiresreload = false;
 			break;
-		case "usedisguise":
-			setUsedisguise(Boolean.parseBoolean(value));
+		case "disguiseid":
+			int disguiseid = Integer.parseInt(value);
+			SoliniaDisguise disg = StateManager.getInstance().getConfigurationManager().getDisguise(disguiseid);
+			if (disg == null)
+				throw new InvalidNpcSettingException("DISGUISEID does not exist");
+			// fetches custom head texture by existing npc
+			setDisguiseId(disg.getId());
 			break;
 		case "timefrom":
 			long time = Long.parseLong(value);
@@ -613,9 +621,6 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 				throw new InvalidNpcSettingException("This is not a valid time range, it shoudl be between 0 and " + Utils.MAXDAYTICK);
 			setTimeto(time2);
 			requiresreload = false;
-			break;
-		case "disguisetype":
-			setDisguisetype(value);
 			break;
 		case "headitem":
 			try
@@ -2272,5 +2277,30 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	@Override
 	public void setEventUsable(boolean eventUsable) {
 		this.eventUsable = eventUsable;
+	}
+
+	@Override
+	public SoliniaDisguise getDisguise() {
+		if (getDisguiseId() < 1)
+			return null;
+		
+		SoliniaDisguise disg;
+		try {
+			disg = StateManager.getInstance().getConfigurationManager().getDisguise(getDisguiseId());
+			return disg;
+		} catch (CoreStateInitException e) {
+		}
+		
+		return null;
+	}
+
+	@Override
+	public boolean isRacialPet() {
+		return isRacialPet;
+	}
+
+	@Override
+	public void setRacialPet(boolean isRacialPet) {
+		this.isRacialPet = isRacialPet;
 	}
 }

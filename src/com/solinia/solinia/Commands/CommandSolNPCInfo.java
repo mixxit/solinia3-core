@@ -20,7 +20,6 @@ import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
-import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.NPCUtils;
 
 public class CommandSolNPCInfo implements CommandExecutor {

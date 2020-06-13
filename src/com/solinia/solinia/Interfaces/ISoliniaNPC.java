@@ -14,6 +14,7 @@ import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.SkillType;
+import com.solinia.solinia.Models.SoliniaDisguise;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
 import com.solinia.solinia.Models.SoliniaNPCEventHandler;
 import com.solinia.solinia.Models.SpellResistType;
@@ -43,14 +44,6 @@ public interface ISoliniaNPC extends IPersistable {
 	int getFactionid();
 
 	void setFactionid(int factionid);
-
-	boolean isUsedisguise();
-
-	void setUsedisguise(boolean usedisguise);
-
-	String getDisguisetype();
-
-	void setDisguisetype(String disguisetype);
 
 	String getHeaditem();
 
@@ -361,4 +354,14 @@ public interface ISoliniaNPC extends IPersistable {
 	void setEventUsable(boolean eventUsable);
 
 	double getStatMaxHP(int stamina);
+
+	int getDisguiseId();
+
+	void setDisguiseId(int disguiseId);
+
+	SoliniaDisguise getDisguise();
+
+	boolean isRacialPet();
+
+	void setRacialPet(boolean isRacialPet);
 }

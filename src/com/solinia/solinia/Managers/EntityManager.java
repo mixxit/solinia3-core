@@ -1,5 +1,6 @@
 package com.solinia.solinia.Managers;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,7 +41,6 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Events.SoliniaEntitySpellsRemovalEvent;
 import com.solinia.solinia.Events.SoliniaEntitySpellsRunEvent;
-import com.solinia.solinia.Events.SoliniaLivingEntityHPRegenTickEvent;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.IEntityManager;
 import com.solinia.solinia.Interfaces.INPCEntityProvider;
@@ -73,10 +73,11 @@ import com.solinia.solinia.Utils.SpellUtils;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.api.exceptions.InvalidMobTypeException;
 import me.libraryaddict.disguise.DisguiseAPI;
+import me.libraryaddict.disguise.disguisetypes.Disguise;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
-import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
-import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
+import me.libraryaddict.disguise.utilities.parser.DisguiseParseException;
+import me.libraryaddict.disguise.utilities.parser.DisguiseParser;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -1121,37 +1122,14 @@ public class EntityManager implements IEntityManager {
 			owner.sendMessage("New Pet spawned with HP: " + spawnedMob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() + " and " + npc.getBaseDamage() + " dmg");
 			
 
-			TargetedDisguise mob = new MobDisguise(DisguiseType.WOLF);
+			Disguise disg = new MobDisguise(DisguiseType.WOLF);
+			if (npc.getDisguiseId() > 0 && npc.getDisguise() != null)
+				disg = npc.getDisguise().getLibsDisguise(0);
 			
-			switch(npc.getMctype().toUpperCase())
-			{
-				case "WOLF":
-					mob = new MobDisguise(DisguiseType.WOLF);
-					break;
-				case "SQUID": // Water Pet
-					mob = new PlayerDisguise(spawnedMob.getCustomName(), "2hot2handle");
-					break;
-				case "PARROT": // Air Pet
-					mob = new PlayerDisguise(spawnedMob.getCustomName(), "BimEinsMaedchen");
-					break;
-				case "SKELETON":
-					mob = new MobDisguise(DisguiseType.SKELETON);
-					break;
-				case "BLAZE": // Fire Pet
-					mob = new PlayerDisguise(spawnedMob.getCustomName(),  "xPan_Mks");
-					break;
-				case "IRON_GOLEM": // Earth Pet
-					mob = new PlayerDisguise(spawnedMob.getCustomName(), "PremiumPilz");
-					break;
-				case "GUARDIAN":
-					mob = new PlayerDisguise(spawnedMob.getCustomName(), "yamiaka");
-					break;
-				default:
-					mob = new MobDisguise(DisguiseType.WOLF);
-					break;
-			}
-						
-			DisguiseAPI.disguiseEntity(spawnedMob, mob);
+			if  (npc.isRacialPet() && solplayer.getRace() != null && solplayer.getRace().getRacePetDisguiseId() > 0 && solplayer.getRace().getRacePetDisguise() != null)
+				disg = solplayer.getRace().getRacePetDisguise().getLibsDisguise(0);
+			
+			DisguiseAPI.disguiseEntity(spawnedMob, disg);
 			return spawnedMob;
 		} catch (CoreStateInitException e)
 		{

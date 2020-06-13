@@ -3,9 +3,14 @@ package com.solinia.solinia.Utils;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftInventory;
 import org.bukkit.inventory.Inventory;
+
+import com.solinia.solinia.Exceptions.CoreStateInitException;
+import com.solinia.solinia.Interfaces.ISoliniaNPC;
+import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Models.SoliniaDisguise;
+
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
 import net.minecraft.server.v1_15_R1.NBTTagList;
 import net.minecraft.server.v1_15_R1.TileEntityChest;
@@ -16,6 +21,15 @@ public class PatchUtils {
 		
 	}
 	
+	private static void addDisguise(SoliniaDisguise soliniaDisguise) {
+		try {
+			StateManager.getInstance().getConfigurationManager().addDisguise(soliniaDisguise);
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public Inventory listToInventory(NBTTagList nbttaglist) {
 		  TileEntityChest tileentitychest = new TileEntityChest();
 		  for(int i = 0; i < nbttaglist.size(); i++) {

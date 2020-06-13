@@ -655,20 +655,19 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 			}
 		}
 
-		if (npc.isUsedisguise() == true && npc.getDisguisetype() != null && !npc.getDisguisetype().equals("")) {
+		if (npc.getDisguiseId() > 0 && npc.getDisguise() != null) {
 			mob = mob + "  Disguise:\r" + System.lineSeparator();
-			if (npc.getDisguisetype().toLowerCase().contains("player-")) {
+			if (npc.getDisguise().isPlayerDisguise(0)) {
 				mob = mob + "    Type: player\r" + System.lineSeparator();
 			} else {
-				mob = mob + "    Type: " + npc.getDisguisetype() + "\r" + System.lineSeparator();
+				mob = mob + "    Type: " + npc.getDisguise().getDisguiseType(0) + "\r" + System.lineSeparator();
 			}
 			if (npc.isBurning() == true) {
 				mob = mob + "    Burning: true\r" + System.lineSeparator();
 			}
-			if (npc.getDisguisetype().toLowerCase().contains("player-")) {
-				String[] disguisedata = npc.getDisguisetype().split("-");
+			if (npc.getDisguise().isPlayerDisguise(0)) {
 				mob = mob + "    Player: " + npc.getName() + "\r" + System.lineSeparator();
-				mob = mob + "    Skin: '" + disguisedata[1] + "'\r" + System.lineSeparator();
+				mob = mob + "    Skin: '" + npc.getDisguise().getDisguiseType(0) + "'\r" + System.lineSeparator();
 			}
 		}
 		if (npc.isMounted() == true) {

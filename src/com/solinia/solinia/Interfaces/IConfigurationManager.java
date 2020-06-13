@@ -17,6 +17,7 @@ import com.solinia.solinia.Exceptions.InvalidQuestSettingException;
 import com.solinia.solinia.Exceptions.InvalidSpellSettingException;
 import com.solinia.solinia.Exceptions.InvalidWorldSettingException;
 import com.solinia.solinia.Exceptions.InvalidZoneSettingException;
+import com.solinia.solinia.Exceptions.InvalidDisguiseSettingException;
 import com.solinia.solinia.Exceptions.InvalidGodSettingException;
 import com.solinia.solinia.Exceptions.InvalidAlignmentSettingException;
 import com.solinia.solinia.Exceptions.InvalidLootDropSettingException;
@@ -41,6 +42,7 @@ import com.solinia.solinia.Models.Oath;
 import com.solinia.solinia.Models.PlayerState;
 import com.solinia.solinia.Models.SoliniaAccountClaim;
 import com.solinia.solinia.Models.SoliniaCraft;
+import com.solinia.solinia.Models.SoliniaDisguise;
 import com.solinia.solinia.Models.SoliniaFaction;
 import com.solinia.solinia.Models.SoliniaGod;
 import com.solinia.solinia.Models.SoliniaMetrics;
@@ -646,4 +648,18 @@ public interface IConfigurationManager {
 	boolean isNPCSpellsChanged();
 
 	void setNPCSpellsChanged(boolean npcspellsChanged);
+
+	void addDisguise(SoliniaDisguise disguise);
+
+	SoliniaDisguise getDisguise(int Id);
+
+	SoliniaDisguise getDisguise(String name);
+
+	List<SoliniaDisguise> getSoliniaDisguises();
+
+	void editDisguise(int disguiseid, String setting, String value) throws NumberFormatException, CoreStateInitException, InvalidDisguiseSettingException;
+
+	void removeClaimedClaims();
+
+	int getNextDisguiseId();
 }

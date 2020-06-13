@@ -81,7 +81,6 @@ import com.solinia.solinia.Models.SoliniaCraftHolder;
 import com.solinia.solinia.Models.SoliniaPlayerSkill;
 import com.solinia.solinia.Models.SoliniaWorld;
 import com.solinia.solinia.Models.SoliniaZone;
-import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.UniversalMerchant;
 import com.solinia.solinia.Utils.ChatUtils;
 import com.solinia.solinia.Utils.DropUtils;

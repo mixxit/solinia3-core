@@ -747,6 +747,18 @@ commands:
     description: Lists crafting recipes
     usage: /listcrafts
     aliases: []
+  createdisguise:
+    description: Creates a new disguise
+    usage: /createdisgusie disguisename disguisetype
+    aliases: []
+  editdisguise:
+    description: Edits disguises
+    usage: /editdisguise disguiseid setting value
+    aliases: []
+  listdisguises:
+    description: Lists disguises
+    usage: /listdisguises
+    aliases: []
   plantflag:
     description: Plant flag
     usage: /plantflag

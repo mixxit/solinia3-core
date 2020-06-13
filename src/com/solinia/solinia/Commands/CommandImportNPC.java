@@ -1,7 +1,5 @@
 package com.solinia.solinia.Commands;
 
-import java.io.IOException;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,9 +9,7 @@ import com.solinia.solinia.Adapters.SoliniaNPCAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.EQItem;
 import com.solinia.solinia.Models.EQMob;
-import com.solinia.solinia.Utils.EQUtils;
 
 public class CommandImportNPC implements CommandExecutor {
 	@Override

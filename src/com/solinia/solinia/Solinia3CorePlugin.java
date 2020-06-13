@@ -50,6 +50,7 @@ import com.solinia.solinia.Repositories.JsonAlignmentRepository;
 import com.solinia.solinia.Repositories.JsonCharacterListRepository;
 import com.solinia.solinia.Repositories.JsonClassRepository;
 import com.solinia.solinia.Repositories.JsonCraftRepository;
+import com.solinia.solinia.Repositories.JsonDisguiseRepository;
 import com.solinia.solinia.Repositories.JsonFactionRepository;
 import com.solinia.solinia.Repositories.JsonFellowshipRepository;
 import com.solinia.solinia.Repositories.JsonGodRepository;
@@ -433,6 +434,11 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 			craftrepo.setJsonFile(getDataFolder() + "/" + "craft.json");
 			craftrepo.reload();
 
+			JsonDisguiseRepository disguisesrepo = new JsonDisguiseRepository();
+			disguisesrepo.setJsonFile(getDataFolder() + "/" + "disguise.json");
+			disguisesrepo.reload();
+
+			
 			JsonWorldRepository worldrepo = new JsonWorldRepository();
 			worldrepo.setJsonFile(getDataFolder() + "/" + "worlds.json");
 			worldrepo.reload();
@@ -465,7 +471,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 					spellrepo, factionrepo, npcrepo, npcmerchantrepo, loottablerepo, lootdroprepo, spawngrouprepo,
 					aaabilityrepo, patchesrepo, questsrepo, alignmentsrepo, characterlistrepo, npcspelllistrepo,
 					accountclaimsrepo, zonesrepo, craftrepo, worldrepo, godrepo, fellowshiprepo, playerstatesrepo,
-					configSettings, importitemsrepo, importnpcsrepo);
+					configSettings, importitemsrepo, importnpcsrepo, disguisesrepo);
 
 			ChannelManager channelManager = new ChannelManager();
 
@@ -774,6 +780,9 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		this.getCommand("togglehint").setExecutor(new CommandToggleHint());
 		this.getCommand("birthday").setExecutor(new CommandBirthday(this));
 		this.getCommand("autocast").setExecutor(new CommandAutoCast());
+		this.getCommand("editdisguise").setExecutor(new CommandEditDisguise());
+		this.getCommand("listdisguises").setExecutor(new CommandListDisguises());
+		this.getCommand("createdisguise").setExecutor(new CommandCreateDisguise());
 	}
 
 	private void createConfigDir() {

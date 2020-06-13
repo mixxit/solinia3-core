@@ -15,7 +15,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.Effects;
 import com.solinia.solinia.Models.EquipSlots;
 import com.solinia.solinia.Models.EquipmentSlot;

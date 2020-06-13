@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Models.SkillType;
+import com.solinia.solinia.Models.SoliniaDisguise;
 
 public interface ISoliniaRace extends IPersistable {
 
@@ -100,4 +101,10 @@ public interface ISoliniaRace extends IPersistable {
 	void setArmouredSkin(boolean armouredSkin);
 
 	boolean isArmouredSkin();
+
+	int getRacePetDisguiseId();
+
+	void setRacePetDisguiseId(int racePetDisguiseId);
+
+	SoliniaDisguise getRacePetDisguise();
 }

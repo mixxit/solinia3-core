@@ -2441,12 +2441,19 @@ public class SoliniaActiveSpell {
 		if (soliniaSpell.getName().contains("Fire Elemental"))
 			type = 3;
 
-		DisguisePackage disguise = Utils.getDisguiseTypeFromDisguiseId(spellEffect.getBase(), type);
-		if (disguise.getDisguisetype() == null || disguise.getDisguisetype() == null
-				|| disguise.getDisguisetype().equals(DisguiseType.UNKNOWN)) {
-			System.out.println("Could not find illusion: " + spellEffect.getBase());
-			return;
+		SoliniaDisguise libsDisguise = null;
+		try
+		{
+			libsDisguise = StateManager.getInstance().getConfigurationManager().getDisguise(spellEffect.getBase());
+		} catch (CoreStateInitException e)
+		{
+			
 		}
+		if (libsDisguise == null)
+			return;
+		
+		
+		DisguisePackage disguise = libsDisguise.getDisguisePackage(type+1);
 
 		if (DisguiseAPI.isDisguised(getLivingEntity())) {
 			Disguise dis = DisguiseAPI.getDisguise(getLivingEntity());

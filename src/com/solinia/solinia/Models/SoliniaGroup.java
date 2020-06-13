@@ -10,11 +10,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
-import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Interfaces.ISoliniaGroup;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
-import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 
 public class SoliniaGroup implements ISoliniaGroup {

@@ -86,7 +86,7 @@ public class SoliniaNPCFactory {
 		npc.setClassid(sourcenpc.getClassid());
 		npc.setCustomhead(sourcenpc.isCustomhead());
 		npc.setCustomheaddata(sourcenpc.getCustomheaddata());
-		npc.setDisguisetype(sourcenpc.getDisguisetype());
+		npc.setDisguiseId(sourcenpc.getDisguiseId());
 		npc.setFactionid(sourcenpc.getFactionid());
 		npc.setFeetitem(sourcenpc.getFeetitem());
 		npc.setGuard(sourcenpc.isGuard());
@@ -108,7 +108,6 @@ public class SoliniaNPCFactory {
 		npc.setRandomSpawn(sourcenpc.isRandomSpawn());
 		npc.setRoamer(sourcenpc.isRoamer());
 		npc.setUpsidedown(sourcenpc.isUpsidedown());
-		npc.setUsedisguise(sourcenpc.isUsedisguise());
 		return StateManager.getInstance().getConfigurationManager().addNPC(npc,reloadPlugin);
 	}
 
