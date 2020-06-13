@@ -92,7 +92,7 @@ public class SoliniaDisguise implements IPersistable {
 		if (a != null)
 			return a.isPlayer();
 		
-		return false;
+		return true;
 	}
 
 	public void editSetting(String setting, String value)
@@ -171,7 +171,10 @@ public class SoliniaDisguise implements IPersistable {
 		
 		DisguisePerm disguisePerm = this.getLibsDisguisesDisguisePerm(type);
 		if (disguisePerm == null)
-			return new MobDisguise(DisguiseType.WOLF);
+		{
+			// its not a permanent diguise so it must be a player
+			return new PlayerDisguise(this.getDisguiseType(type).toUpperCase());
+		}
 		if (disguisePerm.isCustomDisguise())
 			return new ModdedDisguise(this.getDisguiseType(type).toUpperCase());
 		if (disguisePerm.isPlayer())
