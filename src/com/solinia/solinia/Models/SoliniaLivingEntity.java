@@ -4883,7 +4883,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getBukkitLivingEntity() == null)
 			return false;
 		
-		return ca_target.getBukkitLivingEntity().getLocation().distance(getBukkitLivingEntity().getLocation()) <= 3;
+		// only account for x and z
+		return java.awt.geom.Point2D.distance(ca_target.getBukkitLivingEntity().getLocation().getX(), ca_target.getBukkitLivingEntity().getLocation().getZ(), getBukkitLivingEntity().getLocation().getX(), getBukkitLivingEntity().getLocation().getZ())  <= 3D;
+		//return ca_target.getBukkitLivingEntity().getLocation().distance(getBukkitLivingEntity().getLocation()) <= 3;
 	}
 
 	private DamageHitInfo doAttack(ISoliniaLivingEntity other, DamageHitInfo hit) {
