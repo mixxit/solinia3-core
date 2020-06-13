@@ -50,8 +50,8 @@ public class SpellUtils {
 		
 		if (
 				activeSpell.getSpell().getName().toUpperCase().contains("LIGHTNING") ||
-				activeSpell.getSpell().getName().toUpperCase().contains("THUNDER") ||
-				activeSpell.getSpell().getName().toUpperCase().contains("SHOCK")
+				activeSpell.getSpell().getName().toUpperCase().contains("THUNDER") //||
+				//activeSpell.getSpell().getName().toUpperCase().contains("SHOCK")
 				)
 		{
 			SpecialEffectUtils.playLightningStrike(entity);
