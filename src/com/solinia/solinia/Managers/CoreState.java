@@ -648,7 +648,7 @@ public class CoreState {
 	
 	public void sendGroupMessage(Player player, String message) {
 		if (message == null || message.equals("")) {
-			player.sendMessage("You cannot send an empty message");
+			player.sendMessage("<GC>"+"You cannot send an empty message");
 			return;
 		}
 		
@@ -661,7 +661,7 @@ public class CoreState {
 	
 			ISoliniaGroup group = getGroupByMember(player.getUniqueId());
 			if (group == null) {
-				player.sendMessage("You are not in a group");
+				player.sendMessage("<GC>"+"You are not in a group");
 				return;
 			}
 			
@@ -678,11 +678,11 @@ public class CoreState {
 				for (UUID memberid : group.getMembersWithoutPets()) {
 					Player groupplayer = Bukkit.getPlayer(memberid);
 					if (groupplayer != null) {
-						groupplayer.sendMessage(type + " " + ChatColor.WHITE + solplayer.getFullName() + ChatColor.RESET + " ["+ChatColor.RED + (int)player.getHealth()+ ChatColor.RESET + "/" +ChatColor.BLUE + solplayer.getMana() + ChatColor.RESET+ "]: " + ChatColor.AQUA + message);
+						groupplayer.sendMessage("<GC>"+ type + " " + ChatColor.WHITE + solplayer.getFullName() + ChatColor.RESET + " ["+ChatColor.RED + (int)player.getHealth()+ ChatColor.RESET + "/" +ChatColor.BLUE + solplayer.getMana() + ChatColor.RESET+ "]: " + ChatColor.AQUA + message);
 					}
 				}
 			} else {
-				player.sendMessage("There were no members of that group");
+				player.sendMessage("<GC>"+"There were no members of that group");
 				return;
 			}
 		} catch (CoreStateInitException e)
@@ -694,7 +694,7 @@ public class CoreState {
 	public void declineFellowshipInvite(ISoliniaPlayer solplayer) {
 		Integer targetfellowshipid = getCharacterInviteFellowshipID(solplayer);
 		if (targetfellowshipid == null || targetfellowshipid < 1) {
-			solplayer.getBukkitPlayer().sendMessage("You have not been invited to join a fellowship");
+			solplayer.getBukkitPlayer().sendMessage("<FC>"+"You have not been invited to join a fellowship");
 			return;
 		}
 
@@ -703,7 +703,7 @@ public class CoreState {
 			Fellowship fellowship = StateManager.getInstance().getConfigurationManager().getFellowship(targetfellowshipid);
 			if (fellowship == null) {
 				this.removeFellowshipInvite(solplayer);
-				solplayer.getBukkitPlayer().sendMessage("That fellowship has disbanded");
+				solplayer.getBukkitPlayer().sendMessage("<FC>"+"That fellowship has disbanded");
 				return;
 			}
 	
@@ -711,17 +711,17 @@ public class CoreState {
 			{
 				Player owner = fellowship.getMemberPlayerIfOnline(fellowship.getOwnerCharacterId());
 				if (owner != null) {
-					System.out.println("fellowship: " + fellowship.getId() + " got a membership decline: " + solplayer.getFullName());
-					owner.sendMessage(solplayer.getFullName() + " declined your fellowship invite");
+					System.out.println("<FC>"+"fellowship: " + fellowship.getId() + " got a membership decline: " + solplayer.getFullName());
+					owner.sendMessage("<FC>"+solplayer.getFullName() + " declined your fellowship invite");
 				}
 			} catch (FellowshipMemberNotFoundException e)
 			{
-				System.out.println("Tried to send decline message to a member of a fellowship that didnt exist - Fellowship ID: " + fellowship.getId());
+				System.out.println("<FC>"+"Tried to send decline message to a member of a fellowship that didnt exist - Fellowship ID: " + fellowship.getId());
 			}
 			
 			
 			removeFellowshipInvite(solplayer);
-			solplayer.getBukkitPlayer().sendMessage("You declined your fellowship invite");
+			solplayer.getBukkitPlayer().sendMessage("<FC>"+"You declined your fellowship invite");
 			return;
 		} catch (CoreStateInitException e)
 		{
@@ -732,20 +732,20 @@ public class CoreState {
 	public void declineGroupInvite(Player player) {
 		UUID targetgroupid = getPlayerInviteGroupID(player);
 		if (targetgroupid == null) {
-			player.sendMessage("You have not been invited to join a group");
+			player.sendMessage("<GC>"+"You have not been invited to join a group");
 			return;
 		}
 
 		ISoliniaGroup group = getGroup(targetgroupid);
 		if (group == null) {
 			removePlayerGroupInvite(player);
-			player.sendMessage("That group has disbanded");
+			player.sendMessage("<GC>"+"That group has disbanded");
 			return;
 		}
 
 		Player owner = Bukkit.getPlayer(group.getOwner());
 		if (owner != null) {
-			System.out.println("group: " + group.getId() + " got a membership decline: " + player.getDisplayName());
+			System.out.println("<GC>"+"group: " + group.getId() + " got a membership decline: " + player.getDisplayName());
 			owner.sendMessage(player.getDisplayName() + " declined your group invite");
 		}
 
@@ -754,7 +754,7 @@ public class CoreState {
 	
 	public void invitePlayerToFellowship(ISoliniaPlayer leader, ISoliniaPlayer member) {
 		if (getCharacterInviteFellowshipID(member) != null) {
-			leader.getBukkitPlayer().sendMessage("You cannot invite that player, they are already pending a fellowship invite");
+			leader.getBukkitPlayer().sendMessage("<FC>"+"You cannot invite that player, they are already pending a fellowship invite");
 			return;
 		}
 
@@ -762,14 +762,14 @@ public class CoreState {
 		Fellowship inviterfellowship = leader.getFellowship();
 		
 		if (inviteefellowship != null) {
-			leader.getBukkitPlayer().sendMessage("You cannot invite that player, they are already in a fellowship");
+			leader.getBukkitPlayer().sendMessage("<FC>"+"You cannot invite that player, they are already in a fellowship");
 			return;
 		}
 
 		if (inviterfellowship != null) {
 			if (inviterfellowship.isPlayerAlreadyInFellowship(member.getBukkitPlayer()))
 			{
-				leader.getBukkitPlayer().sendMessage("You cannot join the fellowship as you already have another character in it");
+				leader.getBukkitPlayer().sendMessage("<FC>"+"You cannot join the fellowship as you already have another character in it");
 				System.out.println("fellowship: " + inviterfellowship.getId() + " already had a character of same player in it : " + member.getFullName());
 				return;
 			}
@@ -778,33 +778,33 @@ public class CoreState {
 		if (inviterfellowship == null) {
 			// No fellowship exists, create it
 			inviterfellowship = createNewFellowship(leader);
-			leader.getBukkitPlayer().sendMessage("You have created a new fellowship!");
+			leader.getBukkitPlayer().sendMessage("<FC>"+"You have created a new fellowship!");
 		}
 
 		if (inviterfellowship == null) {
-			leader.getBukkitPlayer().sendMessage("Your fellowship does not exist");
+			leader.getBukkitPlayer().sendMessage("<FC>"+"Your fellowship does not exist");
 			return;
 		}
 
 		if (inviterfellowship.getOwnerCharacterId() != leader.getId()) {
-			leader.getBukkitPlayer().sendMessage("You cannot invite that player, you are not the fellowship leader");
+			leader.getBukkitPlayer().sendMessage("<FC>"+"You cannot invite that player, you are not the fellowship leader");
 			return;
 		}
 
 		if (inviterfellowship.getMemberCharacterIds().size() > 5) {
-			leader.getBukkitPlayer().sendMessage("You cannot invite that player, your fellowship is already full");
+			leader.getBukkitPlayer().sendMessage("<FC>"+"You cannot invite that player, your fellowship is already full");
 			return;
 		}
 
 		fellowshipinvites.put(member.getId(), inviterfellowship.getId());
-		leader.getBukkitPlayer().sendMessage("Invited " + member.getFullName() + " to join your fellowship");
+		leader.getBukkitPlayer().sendMessage("<FC>"+"Invited " + member.getFullName() + " to join your fellowship");
 		member.getBukkitPlayer().sendMessage(
-				"You have been invited to join " + leader.getFullName() + "'s fellowship - /fellowship accept | /fellowship decline");
+				"<FC>"+"You have been invited to join " + leader.getFullName() + "'s fellowship - /fellowship accept | /fellowship decline");
 	}
 	
 	public void invitePlayerToGroup(Player leader, Player member) {
 		if (getPlayerInviteGroupID(member) != null) {
-			leader.sendMessage("You cannot invite that player, they are already pending a group invite");
+			leader.sendMessage("<GC>"+"You cannot invite that player, they are already pending a group invite");
 			return;
 		}
 
@@ -812,35 +812,35 @@ public class CoreState {
 		ISoliniaGroup invitergroup = getGroupByMember(leader.getUniqueId());
 
 		if (inviteegroup != null) {
-			leader.sendMessage("You cannot invite that player, they are already in a group");
+			leader.sendMessage("<GC>"+"You cannot invite that player, they are already in a group");
 			return;
 		}
 
 		if (invitergroup == null) {
 			// No group exists, create it
 			invitergroup = createNewGroup(leader);
-			leader.sendMessage("You have joined a new group");
+			leader.sendMessage("<GC>"+"You have joined a new group");
 		}
 
 		if (invitergroup == null) {
-			leader.sendMessage("Your group does not exist");
+			leader.sendMessage("<GC>"+"Your group does not exist");
 			return;
 		}
 
 		if (!invitergroup.getOwner().equals(leader.getUniqueId())) {
-			leader.sendMessage("You cannot invite that player, you are not the group leader");
+			leader.sendMessage("<GC>"+"You cannot invite that player, you are not the group leader");
 			return;
 		}
 
 		// players only
 		if (invitergroup.getMembersWithoutPets().size() > 5) {
-			leader.sendMessage("You cannot invite that player, your group is already full");
+			leader.sendMessage("<GC>"+"You cannot invite that player, your group is already full");
 			return;
 		}
 
 		groupinvites.put(member.getUniqueId(), invitergroup.getId());
-		leader.sendMessage("Invited " + member.getDisplayName() + " to join your group");
-		member.sendMessage(
+		leader.sendMessage("<GC>"+"Invited " + member.getDisplayName() + " to join your group");
+		member.sendMessage("<GC>"+
 				"You have been invited to join " + leader.getName() + "'s group - /group accept | /group decline");
 	}
 

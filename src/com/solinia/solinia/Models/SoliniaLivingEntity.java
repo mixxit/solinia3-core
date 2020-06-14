@@ -6837,7 +6837,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (getBukkitLivingEntity() == null)
 			return;
 		
-		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "* " + message,
+		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "<LC> * " + message,
 				getBukkitLivingEntity().getEquipment().getItemInMainHand());
 	}
 

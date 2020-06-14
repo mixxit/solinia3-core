@@ -59,7 +59,7 @@ public class ServerApi {
 								if (solPlayer == null)
 									continue;
 								
-								ChatUtils.SendHint(player, HINT.DISCORD_MESSAGE, ChatColor.GRAY + "[Discord]~" + message + ChatColor.RESET, false);
+								ChatUtils.SendHint(player, HINT.DISCORD_MESSAGE, ChatColor.GRAY + "~" + message + ChatColor.RESET, false);
 							}
 						}
 			        } catch (CoreStateInitException e)

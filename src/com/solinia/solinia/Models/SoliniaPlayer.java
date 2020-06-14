@@ -1010,15 +1010,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void emote(String string, boolean isManual) {
 		int numberReached = StateManager.getInstance().getChannelManager().sendToLocalChannel(this,
-				ChatColor.AQUA + "* " + string, 
+				ChatColor.AQUA + "[CHAT] * " + string, 
 				getBukkitPlayer().getInventory().getItemInMainHand());
 
 		if (isManual)
 		System.out.println("PLAYEREMOTE|"+string);
-
 		
 		if (isManual && numberReached < 1)
-			getBukkitPlayer().sendMessage("You feel like nobody could see you");
+			getBukkitPlayer().sendMessage("[CHAT] * You feel like nobody could see you");
 	}
 
 	@Override
@@ -1234,7 +1233,8 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				skill.setValue(value);
 				updated = true;
 				if (skill.getValue() > 0)
-					sendMessage(ChatColor.YELLOW + "* You get better at " + skillType.name().toUpperCase() + " (" + value + ")");
+					ChatUtils.SendHint(this.getBukkitPlayer(),HINT.SKILLUP,skillType.name().toUpperCase()+"^"+value, false);
+					
 				return;
 			}
 		}
@@ -1245,7 +1245,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 
 		if (value > 0)
-			sendMessage(ChatColor.YELLOW + "* You get better at " + skillType.name().toLowerCase() + " (" + value + ")");
+			ChatUtils.SendHint(this.getBukkitPlayer(),HINT.SKILLUP,skillType.name().toUpperCase()+"|"+value, false);
 		this.setLastUpdatedTimeNow();
 
 	}

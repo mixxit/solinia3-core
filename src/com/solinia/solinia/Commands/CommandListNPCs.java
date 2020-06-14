@@ -1,5 +1,8 @@
 package com.solinia.solinia.Commands;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,6 +14,8 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaNPC;
 import com.solinia.solinia.Utils.ChatUtils;
+import com.solinia.solinia.Utils.MathUtils;
+
 import net.md_5.bungee.api.ChatColor;
 
 public class CommandListNPCs implements CommandExecutor {

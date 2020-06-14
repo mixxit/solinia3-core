@@ -36,7 +36,7 @@ public class CommandSayDiscord implements CommandExecutor {
 					if (solPlayer == null)
 						continue;
 					
-					ChatUtils.SendHint(player, HINT.DISCORD_MESSAGE,"[Discord]~" + message, false);
+					ChatUtils.SendHint(player, HINT.DISCORD_MESSAGE,"~" + message, false);
 				}
 			}
         } catch (CoreStateInitException e)

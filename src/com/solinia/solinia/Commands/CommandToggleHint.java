@@ -1,9 +1,18 @@
 package com.solinia.solinia.Commands;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -13,7 +22,7 @@ import com.solinia.solinia.Models.HintSetting;
 
 import net.md_5.bungee.api.ChatColor;
 
-public class CommandToggleHint implements CommandExecutor {
+public class CommandToggleHint implements CommandExecutor, TabCompleter {
 	@SuppressWarnings("incomplete-switch")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -93,7 +102,7 @@ public class CommandToggleHint implements CommandExecutor {
 
         return true;
 	}
-
+	
 	private void sendHintStrings(Player player) {
 		String hintStrings = "";
 		for(HINT hintval : HINT.values())
@@ -102,5 +111,22 @@ public class CommandToggleHint implements CommandExecutor {
         }
 		
 		player.sendMessage("Available HINT toggles: " + hintStrings);
+	}
+	
+
+	@Override
+	public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd,
+			@NotNull String alias, @NotNull String[] args) {
+		if (!(sender instanceof Player))
+			return null;
+		
+		if (cmd.getName().equalsIgnoreCase("togglehint"))
+		{
+			return Stream.of(HINT.values())
+                    .map(HINT::name)
+                    .collect(Collectors.toList());
+		} else {
+			return null;
+		}
 	}
 }

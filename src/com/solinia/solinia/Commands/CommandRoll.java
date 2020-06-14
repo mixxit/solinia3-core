@@ -25,7 +25,7 @@ public class CommandRoll implements CommandExecutor {
             
             if (!StringUtils.isNumeric(args[0]))
             {
-            	player.sendMessage("Invalid argument, must provide a number");
+            	player.sendMessage("<LC>Invalid argument, must provide a number");
             	return false;
             }
             
@@ -35,7 +35,7 @@ public class CommandRoll implements CommandExecutor {
             	maxnumber = Integer.parseInt(args[0]);
             } catch (Exception e)
             {
-            	player.sendMessage("Invalid number");
+            	player.sendMessage("<LC>Invalid number");
             	return false;            	
             }
 
@@ -43,7 +43,7 @@ public class CommandRoll implements CommandExecutor {
             
             try
             {
-                String message = ChatColor.AQUA + "[ROLL!] * " + SoliniaPlayerAdapter.Adapt(player).getFullName() + " rolls 1d"+maxnumber+". It's a "+roll+"!";
+                String message = ChatColor.AQUA + "<LC>[ROLL!] * " + SoliniaPlayerAdapter.Adapt(player).getFullName() + " rolls 1d"+maxnumber+". It's a "+roll+"!";
             	SoliniaPlayerAdapter.Adapt(player).emote(message, false);
             } catch (CoreStateInitException e)
             {

@@ -36,7 +36,7 @@ public class CommandWho implements CommandExecutor {
         	String hidden = "";
         	
         	if (currentplayer.hasPermission("essentials.silentjoin"))
-        		hidden = "[HIDDEN]";
+        		hidden = "<HIDDEN>";
         	
         	if (currentplayer.hasPermission("essentials.silentjoin") && !sender.isOp())
         	{
@@ -45,7 +45,7 @@ public class CommandWho implements CommandExecutor {
         	
         	if (ply != null)
         	if (!ply.canSee(currentplayer))
-        		hidden = "[HIDDEN]";
+        		hidden = "<HIDDEN>";
         	
         	if (ply != null)
         	if (!ply.canSee(currentplayer) && !sender.isOp())

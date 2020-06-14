@@ -63,7 +63,7 @@ public class CommandCharacter implements CommandExecutor {
 						{
 							continue;
 						} else {
-							locked = "[LOCK]";
+							locked = "LOCK";
 						}
 					
 					TextComponent tc = new TextComponent();

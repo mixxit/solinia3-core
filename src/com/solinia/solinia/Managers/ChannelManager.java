@@ -236,7 +236,7 @@ public class ChannelManager implements IChannelManager {
 		String title = name;
 		ChatColor nameColour = ChatColor.YELLOW;
 		
-		String messageheader = ChatColor.RESET + "[" + channel + gender + vampire + racealignmentcolour + race
+		String messageheader = ChatColor.RESET + "<LC>[" + channel + gender + vampire + racealignmentcolour + race
 				+ ChatColor.RESET + "" + profession + "]" + nameColour + "~" + title + ChatColor.RESET + ": "
 				+ ChatColor.RESET;
 		message = messageheader + ChatColor.AQUA + message + ChatColor.RESET;
@@ -290,7 +290,7 @@ public class ChannelManager implements IChannelManager {
 		String title = name;
 		ChatColor nameColour = ChatColor.YELLOW;
 		
-		String messageheader = ChatColor.RESET + "[" + channel + gender + vampire + racealignmentcolour + race
+		String messageheader = ChatColor.RESET + "<WC>[" + channel + gender + vampire + racealignmentcolour + race
 				+ ChatColor.RESET + "" + profession + "]" + nameColour + "~" + title + ChatColor.RESET + ": "
 				+ ChatColor.RESET;
 		message = messageheader + ChatColor.AQUA + message + ChatColor.RESET;
@@ -344,7 +344,7 @@ public class ChannelManager implements IChannelManager {
 		String title = name;
 		ChatColor nameColour = ChatColor.YELLOW;
 		
-		String messageheader = ChatColor.RESET + "[" + channel + gender + vampire + racealignmentcolour + race
+		String messageheader = ChatColor.RESET + "<SC>[" + channel + gender + vampire + racealignmentcolour + race
 				+ ChatColor.RESET + "" + profession + "]" + nameColour + "~" + title + ChatColor.RESET + ": "
 				+ ChatColor.RESET;
 		message = messageheader + ChatColor.AQUA + message + ChatColor.RESET;
@@ -399,9 +399,7 @@ public class ChannelManager implements IChannelManager {
 		String title = name;
 		ChatColor nameColour = ChatColor.YELLOW;
 
-		String messageheader = ChatColor.RESET + "[" + channel + gender + vampire + racealignmentcolour + race
-				+ ChatColor.RESET + "" + profession + "]" + nameColour + "~" + title + ChatColor.RESET + ": "
-				+ ChatColor.RESET;
+		String messageheader = ChatColor.RESET + "<OC>[" + channel + gender + vampire + racealignmentcolour + race + ChatColor.RESET + "" + profession + "]" + nameColour + "~" + title + ChatColor.RESET + ": " + ChatColor.RESET;
 		message = messageheader + message;
 		return message;
 	}

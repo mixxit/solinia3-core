@@ -1999,11 +1999,11 @@ public class EntityManager implements IEntityManager {
 		if (!autoAttackState == false)
 		{
 			player.spigot().sendMessage(ChatMessageType.CHAT,
-					new TextComponent(ChatColor.GRAY + "* You stop auto attacking"));
+					new TextComponent(ChatColor.GRAY + "<AS> * You stop auto attacking"));
 		} else {
 			
 			player.spigot().sendMessage(ChatMessageType.CHAT,
-					new TextComponent(ChatColor.GRAY + "* You start auto attacking"));
+					new TextComponent(ChatColor.GRAY + "<AB> * You start auto attacking"));
 		}
 		
 		setEntityAutoAttack(player, !autoAttackState);

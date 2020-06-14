@@ -76,7 +76,7 @@ public class CommandAA implements CommandExecutor {
 						} else {
 							if (aarank.getLevel_req() <= solplayer.getActualLevel())
 							{
-								TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + "[NB] " + aaAbility.getName() + " Rank " + aarank.getPosition()
+								TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + "NB " + aaAbility.getName() + " Rank " + aarank.getPosition()
 								+ ChatColor.GRAY + " Cost: " + ChatColor.GRAY + aarank.getCost() + ChatColor.GRAY
 								+ " Cannot purchase yet"));
 								String details = ChatColor.GOLD + aaAbility.getName() + " Rank: " + aarank.getPosition()
@@ -87,7 +87,7 @@ public class CommandAA implements CommandExecutor {
 							}
 						}
 					} else {
-						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + "[NA] " + aaAbility.getName() + " Rank " + aarank.getPosition()
+						TextComponent tc = new TextComponent(TextComponent.fromLegacyText(ChatColor.GRAY + "NA " + aaAbility.getName() + " Rank " + aarank.getPosition()
 						+ ChatColor.GRAY + " Cost: " + ChatColor.RED + aarank.getCost() + ChatColor.GRAY
 						+ " Insufficient AA points"));
 						String details = ChatColor.GOLD + aaAbility.getName() + " Rank: " + aarank.getPosition()

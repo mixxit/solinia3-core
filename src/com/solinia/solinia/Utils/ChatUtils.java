@@ -208,10 +208,16 @@ public class ChatUtils {
 		if (entity == null)
 			return;
 		
+		String channelCode = ""+hint.ordinal();
+	
 		String message = "";
 		boolean showItemLinks = false;
 		switch (hint)
 		{
+		case SKILLUP:
+			String[] skill = referenceCode.split("\\^");
+			message = ChatColor.YELLOW + "* You get better at " + skill[0] + " (" + skill[1] + ")";
+			break;
 		case INTERRUPTED:
 			message = referenceCode + "'s casting was interrupted";
 			break;
@@ -253,7 +259,7 @@ public class ChatUtils {
 			String damage = referenceCodes[1];
 			String skilltype = referenceCodes[2];
 			String attacker = referenceCodes[3];
-			message = defender + " was hit for " + damage + " points of " + skilltype + " damage by " + attacker;
+			message = attacker + " hit " + defender + " for " + damage + " points of " + skilltype + " damage";
 			break;
 		case HITTHEMBUTMISSED:
 			message = "You tried to hit " + referenceCode + ", but missed!";
@@ -406,7 +412,7 @@ public class ChatUtils {
 			if (!hint.equals(HINT.OOC_MESSAGE))
 			{
 				TextComponent clickTextComponent = new TextComponent("");
-				String title = ChatColor.GRAY + "<*>" + ChatColor.RESET;
+				String title = ChatColor.GRAY + "<"+channelCode+">"+ ChatColor.RESET;
 				clickTextComponent.setText(title);
 				clickTextComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/togglehint " + hint.name().toUpperCase()));
 				clickTextComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to toggle off").create()));
@@ -526,6 +532,8 @@ public class ChatUtils {
 		case NPC_BEGIN_ABILITY:
 			return HintSetting.Chat;
 		case PET_BEGIN_ABILITY:
+			return HintSetting.Chat;
+		case SKILLUP:
 			return HintSetting.Chat;
 		case OTHER_BEGIN_ABILITY:
 			return HintSetting.Chat;
