@@ -116,7 +116,7 @@ public class CommandInspiration implements CommandExecutor {
 					sender.sendMessage(ChatColor.YELLOW + "Sites you can vote on:");
 					String urls = "https://www.fallofanempire.com/docs/guides/voting/";
 					
-					TextComponent tc = new TextComponent(TextComponent.fromLegacyText("[ Click here to visit our voting site ]"));
+					TextComponent tc = new TextComponent(TextComponent.fromLegacyText("< Click here to visit our voting site >"));
 					tc.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,urls));
 					
 					sender.spigot().sendMessage(tc);

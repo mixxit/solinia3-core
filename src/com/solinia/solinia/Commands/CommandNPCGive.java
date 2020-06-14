@@ -92,7 +92,7 @@ public class CommandNPCGive implements CommandExecutor {
 				{
 					if (!eventHandler.playerMeetsRequirements(player))
 					{
-						player.sendMessage(ChatColor.GRAY + "[Hint] You do not meet the requirements to hand this quest item in. Either you are missing a quest step, have already completed this step");
+						player.sendMessage(ChatColor.GRAY + "<Hint> You do not meet the requirements to hand this quest item in. Either you are missing a quest step, have already completed this step");
 						continue;
 					}
 					

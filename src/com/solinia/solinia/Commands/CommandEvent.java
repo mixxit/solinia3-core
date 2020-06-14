@@ -88,7 +88,7 @@ public class CommandEvent implements CommandExecutor {
 				case "LISTNPCS":
 					return listnpcs(player);
 				case "BROADCAST":
-					Bukkit.broadcastMessage(ChatColor.YELLOW+"[GMEvent-"+player.getName().toUpperCase() + "]: " + text.toUpperCase()+ChatColor.RESET);
+					Bukkit.broadcastMessage(ChatColor.YELLOW+"<GMEvent-"+player.getName().toUpperCase() + ">: " + text.toUpperCase()+ChatColor.RESET);
 					break;
 				case "SPAWN":
 					int npcid = Integer.parseInt(args[1]);

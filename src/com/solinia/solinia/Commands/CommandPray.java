@@ -41,7 +41,7 @@ public class CommandPray implements CommandExecutor {
 			}
         	prayerText.trim();
         	
-        	String message = "[" + solPlayer.getClassObj().getName() + "/" + player.getName() + "] " + player.getDisplayName() + " is praying to the Gods! " + prayerText;
+        	//String message = "[" + solPlayer.getClassObj().getName() + "/" + player.getName() + "] " + player.getDisplayName() + " is praying to the Gods! " + prayerText;
         		
         	sender.sendMessage("* The Gods have heard your prayer");
         } catch (Exception e)

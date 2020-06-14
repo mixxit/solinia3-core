@@ -292,7 +292,7 @@ public class PlayerUtils {
 	}
 	
 	public static void BroadcastPlayers(String message, ItemStack itemStack) {
-		message = ChatColor.YELLOW + "[Announcement] " + message + " "+ ChatColor.RESET;
+		message = ChatColor.YELLOW + "<Announcement> " + message + " "+ ChatColor.RESET;
 		TextComponent tc = new TextComponent(message);
 
 		if (itemStack != null && itemStack.getItemMeta() != null)
