@@ -137,6 +137,10 @@
 				<enabled>true</enabled>
 			</releases>
 		</repository>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
 	</repositories>
 	<distributionManagement>
 		<repository>
@@ -167,9 +171,9 @@
 			<version>1.15.2-R0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>de.slikey</groupId>
+			<groupId>com.github.Slikey</groupId>
 			<artifactId>EffectLib</artifactId>
-			<version>6.2-SNAPSHOT</version>
+			<version>master-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.comphenix.protocol</groupId>
