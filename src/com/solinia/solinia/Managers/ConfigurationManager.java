@@ -2442,6 +2442,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			this.accountClaimsRepository.remove(q -> q.getId() == idToRemove);
 			remove++;
 		}
+		this.accountClaimsRepository.commit();
 		
 		System.out.println("Cleaned up " + remove + " claimed claims");
 	}
