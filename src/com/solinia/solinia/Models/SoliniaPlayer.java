@@ -1010,14 +1010,14 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void emote(String string, boolean isManual) {
 		int numberReached = StateManager.getInstance().getChannelManager().sendToLocalChannel(this,
-				ChatColor.AQUA + "[CHAT] * " + string, 
+				ChatColor.AQUA + "<LC> * " + string, 
 				getBukkitPlayer().getInventory().getItemInMainHand());
 
 		if (isManual)
 		System.out.println("PLAYEREMOTE|"+string);
 		
 		if (isManual && numberReached < 1)
-			getBukkitPlayer().sendMessage("[CHAT] * You feel like nobody could see you");
+			getBukkitPlayer().sendMessage("<LC> * You feel like nobody could see you");
 	}
 
 	@Override
