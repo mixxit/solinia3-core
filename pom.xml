@@ -68,8 +68,8 @@
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 		<repository>
-			<id>0_vault-repo</id>
-			<url>https://jitpack.io</url>
+			<id>nexus.hc.to</id>
+			<url>http://nexus.hc.to/content/repositories/thirdparty/</url>
 		</repository>
 		<repository>
 			<id>inventive-repo</id>
@@ -78,10 +78,6 @@
 		<repository>
 			<id>3_dmulloy2-repo</id>
 			<url>http://repo.dmulloy2.net/nexus/repository/public/</url>
-		</repository>
-		<repository>
-			<id>elmakers-repo</id>
-			<url>http://maven.elmakers.com/repository/ </url>
 		</repository>
 		<repository>
 			<id>mvnrepository</id>
@@ -138,8 +134,8 @@
 			</releases>
 		</repository>
 		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
 		</repository>
 	</repositories>
 	<distributionManagement>
@@ -171,9 +167,9 @@
 			<version>1.15.2-R0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.github.Slikey</groupId>
+			<groupId>de.slikey</groupId>
 			<artifactId>EffectLib</artifactId>
-			<version>master-SNAPSHOT</version>
+			<version>6.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.comphenix.protocol</groupId>
