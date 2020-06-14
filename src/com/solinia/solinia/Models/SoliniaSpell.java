@@ -3276,7 +3276,6 @@ public class SoliniaSpell implements ISoliniaSpell {
 		if (sourceEntity.isDead() || targetentity.isDead())
 			return false;
 
-		DebugUtils.DebugLog("SoliniaSpell", "tryApplyOnEntity", targetentity, "Try to apply on me (the target) - " + this.getName() + " " + SpellUtils.getSpellTargetType(getTargettype()).name());
 		try {
 			switch (SpellUtils.getSpellTargetType(getTargettype())) {
 			case Self:
@@ -5551,7 +5550,6 @@ public class SoliniaSpell implements ISoliniaSpell {
 				
 
 			boolean itemUseSuccess = tryApplyOnEntity(sourcemob, targetmob, true, requiredWeaponSkillType);
-			DebugUtils.DebugLog("SoliniaSpell", "tryCast", sourcemob, "Item use success: " + itemUseSuccess);
 
 			if (itemUseSuccess) {
 

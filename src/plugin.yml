@@ -107,10 +107,6 @@ commands:
     usage: /unstuck
     aliases:
     - stuck
-  debugger:
-    description: Debugs Solinia Core Functions
-    usage: /debugger classname methodname focusid
-    aliases: []
   transfercharacter:
     description: Transfers a character to another player
     usage: /transfercharacter <characterId> <playername>

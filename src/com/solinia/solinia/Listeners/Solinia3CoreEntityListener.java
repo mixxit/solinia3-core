@@ -854,7 +854,9 @@ public class Solinia3CoreEntityListener implements Listener {
 		
 			if ((livingEntity instanceof Player) || livingEntity.isCurrentlyNPCPet() || !livingEntity.isNPC())
 				return;
-			
+
+			int killerLevel = livingEntity.getMentorLevel();
+
 			ISoliniaPlayer player = null;
 			if (damager instanceof Player) {
 				player = SoliniaPlayerAdapter.Adapt((Player) damager);
@@ -867,7 +869,7 @@ public class Solinia3CoreEntityListener implements Listener {
 				return;
 			}
 			
-			player.grantExperienceAndLoot(livingEntity);
+			player.grantExperienceAndLoot(livingEntity, killerLevel);
 		} catch (CoreStateInitException e)
 		{
 			

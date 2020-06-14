@@ -40,9 +40,6 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 	private void validatePlayerItems(Player player) {
 		try
 		{
-		
-			DebugUtils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player,"Debug: Validating player items");
-			
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(player);
 			
 			List<Integer> slots = new ArrayList<Integer>();
@@ -88,7 +85,6 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 							{
 								// Delete temporary item
 								player.sendMessage("Your temporary item has faded from existence");
-								DebugUtils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player,"Removed temporary item: " + i.getDisplayname());
 								player.getInventory().setItem(slotId, null);
 								player.updateInventory();
 								break;
@@ -101,10 +97,7 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					if (!slots.contains(slotId))
 						continue;
 					
-					DebugUtils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player,"Validating player slot: " + slotId);
-					
 					// Check out of date items
-					DebugUtils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player,"Checking isItemStackUptoDate: " + ItemStackUtils.isItemStackUptoDate(player.getInventory().getItem(slotId),i));
 					if (!ItemStackUtils.isItemStackUptoDate(player.getInventory().getItem(slotId),i))
 		    		{
 						if (ItemStackUtils.getAugmentationItemId(player.getInventory().getItem(slotId)) != null)
@@ -141,7 +134,6 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 						
 						
 						player.sendMessage(ChatColor.GRAY + "Your out of date item " + i.getDisplayname() + " has been added to your claims");
-						DebugUtils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player,"Moved out of date item to claims: " + i.getId() + " " + i.getDisplayname() + solUp + " vs " + stackUp);
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
 						
@@ -171,7 +163,6 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
 						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been added to your /claims");
-						DebugUtils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player,"Moved minlevel item to claims: " + i.getDisplayname());
 						continue;
 		    		}
 					
@@ -201,7 +192,6 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
 						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been added to your /claims");
-						DebugUtils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player,"Moved wrong class item claims: " + i.getDisplayname());
 						continue;
 					}
 					
@@ -228,11 +218,8 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 						player.getInventory().setItem(slotId, null);
 						player.updateInventory();
 						player.sendMessage(ChatColor.GRAY + "You cannot wear " + i.getDisplayname() + " so it has been added to your /claims");
-						DebugUtils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player,"Moved wrong class item to claims: " + i.getDisplayname());
 						continue;
 					}
-					
-					DebugUtils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",player,"Finished validating player slot: " + slotId);
 					
 				} catch (SoliniaItemException e) {
 					continue;
@@ -293,7 +280,6 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					solPlayer.setEquipSlotItem(slot, 0);
 					PlayerUtils.AddAccountClaim(solPlayer.getBukkitPlayer().getName(),i.getId());
 					solPlayer.getBukkitPlayer().sendMessage(ChatColor.GRAY + "You cannot wear equip item " + i.getDisplayname() + " so it has been added to your /claims");
-					DebugUtils.DebugLog("PlayerInventoryValidatorTimer","validatePlayerItems",solPlayer.getBukkitPlayer(),"Moved minlevel item to claims (equip): " + i.getDisplayname());
 	    		}
 				
 			} catch (CoreStateInitException e) {

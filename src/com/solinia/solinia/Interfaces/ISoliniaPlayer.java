@@ -618,7 +618,7 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public boolean isPlant();
 	public boolean isAnimal();
 	int getSpellBonuses(SpellEffectType spellEffectType);
-	public void grantExperienceAndLoot(ISoliniaLivingEntity livingEntity);
+	public void grantExperienceAndLoot(ISoliniaLivingEntity killedEntity, int killerLevel);
 	boolean getTradeskillSkillCheck(SkillType skillType, int trivial);
 	int getTier();
 	void tryCastFromItemInHand(ISoliniaItem item);

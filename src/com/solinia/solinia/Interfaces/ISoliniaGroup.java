@@ -29,4 +29,7 @@ public interface ISoliniaGroup {
 
 	List<UUID> getUnmodifiableGroupMembersForBuffs(boolean includePets, boolean filterOutNonPetAffinityPets);
 
+	void grantExperienceAndLoot(ISoliniaPlayer xpSource, double experience, ISoliniaLivingEntity killedEntity,
+			int killerLevel);
+
 }

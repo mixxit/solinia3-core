@@ -1277,9 +1277,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	public void tryCastFromItemInHand(ISoliniaItem item)
 	{
 		try {
-			DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer(),
-					"Trying to cast from item in hand: " + item.getId());
-			
 			if (!item.isSpellscroll())
 				return;
 			
@@ -1306,9 +1303,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 
-			DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer(),
-					"SoliniaSpell in hand: " + spellId + " target status: " + (getEntityTarget() == null));
-
 			// Some spells auto target self, if they don't have a target try to do that
 			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
 			if (spell != null) {
@@ -1331,8 +1325,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (!spell.isBardSong())
 			if (!this.hasReagents(spell))
 			{
-				DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer(),
-						"SoliniaSpell in slot: " + spellId + " Missing reagents");
 				return;
 			}
 			
@@ -1340,8 +1332,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (spell.getSpellEffectTypes().contains(SpellEffectType.BindWound)) {
 				if (!hasSufficientBandageReagents(1))
 				{
-					DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer(),
-							"SoliniaSpell in slot: " + spellId + " Missing reagents for Bind Wound");
 					this.getBukkitPlayer().sendMessage("You do not have enough bandages in your /reagent pouch");
 					return;
 				}
@@ -1375,17 +1365,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 				if (expiretimestamp != null)
 					if (!nowtimestamp.after(expiretimestamp)) {
-						DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer(),
-								"SoliniaSpell in slot: " + spellId + " Lack of willpower");
-
-						getBukkitPlayer().sendMessage("You do not have enough willpower to cast " + spell.getName()
-								+ " (Wait: " + ((expiretimestamp.getTime() - nowtimestamp.getTime()) / 1000) + "s");
 						return;
 					}
 			}
-
-			DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromItemInHand", this.getBukkitPlayer(),
-					"SoliniaSpell in slot: " + spellId + " Starting casting");
 
 			startCasting(spell, getBukkitPlayer(), true, true, false, "");
 		} catch (CoreStateInitException e) {
@@ -1396,8 +1378,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void tryCastFromMemorySlot(int slotId) {
 		try {
-			DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer(),
-					"Trying to cast from item in memory slot: " + slotId);
 			int spellId = this.getMemorisedSpellSlot(slotId);
 			if (spellId < 1) {
 				return;
@@ -1422,14 +1402,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 
 			if (!getMemorisedSpellSlots().getAllSpellIds().contains(spellId)) {
-				DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer(),
-						"Spell not in spellbook");
 				getBukkitPlayer().sendMessage("* This spell is no longer in your spellbook");
 				return;
 			}
-
-			DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer(),
-					"SoliniaSpell in slot: " + spellId + " target status: " + (getEntityTarget() == null));
 
 			// Some spells auto target self, if they don't have a target try to do that
 			ISoliniaSpell spell = StateManager.getInstance().getConfigurationManager().getSpell(spellId);
@@ -1453,8 +1428,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (!spell.isBardSong())
 			if (!this.hasReagents(spell))
 			{
-				DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer(),
-						"SoliniaSpell in slot: " + spellId + " Missing reagents");
 				return;
 			}
 			
@@ -1462,8 +1435,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			if (spell.getSpellEffectTypes().contains(SpellEffectType.BindWound)) {
 				if (!hasSufficientBandageReagents(1))
 				{
-					DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer(),
-							"SoliniaSpell in slot: " + spellId + " Missing reagents for Bind Wound");
 					this.getBukkitPlayer().sendMessage("You do not have enough bandages in your /reagent pouch");
 					return;
 				}
@@ -1497,17 +1468,11 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 				if (expiretimestamp != null)
 					if (!nowtimestamp.after(expiretimestamp)) {
-						DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer(),
-								"SoliniaSpell in slot: " + spellId + " Lack of willpower");
-
 						getBukkitPlayer().sendMessage("You do not have enough willpower to cast " + spell.getName()
 								+ " (Wait: " + ((expiretimestamp.getTime() - nowtimestamp.getTime()) / 1000) + "s");
 						return;
 					}
 			}
-
-			DebugUtils.DebugLog("SoliniaPlayer", "tryCastFromMemorySlot", this.getBukkitPlayer(),
-					"SoliniaSpell in slot: " + spellId + " Starting casting");
 
 			startCasting(spell, getBukkitPlayer(), true, true, false, "");
 		} catch (CoreStateInitException e) {
@@ -1962,14 +1927,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 
-			DebugUtils.DebugLog("SoliniaPlayer", "interact", this.getBukkitPlayer(),
-					"consumable status: " + item.isConsumable());
-
 			// Only applies to consumable items
 			if (item.isConsumable()) {
 
 				int newAmount = itemstack.getAmount() - 1;
-				DebugUtils.DebugLog("SoliniaPlayer", "interact", this.getBukkitPlayer(), "using consumable item");
 				item.useItemOnEntity(getBukkitPlayer(), getEntityTarget(), true);
 				if (newAmount < 1) {
 					// To prevent a trap you must cancel event here
@@ -1989,8 +1950,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			// Only applies to non-consumable items
 			if (!item.isConsumable() && !itemstack.getType().equals(Material.ENCHANTED_BOOK)) {
-				DebugUtils.DebugLog("SoliniaPlayer", "interact", this.getBukkitPlayer(),
-						"using non consumable item");
 				item.useItemOnEntity(getBukkitPlayer(), getEntityTarget(), true);
 				return;
 			}
@@ -2231,12 +2190,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 	@Override
 	public boolean checkDoesntFizzle(ISoliniaSpell spell) {
-		DebugUtils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer(),
-				"Starting checkDoesntFizzle for " + getBukkitPlayer().getName());
-
 		if (getBukkitPlayer().isOp()) {
-			DebugUtils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer(),
-					"checkDoesntFizzle was never fizzle as player is an Op");
 			return true;
 		}
 		
@@ -2265,8 +2219,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			ISoliniaAARank AArank = SpellUtils.getRankOfAAAbility(getBukkitPlayer(), aa);
 			if (AArank != null) {
 				for (SoliniaAARankEffect rankEffect : AArank.getEffects()) {
-					DebugUtils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer(),
-							"FoundSpellCastingExpertise level: " + rankEffect.getBase1());
 
 					if (rankEffect.getBase1() > no_fizzle_level)
 						no_fizzle_level = rankEffect.getBase1();
@@ -2281,8 +2233,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				ISoliniaAARank AArank = SpellUtils.getRankOfAAAbility(getBukkitPlayer(), aaMasteryOfThePast);
 				if (AArank != null) {
 					for (SoliniaAARankEffect rankEffect : AArank.getEffects()) {
-						DebugUtils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer(),
-								"FoundMasteryOfPast level: " + rankEffect.getBase1());
 
 						if (rankEffect.getBase1() > no_fizzle_level)
 							no_fizzle_level = rankEffect.getBase1();
@@ -2293,9 +2243,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 		}
 
-		DebugUtils.DebugLog("SoliniaPlayer", "checkDoesntFizzle", this.getBukkitPlayer(),
-				"MinLevelClass check: " + spell.getMinLevelClass(getClassObj().getName())
-						+ " is less than no_fizzle_level " + no_fizzle_level + "?");
 		if (spell.getMinLevelClass(getClassObj().getName()) < no_fizzle_level) {
 			return true;
 		}
@@ -5398,120 +5345,24 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	}
 
 	@Override
-	public void grantExperienceAndLoot(ISoliniaLivingEntity livingEntity) {
+	public void grantExperienceAndLoot(ISoliniaLivingEntity killedEntity, int killerLevel) {
 		try {
-			Double experience = PlayerUtils.getExperienceRewardAverageForLevel(livingEntity.getMentorLevel(),this.getActualLevel());
-
+			// First we need to check that the killer level is within range of the owner
+			if (getMentorLevel() < (EntityUtils.getMinLevelFromLevel(killerLevel))) {
+				this.getBukkitPlayer().sendMessage(ChatColor.GRAY + "You are too low level to gain experience [due to the killer that killed this mob]" + ChatColor.RESET);
+				return;
+			}
+			
+			Double experience = PlayerUtils.getExperienceRewardAverageForLevel(killedEntity.getMentorLevel(),killerLevel);
+			
+			
 			// try to share with group
 			ISoliniaGroup group = StateManager.getInstance().getGroupByMember(getOwnerUUID());
-			if (group != null) {
-
-				List<Integer> levelRanges = new ArrayList<Integer>();
-				// xp to players only
-				for (UUID member : group.getMembersWithoutPets()) {
-					ISoliniaPlayer playerchecked = SoliniaPlayerAdapter.Adapt(Bukkit.getPlayer(member));
-					int checkedlevel = playerchecked.getMentorLevel();
-					levelRanges.add(checkedlevel);
-				}
-				
-				Tuple<Integer,Integer> lowhighlvl = PlayerUtils.GetGroupExpMinAndMaxLevel(levelRanges);
-				int ilowlvl = lowhighlvl.a();
-				int ihighlvl = lowhighlvl.b();
-
-				if (getMentorLevel() < ilowlvl || getMentorLevel() > ihighlvl) {
-					// Only award player the experience
-					// as they are out of range of the group
-					if (livingEntity.getMentorLevel() >= EntityUtils.getMinLevelFromLevel(getMentorLevel())) {
-						// Due to being out of range they get the full xp
-						increasePlayerExperience(experience, true, true);
-						if (getFellowship() != null)
-							grantFellowshipXPBonusToFellowship(experience);
-
-						// Grant title for killing mob
-						if (livingEntity.getNpcid() > 0) {
-							ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager()
-									.getNPC(livingEntity.getNpcid());
-							if (npc != null && !npc.getDeathGrantsTitle().equals("")) {
-								grantTitle(npc.getDeathGrantsTitle());
-							}
-
-							if (npc.isBoss() || npc.isRaidboss()) {
-								grantTitle("the Vanquisher");
-							}
-						}
-
-					} 
-
-				} else {
-					// we only only count player xp
-					double experienceReward = experience / group.getMembersWithoutPets().size();
-					double groupBonus = (experienceReward/100)*(group.getMembersWithoutPets().size()*10);
-					
-					List<Integer> awardsFellowshipIds = new ArrayList<Integer>();
-					
-					// players get xp only
-					for (UUID member : group.getMembersWithoutPets()) {
-						Player tgtplayer = Bukkit.getPlayer(member);
-						if (tgtplayer != null) {
-							ISoliniaPlayer tgtsolplayer = SoliniaPlayerAdapter.Adapt(tgtplayer);
-							int tgtlevel = tgtsolplayer.getMentorLevel();
-
-							if (tgtlevel < ilowlvl || tgtlevel > ihighlvl) {
-								tgtplayer.sendMessage(ChatColor.GRAY
-										+ "You were out of level range to gain experience in this group (Min: "
-										+ ilowlvl + " Max: " + ihighlvl + ")");
-								continue;
-							}
-
-							if (!tgtplayer.getWorld().equals(getBukkitPlayer().getWorld())) {
-								tgtplayer.sendMessage("You were out of range for shared group xp (world)");
-								continue;
-							}
-
-							if (tgtplayer.getLocation().distance(getBukkitPlayer().getLocation()) <= Utils.MaxRangeForExperience) {
-								if (livingEntity.getMentorLevel() >= (EntityUtils.getMinLevelFromLevel(tgtsolplayer.getMentorLevel()))) {
-									// they split the overall experience across the group size
-									
-									// add 10% bonus per player
-									
-									tgtsolplayer.increasePlayerExperience(experienceReward+groupBonus, true, true);
-									
-									if (getFellowship() != null)
-									if (!awardsFellowshipIds.contains(getFellowship().getId()))
-									{
-										awardsFellowshipIds.add(getFellowship().getId());
-										grantFellowshipXPBonusToFellowship(experience);
-									}
-
-									// Grant title for killing mob
-									if (livingEntity.getNpcid() > 0) {
-										ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager()
-												.getNPC(livingEntity.getNpcid());
-										if (npc != null && !npc.getDeathGrantsTitle().equals("")) {
-											tgtsolplayer.grantTitle(npc.getDeathGrantsTitle());
-										}
-
-										if (npc.isBoss() || npc.isRaidboss()) {
-											tgtsolplayer.grantTitle("the Vanquisher");
-										}
-									}
-
-								} else {
-									// The npc was too low level to gain
-									// experience from - Was: " + livingEntity.getLevel() + " Min: " +
-									// EntityUtils.getMinLevelFromLevel(tgtsolplayer.getLevel()));
-								}
-
-							} else {
-								// tgtplayer.sendMessage(ChatColor.GRAY + "You were out of range for shared
-								// group xp (distance)");
-								continue;
-							}
-						}
-					}
-				}
+			if (group != null)
+			{
+				group.grantExperienceAndLoot(this, experience, killedEntity, killerLevel);
 			} else {
-				if (livingEntity.getMentorLevel() >= (EntityUtils.getMinLevelFromLevel(getMentorLevel()))) {
+				if (killedEntity.getMentorLevel() >= (EntityUtils.getMinLevelFromLevel(getMentorLevel()))) {
 					// they are on their own so get the full amount of xp
 					increasePlayerExperience(experience, true, true);
 					
@@ -5519,9 +5370,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					grantFellowshipXPBonusToFellowship(experience);
 
 					// Grant title for killing mob
-					if (livingEntity.getNpcid() > 0) {
+					if (killedEntity.getNpcid() > 0) {
 						ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager()
-								.getNPC(livingEntity.getNpcid());
+								.getNPC(killedEntity.getNpcid());
 						if (npc != null && !npc.getDeathGrantsTitle().equals("")) {
 							grantTitle(npc.getDeathGrantsTitle());
 						}
@@ -5538,8 +5389,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				}
 			}
 
-			if (livingEntity.getNpcid() > 0) {
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(livingEntity.getNpcid());
+			// Apply faction rewards
+			if (killedEntity.getNpcid() > 0) {
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(killedEntity.getNpcid());
 				if (npc.getFactionid() > 0) {
 					ISoliniaFaction faction = StateManager.getInstance().getConfigurationManager()
 							.getFaction(npc.getFactionid());
@@ -5558,8 +5410,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				}
 			}
 
-			if (livingEntity.getNpcid() > 0) {
-				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(livingEntity.getNpcid());
+			// Apply special npc respawn chances and titles
+			if (killedEntity.getNpcid() > 0) {
+				ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getNPC(killedEntity.getNpcid());
 
 				if (npc != null) {
 					if (npc.getChanceToRespawnOnDeath() > 0)
@@ -5585,7 +5438,9 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			}
 
 			giveMoney(1);
-			livingEntity.dropLoot();
+			
+			// Drop loot
+			killedEntity.dropLoot();
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

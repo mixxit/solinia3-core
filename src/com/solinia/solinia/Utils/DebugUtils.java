@@ -20,38 +20,5 @@ public class DebugUtils {
 
 	}
 	
-	public static void DebugLog(String coreclass, String method, Entity focusEntity, String message) {
-		if (focusEntity == null)
-			return;
-		
-		try
-		{
-			coreclass = coreclass.toUpperCase();
-			method = method.toUpperCase();
-			String focusid = focusEntity.getName().toUpperCase();
-			//System.out.println(coreclass + ":" + method + ":" + focusid + ":" + message);
-			try {
-				for (UUID debuggerUuid : StateManager.getInstance().getPlayerManager().getDebugger().keySet()) {
-					Entity entity = Bukkit.getEntity(debuggerUuid);
-					if (entity == null)
-						continue;
 	
-					DebuggerSettings settings = StateManager.getInstance().getPlayerManager().getDebugger()
-							.get(debuggerUuid);
-
-					if (!settings.isDebugging(coreclass, method, focusid))
-						continue;
-	
-					entity.sendMessage(coreclass + ":" + method + ":" + focusid + ":" + message);
-	
-				}
-			} catch (CoreStateInitException e) {
-	
-			}
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
-	}
 }

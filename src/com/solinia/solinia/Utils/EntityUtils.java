@@ -512,7 +512,6 @@ public class EntityUtils {
 		if (entity == null)
 			return;
 		
-				DebugUtils.DebugLog("Utils", "RemoveEntity", entity, "Removing entity via caller: " + caller + " " +entity.getName());
 				if (entity instanceof Player)
 					return;
 				

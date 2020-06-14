@@ -85,13 +85,11 @@ public class CommandNPCGive implements CommandExecutor {
 				if (!eventHandler.getInteractiontype().equals(InteractionType.ITEM))
 					continue;
 				
-				DebugUtils.DebugLog("CommandNPCGive","onCommand",player,"Comparing item id: " + item.getId() + " to triggerdata " + eventHandler.getTriggerdata());
 				if (Integer.parseInt(eventHandler.getTriggerdata()) != item.getId())
 					continue;
 				
 				if (eventHandler.getChatresponse() != null && !eventHandler.getChatresponse().equals(""))
 				{
-					DebugUtils.DebugLog("CommandNPCGive","onCommand",player,"Checking if player meets requirements to hand in item");
 					if (!eventHandler.playerMeetsRequirements(player))
 					{
 						player.sendMessage(ChatColor.GRAY + "[Hint] You do not meet the requirements to hand this quest item in. Either you are missing a quest step, have already completed this step");
@@ -115,7 +113,6 @@ public class CommandNPCGive implements CommandExecutor {
 						}
 					}
 					
-					DebugUtils.DebugLog("CommandNPCGive","onCommand",player,"NPC wants the item");
 					npcWantsItem = true;
 					
 					String response = eventHandler.getChatresponse();
