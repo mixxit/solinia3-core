@@ -2459,7 +2459,7 @@ public class SoliniaActiveSpell {
 			Disguise dis = DisguiseAPI.getDisguise(getLivingEntity());
 			if (dis instanceof PlayerDisguise) {
 				if (disguise.getDisguisedata() != null && !disguise.getDisguisedata().equals("")) {
-					if (((PlayerDisguise) dis).getSkin().equals(disguise.getDisguisedata()))
+					if (((PlayerDisguise) dis).getSkin().equalsIgnoreCase(disguise.getDisguisedata()))
 						return;
 
 					// If we get here we can let the player change their skin as it doesnt match
