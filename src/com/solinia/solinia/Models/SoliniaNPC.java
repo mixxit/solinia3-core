@@ -1240,7 +1240,7 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(itemId);
 
 				TextComponent tc = new TextComponent(
-						TextComponent.fromLegacyText(ChatColor.YELLOW + "[QUEST] "));
+						TextComponent.fromLegacyText(ChatColor.YELLOW + "<QUEST> "));
 				TextComponent tc2 = new TextComponent(TextComponent.fromLegacyText(ChatColor.YELLOW
 						+ "[HAND IN] >> Click here to give " + item.getDisplayname() + " <<"+ ChatColor.RESET));
 				tc2.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/npcgive " + itemId));
