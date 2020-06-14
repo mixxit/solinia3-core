@@ -629,7 +629,7 @@ public class PlayerUtils {
 		if (solplayer.getClassObj() != null)
 			classname = solplayer.getClassObj().getShortName();
 		
-		String message = hidden+"["+optionalplayername+"]"+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ optionalworldname +"] - LVL " + ChatColor.AQUA + mentorLevel + "/"+lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET + " Zone: " + ChatColor.AQUA + zone + ChatColor.RESET;
+		String message = hidden+" "+optionalplayername+" "+ChatColor.YELLOW + solplayer.getFullName().toUpperCase() + ChatColor.RESET + " ["+ optionalworldname +"] - LVL " + ChatColor.AQUA + mentorLevel + "/"+lvl + ChatColor.RESET + " " + racename + " " + ChatColor.AQUA + classname + ChatColor.RESET + " Zone: " + ChatColor.AQUA + zone + ChatColor.RESET;
 		
 		TextComponent tc = new TextComponent(TextComponent.fromLegacyText(message));
 		
