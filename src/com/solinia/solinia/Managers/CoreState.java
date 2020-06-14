@@ -322,12 +322,12 @@ public class CoreState {
 	
 	private void houseKeeping() {
 		// TODO Auto-generated method stub
-		try {
+		/*try { NOT WORKING - FIX
 			StateManager.getInstance().getConfigurationManager().removeClaimedClaims();
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	private void patchVersion() {
