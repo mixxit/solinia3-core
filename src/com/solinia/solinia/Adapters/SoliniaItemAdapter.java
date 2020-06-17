@@ -64,7 +64,11 @@ public class SoliniaItemAdapter {
 		item.setElementalDamageAmount((int)eqitem.getElemdmgamt());
 		item.setFocusEffectId((int)eqitem.getFocuseffect());
 		item.setFireResist((int)eqitem.getFr());
-		item.setAttackspeed((int)eqitem.getHaste());
+		if (eqitem.getHaste() > 0)
+		{
+			int haste = ((int)(eqitem.getHaste()) + 100);
+			item.setAttackspeed(haste);
+		}
 		item.setHp((int)eqitem.getHp());
 		item.setHpregen((int)eqitem.getRegen());
 		item.setBasename(itemStack.getType().name().toUpperCase());
