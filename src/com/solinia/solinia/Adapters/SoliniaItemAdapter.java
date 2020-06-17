@@ -69,6 +69,7 @@ public class SoliniaItemAdapter {
 			int haste = ((int)(eqitem.getHaste()) + 100);
 			item.setAttackspeed(haste);
 		}
+		
 		item.setHp((int)eqitem.getHp());
 		item.setHpregen((int)eqitem.getRegen());
 		item.setBasename(itemStack.getType().name().toUpperCase());

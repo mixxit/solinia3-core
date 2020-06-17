@@ -53,6 +53,8 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	private int agility = 0;
 	private int dexterity = 0;
 	private int procRate = 0;
+	private int backstabDmg = 0;
+	private int bonusDmg = 0;
 	private boolean placeable = false;
 	private int intelligence = 0;
 	private int wisdom = 0;
@@ -2059,4 +2061,5 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 	public void setMakesHotzone(boolean makesHotzone) {
 		this.makesHotzone = makesHotzone;
 	}
+
 }

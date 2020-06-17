@@ -141,7 +141,7 @@ public class ItemStackAdapter {
 		if (soliniaItem.getItemWeaponDamage(false, null) > 0) {
 			loretxt.add("Damage: " + ChatColor.GREEN + soliniaItem.getItemWeaponDamage(false, null) + ChatColor.RESET);
 			if (soliniaItem.getWeaponDelay() > 0) {
-				loretxt.add("WeaponDelay: " + ChatColor.GREEN + soliniaItem.getWeaponDelay() + ChatColor.RESET);
+				loretxt.add("Atk Delay: " + ChatColor.GREEN + soliniaItem.getWeaponDelay() + ChatColor.RESET);
 			}
 		}
 
