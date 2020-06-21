@@ -860,52 +860,56 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (target != null && target instanceof LivingEntity)
 				defender = SoliniaLivingEntityAdapter.Adapt(target);
 
-			if (target != null)
+			EntityAutoAttack autoAttack = StateManager.getInstance().getEntityManager().getEntityAutoAttack(this.getBukkitLivingEntity());
+			
+			if (autoAttack.isAutoAttacking() && autoAttack.canAutoAttack())
 			{
-				if (target.isDead())
+				if (target != null)
 				{
-					if (this.getBukkitLivingEntity() instanceof Player)
-					this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target is dead!");
-					StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
-					targetIsDead = true;
-				}
-				
-				if (defender != null && defender.isFeignedDeath())
-				{
-					if (this.getBukkitLivingEntity() instanceof Player)
-						this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target dead!?");
-					StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
-					targetIsDead = true;
-				}
-				
-				if (defender != null && defender.isInvulnerable())
-				{
-					if (this.getBukkitLivingEntity() instanceof Player)
-						this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target invulnerable!");
-					StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
-					targetIsInvul = true;
-				}
-				
-				if (target instanceof Player)
-				{
-					if (((Player)target).getGameMode() != GameMode.SURVIVAL)
+					if (target.isDead())
 					{
 						if (this.getBukkitLivingEntity() instanceof Player)
-							this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target is not in SURVIVAL gamemode!");
-						
+						this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target is dead!");
+						StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+						targetIsDead = true;
+					}
+					
+					if (defender != null && defender.isFeignedDeath())
+					{
+						if (this.getBukkitLivingEntity() instanceof Player)
+							this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target dead!?");
+						StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+						targetIsDead = true;
+					}
+					
+					if (defender != null && defender.isInvulnerable())
+					{
+						if (this.getBukkitLivingEntity() instanceof Player)
+							this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target invulnerable!");
 						StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
 						targetIsInvul = true;
 					}
-				}
-			} else {
-				if (this.getBukkitLivingEntity() instanceof Player)
-				{
-					this.sendMessage(ChatColor.GRAY + "* You have no target to auto attack");
-					StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+					
+					if (target instanceof Player)
+					{
+						if (((Player)target).getGameMode() != GameMode.SURVIVAL)
+						{
+							if (this.getBukkitLivingEntity() instanceof Player)
+								this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target is not in SURVIVAL gamemode!");
+							
+							StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+							targetIsInvul = true;
+						}
+					}
+				} else {
+					if (this.getBukkitLivingEntity() instanceof Player)
+					{
+						this.sendMessage(ChatColor.GRAY + "* You have no target to auto attack");
+						StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+					}
 				}
 			}
 			
-			EntityAutoAttack autoAttack = StateManager.getInstance().getEntityManager().getEntityAutoAttack(this.getBukkitLivingEntity());
 			if (autoAttack.canAutoAttack() && !targetIsInvul && !targetIsDead && canAttackTarget(defender))
 			{
 				if (isPlayer()
