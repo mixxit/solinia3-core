@@ -482,159 +482,164 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							//!IsMeleeDisabled()
 						) {
 	
-						//we should check to see if they die mid-attacks, previous
-						//crap of checking target for null was not gunna cut it
-	
-						//try main hand first
-						if (autoAttack.canAutoAttack()) {
-							DoMainHandAttackRounds(target, null);
-							//TriggerDefensiveProcs(target, InventorySlot.Primary, false);
-	
-							boolean specialed = false; // NPCs can only do one of these a round
-							if (getSpecialAbility(SpecialAbility.SPECATK_FLURRY) > 0) {
-								int flurry_chance = 0;
-								//int flurry_chance = GetSpecialAbilityParam(SPECATK_FLURRY, 0);
-								flurry_chance = flurry_chance > 0 ? flurry_chance : Utils.NPCFlurryChance;
-	
-								if (MathUtils.Roll(flurry_chance)) {
-									ExtraAttackOptions opts = new ExtraAttackOptions();
-									/*int cur = GetSpecialAbilityParam(SPECATK_FLURRY, 2);
-									if (cur > 0)
-										opts.damage_percent = cur / 100.0f;
-	
-									cur = GetSpecialAbilityParam(SPECATK_FLURRY, 3);
-									if (cur > 0)
-										opts.damage_flat = cur;
-	
-									cur = GetSpecialAbilityParam(SPECATK_FLURRY, 4);
-									if (cur > 0)
-										opts.armor_pen_percent = cur / 100.0f;
-	
-									cur = GetSpecialAbilityParam(SPECATK_FLURRY, 5);
-									if (cur > 0)
-										opts.armor_pen_flat = cur;
-	
-									cur = GetSpecialAbilityParam(SPECATK_FLURRY, 6);
-									if (cur > 0)
-										opts.crit_percent = cur / 100.0f;
-	
-									cur = GetSpecialAbilityParam(SPECATK_FLURRY, 7);
-									if (cur > 0)
-										opts.crit_flat = cur;*/
-	
-									Flurry(opts);
-									specialed = true;
-								}
-							}
-	
-							if (this.isCurrentlyNPCPet()) {
-								ISoliniaLivingEntity owner = this.getOwnerSoliniaLivingEntity();
-								if (owner != null) {
-									int flurry_chance = owner.getAABonuses(SpellEffectType.PetFlurry) +
-										owner.getSpellBonuses(SpellEffectType.PetFlurry) + owner.getItemBonuses(SpellEffectType.PetFlurry);
-	
-									if (flurry_chance > 0 && MathUtils.Roll(flurry_chance))
-										Flurry(null);
-								}
-							}
-	
-							if ((this.isCurrentlyNPCPet()) && this.getOwnerEntity() instanceof Player) {
-								ISoliniaLivingEntity owner = this.getOwnerSoliniaLivingEntity();
-								if (owner.getSpellBonuses(SpellEffectType.PC_Pet_Rampage) > 0 || owner.getItemBonuses(SpellEffectType.PC_Pet_Rampage) > 0 || owner.getAABonuses(SpellEffectType.PC_Pet_Rampage) > 0) {
-									int chance = owner.getSpellBonuses(SpellEffectType.PC_Pet_Rampage) + owner.getItemBonuses(SpellEffectType.PC_Pet_Rampage) + owner.getAABonuses(SpellEffectType.PC_Pet_Rampage);
-									if (MathUtils.Roll(chance)) {
-										Rampage(null);
+						if (autoAttack.canAutoAttack())
+						{
+							//we should check to see if they die mid-attacks, previous
+							//crap of checking target for null was not gunna cut it
+		
+							//try main hand first
+							if (autoAttack.canAutoAttack()) {
+								DoMainHandAttackRounds(target, null);
+								//TriggerDefensiveProcs(target, InventorySlot.Primary, false);
+		
+								boolean specialed = false; // NPCs can only do one of these a round
+								if (getSpecialAbility(SpecialAbility.SPECATK_FLURRY) > 0) {
+									int flurry_chance = 0;
+									//int flurry_chance = GetSpecialAbilityParam(SPECATK_FLURRY, 0);
+									flurry_chance = flurry_chance > 0 ? flurry_chance : Utils.NPCFlurryChance;
+		
+									if (MathUtils.Roll(flurry_chance)) {
+										ExtraAttackOptions opts = new ExtraAttackOptions();
+										/*int cur = GetSpecialAbilityParam(SPECATK_FLURRY, 2);
+										if (cur > 0)
+											opts.damage_percent = cur / 100.0f;
+		
+										cur = GetSpecialAbilityParam(SPECATK_FLURRY, 3);
+										if (cur > 0)
+											opts.damage_flat = cur;
+		
+										cur = GetSpecialAbilityParam(SPECATK_FLURRY, 4);
+										if (cur > 0)
+											opts.armor_pen_percent = cur / 100.0f;
+		
+										cur = GetSpecialAbilityParam(SPECATK_FLURRY, 5);
+										if (cur > 0)
+											opts.armor_pen_flat = cur;
+		
+										cur = GetSpecialAbilityParam(SPECATK_FLURRY, 6);
+										if (cur > 0)
+											opts.crit_percent = cur / 100.0f;
+		
+										cur = GetSpecialAbilityParam(SPECATK_FLURRY, 7);
+										if (cur > 0)
+											opts.crit_flat = cur;*/
+		
+										Flurry(opts);
+										specialed = true;
 									}
 								}
-							}
-	
-							if (getSpecialAbility(SpecialAbility.SPECATK_RAMPAGE) > 0 && !specialed)
-							{
-								int rampage_chance = 0;
-								//int rampage_chance = GetSpecialAbilityParam(SPECATK_RAMPAGE, 0);
-								rampage_chance = rampage_chance > 0 ? rampage_chance : 20;
-								if (MathUtils.Roll(rampage_chance)) {
-									ExtraAttackOptions opts = new ExtraAttackOptions();
-									/*
-									int cur = GetSpecialAbilityParam(SPECATK_RAMPAGE, 3);
-									if (cur > 0) {
-										opts.damage_flat = cur;
+		
+								if (this.isCurrentlyNPCPet()) {
+									ISoliniaLivingEntity owner = this.getOwnerSoliniaLivingEntity();
+									if (owner != null) {
+										int flurry_chance = owner.getAABonuses(SpellEffectType.PetFlurry) +
+											owner.getSpellBonuses(SpellEffectType.PetFlurry) + owner.getItemBonuses(SpellEffectType.PetFlurry);
+		
+										if (flurry_chance > 0 && MathUtils.Roll(flurry_chance))
+											Flurry(null);
 									}
-	
-									cur = GetSpecialAbilityParam(SPECATK_RAMPAGE, 4);
-									if (cur > 0) {
-										opts.armor_pen_percent = cur / 100.0f;
+								}
+		
+								if ((this.isCurrentlyNPCPet()) && this.getOwnerEntity() instanceof Player) {
+									ISoliniaLivingEntity owner = this.getOwnerSoliniaLivingEntity();
+									if (owner.getSpellBonuses(SpellEffectType.PC_Pet_Rampage) > 0 || owner.getItemBonuses(SpellEffectType.PC_Pet_Rampage) > 0 || owner.getAABonuses(SpellEffectType.PC_Pet_Rampage) > 0) {
+										int chance = owner.getSpellBonuses(SpellEffectType.PC_Pet_Rampage) + owner.getItemBonuses(SpellEffectType.PC_Pet_Rampage) + owner.getAABonuses(SpellEffectType.PC_Pet_Rampage);
+										if (MathUtils.Roll(chance)) {
+											Rampage(null);
+										}
 									}
-	
-									cur = GetSpecialAbilityParam(SPECATK_RAMPAGE, 5);
-									if (cur > 0) {
-										opts.armor_pen_flat = cur;
+								}
+		
+								if (getSpecialAbility(SpecialAbility.SPECATK_RAMPAGE) > 0 && !specialed)
+								{
+									int rampage_chance = 0;
+									//int rampage_chance = GetSpecialAbilityParam(SPECATK_RAMPAGE, 0);
+									rampage_chance = rampage_chance > 0 ? rampage_chance : 20;
+									if (MathUtils.Roll(rampage_chance)) {
+										ExtraAttackOptions opts = new ExtraAttackOptions();
+										/*
+										int cur = GetSpecialAbilityParam(SPECATK_RAMPAGE, 3);
+										if (cur > 0) {
+											opts.damage_flat = cur;
+										}
+		
+										cur = GetSpecialAbilityParam(SPECATK_RAMPAGE, 4);
+										if (cur > 0) {
+											opts.armor_pen_percent = cur / 100.0f;
+										}
+		
+										cur = GetSpecialAbilityParam(SPECATK_RAMPAGE, 5);
+										if (cur > 0) {
+											opts.armor_pen_flat = cur;
+										}
+		
+										cur = GetSpecialAbilityParam(SPECATK_RAMPAGE, 6);
+										if (cur > 0) {
+											opts.crit_percent = cur / 100.0f;
+										}
+		
+										cur = GetSpecialAbilityParam(SPECATK_RAMPAGE, 7);
+										if (cur > 0) {
+											opts.crit_flat = cur;
+										}*/
+										Rampage(opts);
+										specialed = true;
 									}
-	
-									cur = GetSpecialAbilityParam(SPECATK_RAMPAGE, 6);
-									if (cur > 0) {
-										opts.crit_percent = cur / 100.0f;
+								}
+		
+								if (getSpecialAbility(SpecialAbility.SPECATK_AREA_RAMPAGE) > 0 && !specialed)
+								{
+									int rampage_chance = 0;
+									//int rampage_chance = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 0);
+									rampage_chance = rampage_chance > 0 ? rampage_chance : 20;
+									if (MathUtils.Roll(rampage_chance)) {
+										ExtraAttackOptions opts;
+										/*
+										int cur = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 3);
+										if (cur > 0) {
+											opts.damage_flat = cur;
+										}
+		
+										cur = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 4);
+										if (cur > 0) {
+											opts.armor_pen_percent = cur / 100.0f;
+										}
+		
+										cur = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 5);
+										if (cur > 0) {
+											opts.armor_pen_flat = cur;
+										}
+		
+										cur = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 6);
+										if (cur > 0) {
+											opts.crit_percent = cur / 100.0f;
+										}
+		
+										cur = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 7);
+										if (cur > 0) {
+											opts.crit_flat = cur;
+										}*/
+		
+										// TODO AreaRampage
+										//AreaRampage(opts);
+										specialed = true;
 									}
-	
-									cur = GetSpecialAbilityParam(SPECATK_RAMPAGE, 7);
-									if (cur > 0) {
-										opts.crit_flat = cur;
-									}*/
-									Rampage(opts);
-									specialed = true;
 								}
 							}
-	
-							if (getSpecialAbility(SpecialAbility.SPECATK_AREA_RAMPAGE) > 0 && !specialed)
-							{
-								int rampage_chance = 0;
-								//int rampage_chance = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 0);
-								rampage_chance = rampage_chance > 0 ? rampage_chance : 20;
-								if (MathUtils.Roll(rampage_chance)) {
-									ExtraAttackOptions opts;
-									/*
-									int cur = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 3);
-									if (cur > 0) {
-										opts.damage_flat = cur;
-									}
-	
-									cur = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 4);
-									if (cur > 0) {
-										opts.armor_pen_percent = cur / 100.0f;
-									}
-	
-									cur = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 5);
-									if (cur > 0) {
-										opts.armor_pen_flat = cur;
-									}
-	
-									cur = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 6);
-									if (cur > 0) {
-										opts.crit_percent = cur / 100.0f;
-									}
-	
-									cur = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 7);
-									if (cur > 0) {
-										opts.crit_flat = cur;
-									}*/
-	
-									// TODO AreaRampage
-									//AreaRampage(opts);
-									specialed = true;
-								}
-							}
+		
+							//now off hand
+							if (
+									//attack_dw_timer.Check() && 
+									canThisClassDualWield()
+									)
+								DoOffHandAttackRounds(target, null);
+		
+							//now special attacks (kick, etc)
+							if (isNPC())
+								doClassAttacks(defender);
+						
+							autoAttack.setLastUpdatedTimeNow(this);
 						}
-	
-						//now off hand
-						if (
-								//attack_dw_timer.Check() && 
-								canThisClassDualWield()
-								)
-							DoOffHandAttackRounds(target, null);
-	
-						//now special attacks (kick, etc)
-						if (isNPC())
-							doClassAttacks(defender);
 	
 					}
 					AI_EngagedCastCheck();
@@ -862,171 +867,179 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 			EntityAutoAttack autoAttack = StateManager.getInstance().getEntityManager().getEntityAutoAttack(this.getBukkitLivingEntity());
 			
-			if (autoAttack.isAutoAttacking() && autoAttack.canAutoAttack())
+			if (autoAttack.canAutoAttack())
 			{
-				if (target != null)
+				if (autoAttack.isAutoAttacking() && autoAttack.canAutoAttack())
 				{
-					if (target.isDead())
+					if (target != null)
 					{
-						if (this.getBukkitLivingEntity() instanceof Player)
-						this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target is dead!");
-						StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
-						targetIsDead = true;
-					}
-					
-					if (defender != null && defender.isFeignedDeath())
-					{
-						if (this.getBukkitLivingEntity() instanceof Player)
-							this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target dead!?");
-						StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
-						targetIsDead = true;
-					}
-					
-					if (defender != null && defender.isInvulnerable())
-					{
-						if (this.getBukkitLivingEntity() instanceof Player)
-							this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target invulnerable!");
-						StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
-						targetIsInvul = true;
-					}
-					
-					if (target instanceof Player)
-					{
-						if (((Player)target).getGameMode() != GameMode.SURVIVAL)
+						if (target.isDead())
 						{
 							if (this.getBukkitLivingEntity() instanceof Player)
-								this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target is not in SURVIVAL gamemode!");
-							
+							this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target is dead!");
+							StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+							targetIsDead = true;
+						}
+						
+						if (defender != null && defender.isFeignedDeath())
+						{
+							if (this.getBukkitLivingEntity() instanceof Player)
+								this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target dead!?");
+							StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+							targetIsDead = true;
+						}
+						
+						if (defender != null && defender.isInvulnerable())
+						{
+							if (this.getBukkitLivingEntity() instanceof Player)
+								this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target invulnerable!");
 							StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
 							targetIsInvul = true;
 						}
-					}
-				} else {
-					if (this.getBukkitLivingEntity() instanceof Player)
-					{
-						this.sendMessage(ChatColor.GRAY + "* You have no target to auto attack");
-						StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
-					}
-				}
-			}
-			
-			if (autoAttack.canAutoAttack() && !targetIsInvul && !targetIsDead && canAttackTarget(defender))
-			{
-				if (isPlayer()
-					&& !this.isCasting()
-					&& !isStunned() && !isFeared() && !isMezzed() && (wasTriggeredManually || autoAttack.isAutoAttacking())
-					)
-					may_use_attacks = true;
-
-				/* TODO - Ranged has its own timer
-					if (may_use_attacks && ranged_timer.Enabled()) {
-						//if the range timer is enabled, we need to consider it
-						if (!ranged_timer.Check(false)) {
-							//the ranged timer has not elapsed, cannot attack.
-							may_use_attacks = false;
-						}
-					}*/
-			}
-			
-			//if (AutoFireEnabled()) {
-			if (autoAttack.canAutoAttack() && may_use_attacks && ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
-			{
-				//if (ranged->GetItem() && ranged->GetItem()->ItemType == EQEmu::item::ItemTypeBow) {
-				if (!getSoliniaItemInMainHand().isThrowing())
-				{
-					// if (GetTarget() && (GetTarget()->IsNPC() || GetTarget()->IsClient())) {
-					if (target != null && target != this.getBukkitLivingEntity() && !target.isDead() && defender != null)
-					{
-						if (this.checkLosFN(defender,false)) {
-							// if (AutoFireEnabled()) {
-							RangedAttack(defender, false);
-							autoAttack.setLastUpdatedTimeNow(this);
-							//if (CheckDoubleRangedAttack())
-							//	RangedAttack(GetTarget(), true);
-						} else {
-							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You do not have line of sight to your target!");
-							autoAttack.setLastUpdatedTimeNow(this);
+						
+						if (target instanceof Player)
+						{
+							if (((Player)target).getGameMode() != GameMode.SURVIVAL)
+							{
+								if (this.getBukkitLivingEntity() instanceof Player)
+									this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target is not in SURVIVAL gamemode!");
+								
+								StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+								targetIsInvul = true;
+							}
 						}
 					} else {
-						autoAttack.setLastUpdatedTimeNow(this);
-					}
-				} else {
-					//else if (ranged->GetItem() && (ranged->GetItem()->ItemType == EQEmu::item::ItemTypeLargeThrowing || ranged->GetItem()->ItemType == EQEmu::item::ItemTypeSmallThrowing)) {
-					// Throwing weapon
-					// if (GetTarget() && (GetTarget()->IsNPC() || GetTarget()->IsClient())) {
-					if (target != null && target != this.getBukkitLivingEntity() && !target.isDead() && defender != null)
-					{
-						if (this.checkLosFN(defender,false)) {
-							// if (AutoFireEnabled()) {
-							ThrowingAttack(defender, false);
-							autoAttack.setLastUpdatedTimeNow(this);
-							//if (CheckDoubleRangedAttack())
-							//	RangedAttack(GetTarget(), true);
-						} else {
-							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You do not have line of sight to your target!");
-							autoAttack.setLastUpdatedTimeNow(this);
+						if (this.getBukkitLivingEntity() instanceof Player)
+						{
+							this.sendMessage(ChatColor.GRAY + "* You have no target to auto attack");
+							StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
 						}
-					} else {
-						autoAttack.setLastUpdatedTimeNow(this);
 					}
 				}
-			}
-			
-			if (autoAttack.canAutoAttack() && target != null && may_use_attacks && !ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
-			{
-				Tuple<Boolean, String> canUseItem = this.canUseItem(getBukkitLivingEntity().getEquipment().getItemInMainHand());
 				
-				if (!combatRange(defender))
+				if (autoAttack.canAutoAttack() && !targetIsInvul && !targetIsDead && canAttackTarget(defender))
 				{
-					this.getBukkitLivingEntity().sendMessage("* You are too far from your target");
-				} else if (target == this.getBukkitLivingEntity())
-				{
-					this.getBukkitLivingEntity().sendMessage("* Try attack something other than yourself");
-				} else if (!this.isNPC() && !canUseItem.a())
-				{
-					if (getBukkitLivingEntity() instanceof Player)
-						getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "You cannot use this item ["+canUseItem.b()+"]");
-				} else if (target.getHealth() > 0D)
-				{
-					ItemStack wpn = getBukkitLivingEntity().getEquipment().getItemInMainHand();
-					tryWeaponProc(wpn, defender, InventorySlot.Primary);
-					//TriggerDefensiveProcs(target, InventorySlot.Primary, false);
-
-					doAttackRounds(defender, InventorySlot.Primary, false);
-					//if (CheckAATimer(aaTimerRampage))
-					//	entity_list.AEAttack(this, 30);
+					if (isPlayer()
+						&& !this.isCasting()
+						&& !isStunned() && !isFeared() && !isMezzed() && (wasTriggeredManually || autoAttack.isAutoAttacking())
+						)
+						may_use_attacks = true;
+	
+					/* TODO - Ranged has its own timer
+						if (may_use_attacks && ranged_timer.Enabled()) {
+							//if the range timer is enabled, we need to consider it
+							if (!ranged_timer.Check(false)) {
+								//the ranged timer has not elapsed, cannot attack.
+								may_use_attacks = false;
+							}
+						}*/
 				}
-
-			}
-			
-			if (autoAttack.canAutoAttack() && target != null && may_use_attacks && canThisClassDualWield() && !ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
-			{
-				boolean los_status = this.checkLosFN(defender,false);
-				boolean los_status_facing= this.isFacingMob(defender);
-
-				// Range check
-				if (!combatRange(defender)) {
-					// this is a duplicate message don't use it.
-					//Message_StringID(MT_TooFarAway,TARGET_TOO_FAR);
-				}
-				// Don't attack yourself
-				else if (target == this.getBukkitLivingEntity()) {
-					//Message_StringID(MT_TooFarAway,TRY_ATTACKING_SOMEONE);
-				}
-				else if (!los_status || !los_status_facing)
+				
+				//if (AutoFireEnabled()) {
+				if (autoAttack.canAutoAttack() && may_use_attacks && ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
 				{
-					//you can't see your target
-				}
-				else if (target.getHealth() > 0D) {
-					tryIncreaseSkill(SkillType.DualWield, 1);
-					if (checkDualWield()) {
-						ItemStack wpn = getBukkitLivingEntity().getEquipment().getItemInOffHand();
-						tryWeaponProc(wpn, defender, InventorySlot.Secondary);
-
-						doAttackRounds(defender, InventorySlot.Secondary, false);
+					//if (ranged->GetItem() && ranged->GetItem()->ItemType == EQEmu::item::ItemTypeBow) {
+					if (!getSoliniaItemInMainHand().isThrowing())
+					{
+						// if (GetTarget() && (GetTarget()->IsNPC() || GetTarget()->IsClient())) {
+						if (target != null && target != this.getBukkitLivingEntity() && !target.isDead() && defender != null)
+						{
+							if (this.checkLosFN(defender,false)) {
+								// if (AutoFireEnabled()) {
+								RangedAttack(defender, false);
+								autoAttack.setLastUpdatedTimeNow(this);
+								//if (CheckDoubleRangedAttack())
+								//	RangedAttack(GetTarget(), true);
+							} else {
+								getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You do not have line of sight to your target!");
+								autoAttack.setLastUpdatedTimeNow(this);
+							}
+						} else {
+							autoAttack.setLastUpdatedTimeNow(this);
+						}
+					} else {
+						//else if (ranged->GetItem() && (ranged->GetItem()->ItemType == EQEmu::item::ItemTypeLargeThrowing || ranged->GetItem()->ItemType == EQEmu::item::ItemTypeSmallThrowing)) {
+						// Throwing weapon
+						// if (GetTarget() && (GetTarget()->IsNPC() || GetTarget()->IsClient())) {
+						if (target != null && target != this.getBukkitLivingEntity() && !target.isDead() && defender != null)
+						{
+							if (this.checkLosFN(defender,false)) {
+								// if (AutoFireEnabled()) {
+								ThrowingAttack(defender, false);
+								autoAttack.setLastUpdatedTimeNow(this);
+								//if (CheckDoubleRangedAttack())
+								//	RangedAttack(GetTarget(), true);
+							} else {
+								getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You do not have line of sight to your target!");
+								autoAttack.setLastUpdatedTimeNow(this);
+							}
+						} else {
+							autoAttack.setLastUpdatedTimeNow(this);
+						}
 					}
 				}
+				
+				if (autoAttack.canAutoAttack() && target != null && may_use_attacks && !ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+				{
+					Tuple<Boolean, String> canUseItem = this.canUseItem(getBukkitLivingEntity().getEquipment().getItemInMainHand());
+					
+					if (!combatRange(defender))
+					{
+						this.getBukkitLivingEntity().sendMessage("* You are too far from your target");
+					} else if (target == this.getBukkitLivingEntity())
+					{
+						this.getBukkitLivingEntity().sendMessage("* Try attack something other than yourself");
+					} else if (!this.isNPC() && !canUseItem.a())
+					{
+						if (getBukkitLivingEntity() instanceof Player)
+							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "You cannot use this item ["+canUseItem.b()+"]");
+					} else if (target.getHealth() > 0D)
+					{
+						ItemStack wpn = getBukkitLivingEntity().getEquipment().getItemInMainHand();
+						tryWeaponProc(wpn, defender, InventorySlot.Primary);
+						//TriggerDefensiveProcs(target, InventorySlot.Primary, false);
+	
+						doAttackRounds(defender, InventorySlot.Primary, false);
+						//if (CheckAATimer(aaTimerRampage))
+						//	entity_list.AEAttack(this, 30);
+					}
+	
+				}
+				
+				if (autoAttack.canAutoAttack() && target != null && may_use_attacks && canThisClassDualWield() && !ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+				{
+					boolean los_status = this.checkLosFN(defender,false);
+					boolean los_status_facing= this.isFacingMob(defender);
+	
+					// Range check
+					if (!combatRange(defender)) {
+						// this is a duplicate message don't use it.
+						//Message_StringID(MT_TooFarAway,TARGET_TOO_FAR);
+					}
+					// Don't attack yourself
+					else if (target == this.getBukkitLivingEntity()) {
+						//Message_StringID(MT_TooFarAway,TRY_ATTACKING_SOMEONE);
+					}
+					else if (!los_status || !los_status_facing)
+					{
+						//you can't see your target
+					}
+					else if (target.getHealth() > 0D) {
+						tryIncreaseSkill(SkillType.DualWield, 1);
+						if (checkDualWield()) {
+							ItemStack wpn = getBukkitLivingEntity().getEquipment().getItemInOffHand();
+							tryWeaponProc(wpn, defender, InventorySlot.Secondary);
+	
+							doAttackRounds(defender, InventorySlot.Secondary, false);
+						}
+					}
+				}
+				
+				autoAttack.setLastUpdatedTimeNow(this);
+			} else {
+				// waiting on auto attack timer
 			}
+
 			
 		} catch (CoreStateInitException e)
 		{
@@ -11250,6 +11263,21 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 	@Override
 	public boolean canAttackTarget(ISoliniaLivingEntity defender) {
+		if (defender == null)
+			return false;
+		
+		if (this.getBukkitLivingEntity() == null)
+			return false;
+		
+		if (defender.getBukkitLivingEntity() == null)
+			return false;
+		
+		if (defender.getBukkitLivingEntity().isDead())
+			return false;
+		
+		if (this.getBukkitLivingEntity().isDead())
+			return false;
+		
 		// IM MEZZED SO CANT DO ANYTHING
 		if (isStunned())
 			return false;
