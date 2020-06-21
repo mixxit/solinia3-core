@@ -5,7 +5,6 @@ import java.util.UUID;
 import org.bukkit.command.CommandSender;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Exceptions.InvalidNpcSettingException;
 import com.solinia.solinia.Exceptions.InvalidRaceSettingException;
 import com.solinia.solinia.Interfaces.IPersistable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;

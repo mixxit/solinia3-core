@@ -74,7 +74,7 @@ import com.solinia.solinia.Timers.AttendenceXpBonusTimer;
 import com.solinia.solinia.Timers.AutoCastTimer;
 import com.solinia.solinia.Timers.CastingTimer;
 import com.solinia.solinia.Timers.ClientVersionTimer;
-import com.solinia.solinia.Timers.EntityAutoAttackTimer;
+import com.solinia.solinia.Timers.EntityClientProcess;
 import com.solinia.solinia.Timers.InvalidItemCheckerTimer;
 import com.solinia.solinia.Timers.NPCCheckForEnemiesTimer;
 import com.solinia.solinia.Timers.NPCRandomChatTimer;
@@ -125,7 +125,7 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 	private UpdatePlayerWindowTimer playerWindowTimer;
 	private PetFastCheckTimer petFastCheckTickTimer;
 	private InvalidItemCheckerTimer invalidItemCheckerTimer;
-	private EntityAutoAttackTimer entityAutoAttackTimer;
+	private EntityClientProcess entityClientProcess;
 	private SoliniaLivingEntityPassiveEffectTimer entityPassiveEffectTimer;
 	FileConfiguration config = getConfig();
 	private EffectManager effectManager;
@@ -545,9 +545,9 @@ public class Solinia3CorePlugin extends JavaPlugin implements PluginMessageListe
 		// every 100 milliseconds
 		castingTimer.runTaskTimer(this, 0L, 1 * 2L);
 
-		entityAutoAttackTimer = new EntityAutoAttackTimer();
+		entityClientProcess = new EntityClientProcess();
 		// if 20L is a second, then 1L is 50ms
-		entityAutoAttackTimer.runTaskTimer(this, 0L, 1L);
+		entityClientProcess.runTaskTimer(this, 0L, 1L);
 
 		entityPassiveEffectTimer = new SoliniaLivingEntityPassiveEffectTimer();
 		entityPassiveEffectTimer.runTaskTimer(this, 6 * 20L, 6 * 20L);

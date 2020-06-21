@@ -782,6 +782,7 @@ public class SoliniaActiveSpell {
 		case GroupFearImmunity:
 			return;
 		case Rampage:
+			applyRampage(spellEffect, soliniaSpell, casterLevel);
 			return;
 		case AETaunt:
 			return;
@@ -2948,6 +2949,37 @@ public class SoliniaActiveSpell {
 		} catch (CoreStateInitException e) {
 			return;
 		}
+	}
+	
+	private void applyRampage(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {
+		/*
+		 * TODO - Player rampage
+		 * if (getLivingEntity().isDead())
+			return;
+
+		if (Bukkit.getEntity(getSourceUuid()) == null)
+			return;
+
+		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
+		if (sourceEntity == null)
+			return;
+
+		if (!(sourceEntity instanceof LivingEntity))
+			return;
+
+		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
+
+		try {
+			ISoliniaLivingEntity solSourceEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
+			if (solSourceEntity == null)
+				return;
+			
+			solSourceEntity.getSomeList().AEAttack(solSourceEntity, 30, InventorySlot.Primary, 0, true); // on live wars dont get a duration ramp, its a one shot deal
+			
+		} catch (CoreStateInitException e)
+		{
+			
+		}*/
 	}
 
 	private void applyBackstab(SpellEffect spellEffect, ISoliniaSpell soliniaSpell, int casterLevel) {

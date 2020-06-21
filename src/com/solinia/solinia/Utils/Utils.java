@@ -8,7 +8,6 @@ import java.net.URLConnection;
 import org.bukkit.Location;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Models.DisguisePackage;
 import com.solinia.solinia.Models.SoliniaZone;
 
 public class Utils {
@@ -54,7 +53,17 @@ public class Utils {
 
 	public static final int HASTE_CAP = 200;
 
+	public static final int NPCDualAttackModifier = 20;
+
+	public static final int NPCTripleAttackModifier = 0;
 	
+	public static final int NPCQuadAttackModifier = -20;
+
+	public static final double NPC_RAMPAGE_RANGE2 = 5625.0f;
+
+	public static final int NPCFlurryChance = 20;
+
+	public static final int AI_IdleBeneficialChance = 100;
 
 	public static String getHttpUrlAsString(String urlLink) {
 		try {

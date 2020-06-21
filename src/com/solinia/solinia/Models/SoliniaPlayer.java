@@ -51,7 +51,6 @@ import com.solinia.solinia.Interfaces.ISoliniaRace;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ChatUtils;
-import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.ForgeUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;

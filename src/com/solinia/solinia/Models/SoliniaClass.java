@@ -64,6 +64,7 @@ public class SoliniaClass implements ISoliniaClass,IPersistable {
 	private int dodgelevel = 0;
 	private int ripostelevel = 0;
 	private int doubleattacklevel = 0;
+	private int tripleattacklevel = 0;
 	private int safefalllevel = 0;
 	private int dualwieldlevel = 0;
 	private String shortName = "";
@@ -91,7 +92,6 @@ public class SoliniaClass implements ISoliniaClass,IPersistable {
 	private int armsItemIconItemId = 226504;
 	private int handsItemIconItemId = 226502;
 	private int waistItemIconItemId = 226501;
-	
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
@@ -248,6 +248,7 @@ public class SoliniaClass implements ISoliniaClass,IPersistable {
 		sender.sendMessage("- dodgelevel: " + ChatColor.GOLD + getDodgelevel() + ChatColor.RESET);
 		sender.sendMessage("- ripostelevel: " + ChatColor.GOLD + getRipostelevel() + ChatColor.RESET);
 		sender.sendMessage("- doubleattacklevel: " + ChatColor.GOLD + getDoubleattacklevel() + ChatColor.RESET);
+		sender.sendMessage("- tripleattacklevel: " + ChatColor.GOLD + getDoubleattacklevel() + ChatColor.RESET);
 		sender.sendMessage("- safefalllevel: " + ChatColor.GOLD + getSafefalllevel() + ChatColor.RESET);
 		sender.sendMessage("- specialiselevel: " + ChatColor.GOLD + getSpecialiselevel() + ChatColor.RESET);
 		sender.sendMessage("- dualwieldlevel: " + ChatColor.GOLD + getDualwieldlevel() + ChatColor.RESET);
@@ -422,6 +423,9 @@ public class SoliniaClass implements ISoliniaClass,IPersistable {
 			break;
 		case "dodgelevel":
 			this.setDodgelevel(Integer.parseInt(value));
+			break;
+		case "tripleattacklevel":
+			this.setTripleattacklevel(Integer.parseInt(value));
 			break;
 		case "doubleattacklevel":
 			this.setDoubleattacklevel(Integer.parseInt(value));
@@ -836,6 +840,14 @@ public class SoliniaClass implements ISoliniaClass,IPersistable {
 	@Override
 	public boolean canDoubleAttack() {
 		if (getDoubleattacklevel() < 1)
+			return false;
+
+		return true;
+	}
+	
+	@Override
+	public boolean canTripleAttack() {
+		if (getTripleattacklevel() < 1)
 			return false;
 
 		return true;
@@ -1272,5 +1284,15 @@ public class SoliniaClass implements ISoliniaClass,IPersistable {
 	@Override
 	public void setWaistItemIconItemId(int waistItemIconItemId) {
 		this.waistItemIconItemId = waistItemIconItemId;
+	}
+
+	@Override
+	public int getTripleattacklevel() {
+		return tripleattacklevel;
+	}
+
+	@Override
+	public void setTripleattacklevel(int tripleattacklevel) {
+		this.tripleattacklevel = tripleattacklevel;
 	}
 }

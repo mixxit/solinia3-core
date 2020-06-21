@@ -17,7 +17,6 @@ import com.solinia.solinia.Interfaces.ISoliniaItem;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.EquipmentSlot;
-import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.PlayerUtils;
 import net.md_5.bungee.api.ChatColor;

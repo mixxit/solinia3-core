@@ -85,7 +85,7 @@ public interface ISoliniaClass extends IPersistable {
 	public boolean canDodge();
 
 	public boolean canDoubleAttack();
-
+	
 	int getDodgelevel();
 
 	void setDodgelevel(int dodgelevel);
@@ -249,5 +249,11 @@ public interface ISoliniaClass extends IPersistable {
 	int getWaistItemIconItemId();
 
 	void setWaistItemIconItemId(int waistItemIconItemId);
+
+	int getTripleattacklevel();
+
+	void setTripleattacklevel(int tripleattacklevel);
+
+	boolean canTripleAttack();
 
 }

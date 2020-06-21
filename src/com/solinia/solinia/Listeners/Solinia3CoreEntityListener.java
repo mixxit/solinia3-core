@@ -489,7 +489,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					return;
 				
 				damager.setEntityTarget(defender.getBukkitLivingEntity());
-				damager.processAutoAttack(true);
+				damager.ClientProcess(true);
 				
 			} catch (CoreStateInitException e) {
 			}
@@ -513,7 +513,7 @@ public class Solinia3CoreEntityListener implements Listener {
 					return;
 				
 				damager.setEntityTarget(defender.getBukkitLivingEntity());
-				damager.processAutoAttack(true);
+				damager.ClientProcess(true);
 				
 			} catch (CoreStateInitException e) {
 			}

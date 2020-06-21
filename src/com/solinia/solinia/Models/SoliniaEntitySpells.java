@@ -22,7 +22,6 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.ChatUtils;
-import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.SpellUtils;
 import me.libraryaddict.disguise.DisguiseAPI;

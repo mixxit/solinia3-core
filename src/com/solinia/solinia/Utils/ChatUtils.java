@@ -214,6 +214,18 @@ public class ChatUtils {
 		boolean showItemLinks = false;
 		switch (hint)
 		{
+		case NPC_RAMPAGE:
+			message = "* " + entity.getCustomName() +  " goes on a RAMPAGE!";
+			break;
+		case PET_FLURRY:
+			message = "* " + entity.getCustomName() +  " unleashes a flurry of attacks!";
+			break;
+		case NPC_FLURRY:
+			message = "* " + entity.getCustomName() +  " unleashes a flurry of attacks!";
+			break;
+		case YOU_FLURRY:
+			message = "* You unleash a flurry of attacks";
+			break;
 		case SKILLUP:
 			String[] skill = referenceCode.split("\\^");
 			message = ChatColor.YELLOW + "* You get better at " + skill[0] + " (" + skill[1] + ")";
@@ -588,6 +600,14 @@ public class ChatUtils {
 		case DUALWIELD:
 			return HintSetting.Chat;
 		case DOUBLEATTACK:
+			return HintSetting.Chat;
+		case NPC_RAMPAGE:
+			return HintSetting.Chat;
+		case PET_FLURRY:
+			return HintSetting.Chat;
+		case YOU_FLURRY:
+			return HintSetting.Chat;
+		case NPC_FLURRY:
 			return HintSetting.Chat;
 		}
 		

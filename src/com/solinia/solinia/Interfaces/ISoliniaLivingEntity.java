@@ -14,11 +14,13 @@ import org.bukkit.plugin.Plugin;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
 import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.DamageHitInfo;
+import com.solinia.solinia.Models.ExtraAttackOptions;
 import com.solinia.solinia.Models.FactionStandingType;
 import com.solinia.solinia.Models.FocusEffect;
 import com.solinia.solinia.Models.InteractionType;
 import com.solinia.solinia.Models.NumHit;
 import com.solinia.solinia.Models.PacketMobVitals;
+import com.solinia.solinia.Models.RampageList;
 import com.solinia.solinia.Models.SkillType;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
@@ -59,8 +61,6 @@ public interface ISoliniaLivingEntity  {
 	void say(String message);
 
 	void processInteractionEvent(LivingEntity triggerentity, InteractionType type, String data);
-
-	void doSpellCast(Plugin plugin, LivingEntity livingEntity);
 
 	boolean getDodgeCheck();
 
@@ -224,8 +224,6 @@ public interface ISoliniaLivingEntity  {
 
 	void damageAlertHook(double damage, Entity sourceEntity);
 
-	void autoAttackEnemy(ISoliniaLivingEntity solLivingEntity);
-
 	SoliniaWorld getWorld();
 
 	Tuple<Boolean, String> canUseItem(ItemStack itemInMainHand);
@@ -349,6 +347,7 @@ public interface ISoliniaLivingEntity  {
 	boolean canDisarm();
 
 	boolean isAttackAllowed(ISoliniaLivingEntity target, boolean isSpellAttack);
+	boolean isAttackAllowed(ISoliniaLivingEntity target);
 
 	public void disarm(ISoliniaLivingEntity disarmer, int chance);
 
@@ -414,8 +413,6 @@ public interface ISoliniaLivingEntity  {
 
 	double setHPChange(int hpchange, LivingEntity causeOfEntityHpChange);
 
-	public boolean isFacingMob(SoliniaLivingEntity soliniaLivingEntity);
-
 	void buffFadeByEffect(SpellEffectType type);
 
 	void healDamage(double amount, ISoliniaLivingEntity caster, int spell_id);
@@ -457,8 +454,6 @@ public interface ISoliniaLivingEntity  {
 	public boolean checkLosFN(ISoliniaLivingEntity solTarget, boolean checkDirection);
 
 	boolean IsCorePet();
-
-	void processAutoAttack(boolean wasTriggeredManually);
 
 	ISoliniaPlayer getPlayer();
 
@@ -558,5 +553,29 @@ public interface ISoliniaLivingEntity  {
 	void increaseMana(int amount);
 
 	void reduceMana(int amount);
+	
+	public void doAttackRounds(ISoliniaLivingEntity target, int hand, boolean isFromSpell);
+
+	RampageList getRampageArray();
+
+	boolean Rampage(ExtraAttackOptions opts);
+
+	boolean checkTripleAttack();
+
+	boolean canTripleAttack();
+
+	void ClientProcess(boolean manual);
+
+	boolean isFacingMob(ISoliniaLivingEntity soliniaLivingEntity);
+
+	void AI_Process();
+
+	public void NPCProcess();
+
+	public boolean IsCorpse();
+
+	void doClassAttacks(ISoliniaLivingEntity ca_target);
+
+	void AI_EngagedCastCheck();
 
 }

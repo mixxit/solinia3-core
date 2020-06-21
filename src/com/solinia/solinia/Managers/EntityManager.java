@@ -56,6 +56,7 @@ import com.solinia.solinia.Models.ActiveSpellEffect;
 import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.EntityAutoAttack;
 import com.solinia.solinia.Models.HINT;
+import com.solinia.solinia.Models.RampageList;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SoliniaLivingEntity;
@@ -64,7 +65,6 @@ import com.solinia.solinia.Models.UniversalMerchantEntry;
 import com.solinia.solinia.Models.SpellEffectType;
 import com.solinia.solinia.Models.SpellType;
 import com.solinia.solinia.Utils.ChatUtils;
-import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.PartyWindowUtils;
 import com.solinia.solinia.Utils.RaycastUtils;
@@ -114,6 +114,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Boolean> playerSetMain = new ConcurrentHashMap<UUID, Boolean>();
 	private ConcurrentHashMap<UUID, EntityAutoAttack> entityAutoAttack = new ConcurrentHashMap<UUID, EntityAutoAttack>();
 	private ConcurrentHashMap<UUID, UUID> entityTargets = new ConcurrentHashMap<UUID, UUID>();
+	private ConcurrentHashMap<UUID, RampageList> rampageList = new ConcurrentHashMap<UUID, RampageList>();
 	private ConcurrentHashMap<UUID, Boolean> feignedDeath = new ConcurrentHashMap<UUID, Boolean>();
 	private ConcurrentHashMap<UUID, UUID> following = new ConcurrentHashMap<UUID, UUID>();
 	private ConcurrentHashMap<UUID, CastingSpell> entitySpellCasting = new ConcurrentHashMap<UUID, CastingSpell>();
@@ -799,14 +800,7 @@ public class EntityManager implements IEntityManager {
 					
 					completedNpcsIds.add(solLivingEntityThatWillCast.getNpcid());
 					
-					if (solLivingEntityThatWillCast.getAttackTarget() != null)
-					{
-						ISoliniaLivingEntity solCreatureThatWillCastsTarget = SoliniaLivingEntityAdapter.Adapt(solLivingEntityThatWillCast.getAttackTarget());
-						if (RaycastUtils.isEntityInLineOfSight(solLivingEntityThatWillCast, solCreatureThatWillCastsTarget, true))
-							solLivingEntityThatWillCast.doSpellCast(plugin, solLivingEntityThatWillCast.getAttackTarget());
-					} else {
-						solLivingEntityThatWillCast.doSpellCast(plugin, null);
-					}
+					solLivingEntityThatWillCast.AI_EngagedCastCheck();
 					
 				} catch (CoreStateInitException e) {
 					// TODO Auto-generated catch block
@@ -2072,6 +2066,8 @@ public class EntityManager implements IEntityManager {
 	
 	@Override
 	public void addToHateList(UUID entity, UUID provoker, int hate, boolean isYellForHelp) {
+		addToRampageList(entity, provoker);
+		
 		if (hateList.get(entity) == null)
 			hateList.put(entity, new ConcurrentHashMap<UUID, Tuple<Integer,Boolean>>());
 
@@ -2118,6 +2114,44 @@ public class EntityManager implements IEntityManager {
 		}
 	}
 	
+	@Override
+	public void addToRampageList(UUID entity, UUID provoker) {
+		if (rampageList.get(entity) == null)
+			rampageList.put(entity, new RampageList(new ArrayList<UUID>()));
+		
+		// Add unless already in
+		rampageList.get(entity).addToList(provoker);
+		return;
+	}
+	
+	@Override
+	public RampageList getRampageList(UUID entity) {
+		if (rampageList.get(entity) == null)
+			rampageList.put(entity, new RampageList(new ArrayList<UUID>()));
+		
+		return rampageList.get(entity);
+	}
+	
+	@Override
+	public void clearRampageList(UUID entity) {
+		if (rampageList.get(entity) == null)
+			rampageList.put(entity, new RampageList(new ArrayList<UUID>()));
+		
+		// Add unless already in
+		rampageList.get(entity).clearRampageList();
+		return;
+	}
+	
+	@Override
+	public void removeFromRampageList(UUID entity, UUID provoker) {
+		if (rampageList.get(entity) == null)
+			rampageList.put(entity, new RampageList(new ArrayList<UUID>()));
+		
+		// Add unless already in
+		rampageList.get(entity).removeFromList(provoker);
+		return;
+	}
+	
 	private ConcurrentHashMap<UUID, Tuple<Integer,Boolean>> getHateList(UUID entity)
 	{
 		if (hateList.get(entity) == null)
@@ -2159,6 +2193,8 @@ public class EntityManager implements IEntityManager {
 
 	@Override
 	public void clearHateList(UUID entityUuid) {
+		clearRampageList(entityUuid);
+		
 		if (hateList.get(entityUuid) != null)
 		{
 			if (hateList.get(entityUuid).size() == 0)
@@ -2193,6 +2229,8 @@ public class EntityManager implements IEntityManager {
 	
 	@Override
 	public void removeFromHateList(UUID entityUuid, UUID target) {
+		removeFromRampageList(entityUuid, target);
+		
 		if (hateList.get(entityUuid) == null)
 			return;
 		
@@ -2435,5 +2473,4 @@ public class EntityManager implements IEntityManager {
 	public void setPetFocus(UUID uuid, int petFocus) {
 		this.petFocus.put(uuid, petFocus);
 	}
-
 }

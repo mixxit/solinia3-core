@@ -13,19 +13,19 @@ import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Utils.EntityUtils;
 
-public class EntityAutoAttackTimer extends BukkitRunnable {
+public class EntityClientProcess extends BukkitRunnable {
 	@Override
 	public void run() {
 		try
 		{
-			runEntitiesAutoAttack();
+			runEntitiesClientProcess();
 		} catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 	}
 
-	private void runEntitiesAutoAttack() {
+	private void runEntitiesClientProcess() {
 List<String> completedEntities = new ArrayList<String>();
 		
 		// Check each player and check entities near player
@@ -35,7 +35,7 @@ List<String> completedEntities = new ArrayList<String>();
 				// Player first
 				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(player);
 				if (solLivingEntity != null)
-					solLivingEntity.processAutoAttack(false);
+					solLivingEntity.ClientProcess(false);
 
 				
 				// Then nearby npcs
@@ -70,7 +70,7 @@ List<String> completedEntities = new ArrayList<String>();
 					if (solLe == null)
 						continue;
 					
-					solLe.processAutoAttack(false);
+					solLe.NPCProcess();
 				}
 			
 			} catch (Exception e)

@@ -35,6 +35,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import com.rit.sucy.player.TargetHelper;
+import com.solinia.solinia.Adapters.ItemStackAdapter;
 import com.solinia.solinia.Adapters.SoliniaItemAdapter;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
@@ -100,84 +101,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (metaid != null)
 			if (!metaid.equals(""))
 				installNpcByMetaName(metaid);
-	}
-	
-	@Override
-	public void processAutoAttack(boolean wasTriggeredManually) {
-		try
-		{
-			EntityAutoAttack autoAttack = StateManager.getInstance().getEntityManager().getEntityAutoAttack(this.getBukkitLivingEntity());
-
-			if (!wasTriggeredManually && !autoAttack.isAutoAttacking())
-				return;
-				
-			if (!wasTriggeredManually && this.getBukkitLivingEntity() == null || this.getBukkitLivingEntity().isDead())
-			{
-				StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
-				return;
-			}
-			
-			// For normal auto attack
-			if (!autoAttack.canAutoAttack())
-			{
-				return;
-			}
-			
-			LivingEntity target = getEntityTarget();
-			if (target != null)
-			{
-				if (target instanceof Player)
-				{
-					if (((Player)target).getGameMode() != GameMode.SURVIVAL)
-					{
-						if (this.getBukkitLivingEntity() instanceof Player)
-							this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target is not in SURVIVAL gamemode!");
-						
-						StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
-					}
-				}
-				
-				if (target.isDead())
-				{
-					if (this.getBukkitLivingEntity() instanceof Player)
-					this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target is dead!");
-					StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
-					return;
-				}
-				
-				ISoliniaLivingEntity solLivingEntityTarget = SoliniaLivingEntityAdapter.Adapt(target);
-				
-				// Patch to fix mobs keeping aggro despite not being in hate list
-				// Mythicmobs bug? 
-				// TODO
-				
-				// nm
-
-				if (solLivingEntityTarget != null)
-				{
-					// reset timer
-					autoAttack.setLastUpdatedTimeNow(this);
-					this.autoAttackEnemy(solLivingEntityTarget);
-				} else {
-					if (this.getBukkitLivingEntity() instanceof Player)
-					this.sendMessage(ChatColor.GRAY + "* Could not find target to attack!");
-					StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
-					return;
-				}
-			} else {
-				if (this.getBukkitLivingEntity() instanceof Player)
-				this.sendMessage(ChatColor.GRAY + "* You have no target to auto attack");
-				StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
-				return;
-			}
-		} catch (CoreStateInitException e)
-		{
-			e.printStackTrace();
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
 	}
 
 	@Override
@@ -356,199 +279,1104 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return null;
 		}
 	}
-
+	
 	@Override
-	public void autoAttackEnemy(ISoliniaLivingEntity defender) {
-		if (getBukkitLivingEntity().isInvulnerable() || defender.getBukkitLivingEntity().isInvulnerable())
+	public void NPCProcess() {
+		// stun removal check
+		// depop check
+		
+		//SpellProcess();
+
+		// hp regen
+		// mana regen
+		
+		// send hp update
+		
+		// npc pathing
+
+		if (isMezzed())
+			return;
+
+		if(isStunned()) {
+			//if(spun_timer.Check())
+				//Spin();
+			return;
+		}
+
+		// enrage timer
+		/*
+		if (enraged_timer.Check()){
+			ProcessEnrage();
+
+			if (!GetSpecialAbility(SPECATK_ENRAGE)) {
+				enraged_timer.Disable();
+			}
+		}
+		 */
+
+		/*
+		//Handle assists...
+		if (assist_cap_timer.Check()) {
+			if (NPCAssistCap() > 0)
+				DelAssistCap();
+			else
+				assist_cap_timer.Disable();
+		}
+
+		if (assist_timer.Check() && IsEngaged() && !Charmed() && !HasAssistAggro() &&
+		    NPCAssistCap() < RuleI(Combat, NPCAssistCap)) {
+			entity_list.AIYellForHelp(this, GetTarget());
+			if (NPCAssistCap() > 0 && !assist_cap_timer.Enabled())
+				assist_cap_timer.Start(RuleI(Combat, NPCAssistCapTimer));
+		}
+		*/
+
+		AI_Process();
+	}
+	
+	@Override
+	public void AI_Process()
+	{
+		try
 		{
-			try {
-				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You stop auto attacking (invulnerable)");
-				StateManager.getInstance().getEntityManager().setEntityAutoAttack(getBukkitLivingEntity(), false);
-				if (this.isInHateList(defender.getBukkitLivingEntity().getUniqueId()))
-					this.removeFromHateList(defender.getBukkitLivingEntity().getUniqueId());
+			if (!this.isNPC() && !this.isCurrentlyNPCPet())
 				return;
-			} catch (CoreStateInitException e) {
-
-			}
-			return;
-		}
-		
-		if (getBukkitLivingEntity().isDead()) {
-			try {
-				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You stop auto attacking (dead)");
-				StateManager.getInstance().getEntityManager().setEntityAutoAttack(getBukkitLivingEntity(), false);
-				if (this.isInHateList(defender.getBukkitLivingEntity().getUniqueId()))
-					this.removeFromHateList(defender.getBukkitLivingEntity().getUniqueId());
+			
+			// TODO Check last think timer
+			//if (!(AI_think_timer->Check() || attack_timer.Check(false)))
+				//return;
+	
+			if (isCasting())
 				return;
-			} catch (CoreStateInitException e) {
-
+	
+			boolean engaged = isEngaged();
+			boolean doranged = false;
+	
+			/*
+			if (!zone->CanDoCombat() || IsPetStop() || IsPetRegroup()) {
+				engaged = false;
 			}
-			return;
-		}
-
-		if (defender.getBukkitLivingEntity().isDead()) {
-			try {
-				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You stop auto attacking (dead)");
-				StateManager.getInstance().getEntityManager().setEntityAutoAttack(getBukkitLivingEntity(), false);
-				if (this.isInHateList(defender.getBukkitLivingEntity().getUniqueId()))
-					this.removeFromHateList(defender.getBukkitLivingEntity().getUniqueId());
-				return;
-			} catch (CoreStateInitException e) {
-
-			}
-			return;
-		}
-
-		if (defender.isFeignedDeath())
-		{
-			try {
-				// Clear aggro
-				defender.resetReverseAggro();
-				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You stop auto attacking (dead)");
-				StateManager.getInstance().getEntityManager().setEntityAutoAttack(getBukkitLivingEntity(), false);
-				if (this.isInHateList(defender.getBukkitLivingEntity().getUniqueId()))
-					this.removeFromHateList(defender.getBukkitLivingEntity().getUniqueId());
-			} catch (CoreStateInitException e) {
-
-			}
-			return;
-		}
-		
-		if (defender.getBukkitLivingEntity().getUniqueId().toString()
-				.equals(getBukkitLivingEntity().getUniqueId().toString())) {
-			getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You cannot auto attack yourself!");
-			return;
-		}
-
-		if (defender.isCurrentlyNPCPet()) {
-			if (defender.getOwnerEntity().getUniqueId().toString()
-					.equals(getBukkitLivingEntity().getUniqueId().toString())) {
-				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You cannot auto attack your pet!");
-				return;
-			}
-		}
-		
-		// Remove buffs on attacker (invis should drop)
-		// and check they are not mezzed
-
-		// MEZZED
-		if (this.isMezzed()) {
-			if (this instanceof Player) {
-				((Player) this.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-						new TextComponent(ChatColor.GRAY + "* You are mezzed!"));
-			}
-			return;
-		}
-		
-		// FEAR
-				if (this.isFeared()) {
-					if (this instanceof Player) {
-						((Player) this.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-								new TextComponent(ChatColor.GRAY + "* You are feared!"));
+			*/
+	
+			// door opening code
+	
+			// fear pathing/fleeing
+			
+			EntityAutoAttack autoAttack = StateManager.getInstance().getEntityManager().getEntityAutoAttack(this.getBukkitLivingEntity());
+			LivingEntity target = getEntityTarget();
+	
+			ISoliniaLivingEntity defender = null;
+			if (target != null && target instanceof LivingEntity)
+				defender = SoliniaLivingEntityAdapter.Adapt(target);
+			
+			if (engaged) {
+				// todo fix height
+				// NPCs will forget people after 10 mins of not interacting with them or out of range
+				// both of these maybe zone specific, hardcoded for now
+				
+				/*
+				if (hate_list_cleanup_timer.Check()) {
+					hate_list.RemoveStaleEntries(600000, 600.0f);
+					if (hate_list.IsHateListEmpty()) {
+						AI_Event_NoLongerEngaged();
+						zone->DelAggroMob();
+						if (IsNPC() && !RuleB(Aggro, AllowTickPulling))
+							ResetAssistCap();
 					}
+				}
+				*/
+				// we are prevented from getting here if we are blind and don't have a target in range
+				// from above, so no extra blind checks needed
+				
+				/* Attacking nearer mobs
+				if ((IsRooted() && !GetSpecialAbility(IGNORE_ROOT_AGGRO_RULES)) || IsBlind())
+					SetTarget(hate_list.GetClosestEntOnHateList(this));
+				else
+				{
+					if (AI_target_check_timer->Check())
+					{
+						if (IsFocused()) {
+							if (!target) {
+								SetTarget(hate_list.GetEntWithMostHateOnList(this));
+							}
+						}
+						else {
+							if (!ImprovedTaunt())
+								SetTarget(hate_list.GetEntWithMostHateOnList(this));
+						}
+	
+					}
+				}
+				*/
+	
+				if (target == null || defender == null)
+					return;
+	
+				if (defender.IsCorpse()) {
+					removeFromHateList(target.getUniqueId());
 					return;
 				}
-		
-		// MEZZED - only players can break mez
-		if (!this.isPlayer() && defender.isMezzed()) {
-			return;
-		}
-
-		// STUNNED
-		if (this.isStunned()) {
-			if (this instanceof Player) {
-				((Player) this.getBukkitLivingEntity()).spigot().sendMessage(ChatMessageType.ACTION_BAR,
-						new TextComponent(ChatColor.GRAY + "* You are stunned!"));
+	
+				if (DivineAura())
+					return;
+	
+				//ProjectileAttack();
+	
+				/* Spawn point tethering
+				auto npcSpawnPoint = getSpawnPoint();
+				if (GetSpecialAbility(TETHER)) {
+					float tether_range = static_cast<float>(GetSpecialAbilityParam(TETHER, 0));
+					tether_range = tether_range > 0.0f ? tether_range * tether_range : pAggroRange * pAggroRange;
+	
+					if (DistanceSquaredNoZ(m_Position, npcSpawnPoint) > tether_range) {
+						GMMove(npcSpawnPoint.x, npcSpawnPoint.y, npcSpawnPoint.z, npcSpawnPoint.w);
+					}
+				}
+				else if (GetSpecialAbility(LEASH)) {
+					float leash_range = static_cast<float>(GetSpecialAbilityParam(LEASH, 0));
+					leash_range = leash_range > 0.0f ? leash_range * leash_range : pAggroRange * pAggroRange;
+	
+					if (DistanceSquaredNoZ(m_Position, npcSpawnPoint) > leash_range) {
+						GMMove(npcSpawnPoint.x, npcSpawnPoint.y, npcSpawnPoint.z, npcSpawnPoint.w);
+						SetHP(GetMaxHP());
+						BuffFadeAll();
+						WipeHateList();
+						return;
+					}
+				}
+				*/
+	
+				//StartEnrage();
+	
+				boolean is_combat_range = combatRange(defender);
+				
+				if (is_combat_range)
+				{
+					/*if (AI_movement_timer->Check())
+					{
+						if (CalculateHeadingToTarget(GetTarget()->GetX(), GetTarget()->GetY()) != m_Position.w)
+						{
+							SetHeading(CalculateHeadingToTarget(GetTarget()->GetX(), GetTarget()->GetY()));
+							SendPosition();
+						}
+						SetCurrentSpeed(0);
+					}*/
+					/*
+					if (IsMoving())
+					{
+						if (CalculateHeadingToTarget(GetTarget()->GetX(), GetTarget()->GetY()) != m_Position.w)
+						{
+							SetHeading(CalculateHeadingToTarget(GetTarget()->GetX(), GetTarget()->GetY()));
+							SendPosition();
+						}
+						SetCurrentSpeed(0);
+					}
+					*/
+	
+					//casting checked above...
+					if (
+							target != null && 
+							!isStunned() && 
+							!isMezzed() //&& 
+							//GetAppearance() != eaDead && 
+							//!IsMeleeDisabled()
+						) {
+	
+						//we should check to see if they die mid-attacks, previous
+						//crap of checking target for null was not gunna cut it
+	
+						//try main hand first
+						if (autoAttack.canAutoAttack()) {
+							DoMainHandAttackRounds(target, null);
+							//TriggerDefensiveProcs(target, InventorySlot.Primary, false);
+	
+							boolean specialed = false; // NPCs can only do one of these a round
+							if (getSpecialAbility(SpecialAbility.SPECATK_FLURRY) > 0) {
+								int flurry_chance = 0;
+								//int flurry_chance = GetSpecialAbilityParam(SPECATK_FLURRY, 0);
+								flurry_chance = flurry_chance > 0 ? flurry_chance : Utils.NPCFlurryChance;
+	
+								if (MathUtils.Roll(flurry_chance)) {
+									ExtraAttackOptions opts = new ExtraAttackOptions();
+									/*int cur = GetSpecialAbilityParam(SPECATK_FLURRY, 2);
+									if (cur > 0)
+										opts.damage_percent = cur / 100.0f;
+	
+									cur = GetSpecialAbilityParam(SPECATK_FLURRY, 3);
+									if (cur > 0)
+										opts.damage_flat = cur;
+	
+									cur = GetSpecialAbilityParam(SPECATK_FLURRY, 4);
+									if (cur > 0)
+										opts.armor_pen_percent = cur / 100.0f;
+	
+									cur = GetSpecialAbilityParam(SPECATK_FLURRY, 5);
+									if (cur > 0)
+										opts.armor_pen_flat = cur;
+	
+									cur = GetSpecialAbilityParam(SPECATK_FLURRY, 6);
+									if (cur > 0)
+										opts.crit_percent = cur / 100.0f;
+	
+									cur = GetSpecialAbilityParam(SPECATK_FLURRY, 7);
+									if (cur > 0)
+										opts.crit_flat = cur;*/
+	
+									Flurry(opts);
+									specialed = true;
+								}
+							}
+	
+							if (this.isCurrentlyNPCPet()) {
+								ISoliniaLivingEntity owner = this.getOwnerSoliniaLivingEntity();
+								if (owner != null) {
+									int flurry_chance = owner.getAABonuses(SpellEffectType.PetFlurry) +
+										owner.getSpellBonuses(SpellEffectType.PetFlurry) + owner.getItemBonuses(SpellEffectType.PetFlurry);
+	
+									if (flurry_chance > 0 && MathUtils.Roll(flurry_chance))
+										Flurry(null);
+								}
+							}
+	
+							if ((this.isCurrentlyNPCPet()) && this.getOwnerEntity() instanceof Player) {
+								ISoliniaLivingEntity owner = this.getOwnerSoliniaLivingEntity();
+								if (owner.getSpellBonuses(SpellEffectType.PC_Pet_Rampage) > 0 || owner.getItemBonuses(SpellEffectType.PC_Pet_Rampage) > 0 || owner.getAABonuses(SpellEffectType.PC_Pet_Rampage) > 0) {
+									int chance = owner.getSpellBonuses(SpellEffectType.PC_Pet_Rampage) + owner.getItemBonuses(SpellEffectType.PC_Pet_Rampage) + owner.getAABonuses(SpellEffectType.PC_Pet_Rampage);
+									if (MathUtils.Roll(chance)) {
+										Rampage(null);
+									}
+								}
+							}
+	
+							if (getSpecialAbility(SpecialAbility.SPECATK_RAMPAGE) > 0 && !specialed)
+							{
+								int rampage_chance = 0;
+								//int rampage_chance = GetSpecialAbilityParam(SPECATK_RAMPAGE, 0);
+								rampage_chance = rampage_chance > 0 ? rampage_chance : 20;
+								if (MathUtils.Roll(rampage_chance)) {
+									ExtraAttackOptions opts = new ExtraAttackOptions();
+									/*
+									int cur = GetSpecialAbilityParam(SPECATK_RAMPAGE, 3);
+									if (cur > 0) {
+										opts.damage_flat = cur;
+									}
+	
+									cur = GetSpecialAbilityParam(SPECATK_RAMPAGE, 4);
+									if (cur > 0) {
+										opts.armor_pen_percent = cur / 100.0f;
+									}
+	
+									cur = GetSpecialAbilityParam(SPECATK_RAMPAGE, 5);
+									if (cur > 0) {
+										opts.armor_pen_flat = cur;
+									}
+	
+									cur = GetSpecialAbilityParam(SPECATK_RAMPAGE, 6);
+									if (cur > 0) {
+										opts.crit_percent = cur / 100.0f;
+									}
+	
+									cur = GetSpecialAbilityParam(SPECATK_RAMPAGE, 7);
+									if (cur > 0) {
+										opts.crit_flat = cur;
+									}*/
+									Rampage(opts);
+									specialed = true;
+								}
+							}
+	
+							if (getSpecialAbility(SpecialAbility.SPECATK_AREA_RAMPAGE) > 0 && !specialed)
+							{
+								int rampage_chance = 0;
+								//int rampage_chance = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 0);
+								rampage_chance = rampage_chance > 0 ? rampage_chance : 20;
+								if (MathUtils.Roll(rampage_chance)) {
+									ExtraAttackOptions opts;
+									/*
+									int cur = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 3);
+									if (cur > 0) {
+										opts.damage_flat = cur;
+									}
+	
+									cur = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 4);
+									if (cur > 0) {
+										opts.armor_pen_percent = cur / 100.0f;
+									}
+	
+									cur = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 5);
+									if (cur > 0) {
+										opts.armor_pen_flat = cur;
+									}
+	
+									cur = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 6);
+									if (cur > 0) {
+										opts.crit_percent = cur / 100.0f;
+									}
+	
+									cur = GetSpecialAbilityParam(SPECATK_AREA_RAMPAGE, 7);
+									if (cur > 0) {
+										opts.crit_flat = cur;
+									}*/
+	
+									// TODO AreaRampage
+									//AreaRampage(opts);
+									specialed = true;
+								}
+							}
+						}
+	
+						//now off hand
+						if (
+								//attack_dw_timer.Check() && 
+								canThisClassDualWield()
+								)
+							DoOffHandAttackRounds(target, null);
+	
+						//now special attacks (kick, etc)
+						if (isNPC())
+							doClassAttacks(defender);
+	
+					}
+					AI_EngagedCastCheck();
+	
+				}	//end is within combat rangepet
+				else {
+					//we cannot reach our target...
+					//underwater stuff only works with water maps in the zone!
+					
+					/*
+					if (IsNPC() && IsUnderwaterOnly() && zone->HasWaterMap()) {
+						auto targetPosition = glm::vec3(target->GetX(), target->GetY(), target->GetZ());
+						if (!zone->watermap->InLiquid(targetPosition)) {
+							Mob *tar = hate_list.GetEntWithMostHateOnList(this);
+							if (tar == target) {
+								WipeHateList();
+								Heal();
+								BuffFadeAll();
+								AI_walking_timer->Start(100);
+								pLastFightingDelayMoving = Timer::GetCurrentTime();
+								return;
+							}
+							else if (tar != nullptr) {
+								SetTarget(tar);
+								return;
+							}
+						}
+					}
+					*/
+	
+					/*
+					// See if we can summon the mob to us
+					if (!HateSummon())
+					{
+						//could not summon them, check ranged...
+						if (GetSpecialAbility(SPECATK_RANGED_ATK))
+							doranged = true;
+	
+						// Now pursue
+						// TODO: Check here for another person on hate list with close hate value
+						if (AI_PursueCastCheck()) {
+							//we did something, so do not process movement.
+						}
+						else if (AI_movement_timer->Check() && target)
+						{
+							if (!IsRooted()) {
+								Log(Logs::Detail, Logs::AI, "Pursuing %s while engaged.", target->GetName());
+								if (!RuleB(Pathing, Aggro) || !zone->pathing)
+									CalculateNewPosition(target->GetX(), target->GetY(), target->GetZ(), GetRunspeed());
+								else
+								{
+									bool WaypointChanged, NodeReached;
+	
+									glm::vec3 Goal = UpdatePath(target->GetX(), target->GetY(), target->GetZ(),
+										GetRunspeed(), WaypointChanged, NodeReached);
+	
+									if (WaypointChanged)
+										tar_ndx = 20;
+	
+									CalculateNewPosition(Goal.x, Goal.y, Goal.z, GetRunspeed());
+								}
+	
+							}
+							else if (IsMoving()) {
+								SetHeading(CalculateHeadingToTarget(target->GetX(), target->GetY()));
+								SetCurrentSpeed(0);
+	
+							}
+						}
+					}
+					
+					*/
+				}
 			}
-			return;
-		}
-
-		// CAN ATTACK / MEZ, STUN - PETS CHECKING IF CAN ATTACK ETC
-		if (!this.canAttackTarget(defender)) {
-			return;
-		}
-		
-		Tuple<Boolean, String> canUseItem = this.canUseItem(getBukkitLivingEntity().getEquipment().getItemInMainHand());
-		if (!this.isNPC() && !canUseItem.a()) {
-			if (getBukkitLivingEntity() instanceof Player) {
-				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "You cannot use this item ["+canUseItem.b()+"]");
+			else {
+				//if (m_PlayerState & static_cast<uint32>(PlayerState::Aggressive))
+					//SendRemovePlayerState(PlayerState::Aggressive);
+	
+				//if (IsPetStop()) // pet stop won't be engaged, so we will always get here and we want the above branch to execute
+					//return;
+	
+				/*
+				if(
+						//zone->CanDoCombat() 
+						&& AI_feign_remember_timer->Check()) {
+					// 6/14/06
+					// Improved Feign Death Memory
+					// check to see if any of our previous feigned targets have gotten up.
+					std::set<uint32>::iterator RememberedCharID;
+					RememberedCharID = feign_memory_list.begin();
+					while (RememberedCharID != feign_memory_list.end()) {
+						Client* remember_client = entity_list.GetClientByCharID(*RememberedCharID);
+						if (remember_client == nullptr) {
+							//they are gone now...
+							RememberedCharID = feign_memory_list.erase(RememberedCharID);
+						} else if (!remember_client->GetFeigned()) {
+							AddToHateList(remember_client->CastToMob(),1);
+							RememberedCharID = feign_memory_list.erase(RememberedCharID);
+							break;
+						} else {
+							//they are still feigned, carry on...
+							++RememberedCharID;
+						}
+					}
+				}
+				*/
+				
+				if (AI_IdleCastCheck())
+				{
+					//we processed a spell action, so do nothing else.
+				}
+				// Aquire target
+				else if (
+						this.getEntityTarget() == null
+						//zone->CanDoCombat() && 
+						//CastToNPC()->WillAggroNPCs() && 
+						//AI_scan_area_timer->Check()
+						)
+				{
+					/*
+					* NPC to NPC aggro checking, npc needs npc_aggro flag
+					*/
+					
+					// handled by NPC Check for enemies timer for now
+	
+					//Mob* temp_target = entity_list.AICheckNPCtoNPCAggro(this, GetAggroRange(), GetAssistRange());
+					//if (temp_target){
+					//	AddToHateList(temp_target);
+					//}
+	
+					//AI_scan_area_timer->Disable();
+					//AI_scan_area_timer->Start(RandomTimer(RuleI(NPC, NPCToNPCAggroTimerMin), RuleI(NPC, NPCToNPCAggroTimerMax)), false);
+	
+				}
+				// TODO - Manually AI movement, following etc
 			}
-			return;
-		}
-
-
-		//if (AutoFireEnabled()) {
-		if (ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+	
+			//Do Ranged attack here
+			if(doranged)
+				RangedAttack(defender);
+		} catch (CoreStateInitException e)
 		{
-			if (!this.isNPC() && !this.hasArrowsInInventory()) {
-				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + 
-						"* You do not have sufficient arrows in your inventory to auto fire your bow!");
+			
+		}
+	}
+	
+	@Override
+	public void AI_EngagedCastCheck() {
+		if (isPlayer())
+			return;
+
+		if (!isNPC())
+			return;
+
+		if (this.livingentity == null)
+			return;
+
+		ISoliniaNPC npc;
+		try {
+			npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc.getClassid() < 1)
 				return;
-			}
-			
-			if (!this.checkLosFN(defender,false)) {
-				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + 
-						"* You do not have line of sight to your target!");
+
+			aiEngagedCastCheck(StateManager.getInstance().getPlugin(), npc, this.getAttackTarget(), this.getEffectiveLevel(true));
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void ClientProcess(boolean wasTriggeredManually) {
+		try
+		{
+			if (this.getBukkitLivingEntity() == null)
 				return;
-			}
 			
-			// if (AutoFireEnabled()) {
-			RangedAttack(defender, false);
-			
-		} else {
-			//check if change
-			//only check on primary attack.. sorry offhand you gotta wait!
-			
-			if (!defender.combatRange(this)) {
-				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You are too far away to auto attack!");
+			if (!(this.getBukkitLivingEntity() instanceof Player))
 				return;
-			}	
 			
-			if (defender.getBukkitLivingEntity().getUniqueId().equals(this.getBukkitLivingEntity().getUniqueId())) {
-				getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Try attacking someone other than yourself!");
-				return;
-			}	
-			
-			// this is where we need to validate
-			
-			getBukkitLivingEntity().getWorld().playSound(getBukkitLivingEntity().getLocation(),
-					Sound.ENTITY_PLAYER_ATTACK_STRONG, 1.0F, 1.0F);
-			// Send packet to nearby players
-			for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
-				if (listening instanceof Player)
-			        EntityUtils.sendAnimationPacket(getBukkitLivingEntity(),(Player)listening,SolAnimationType.SwingArm);
-			}
-			
-			// Send packet to self
-			if (getBukkitLivingEntity() instanceof Player)
-		        EntityUtils.sendAnimationPacket(getBukkitLivingEntity(),(Player)getBukkitLivingEntity(),SolAnimationType.SwingArm);
-			
-			
-			tryWeaponProc(getBukkitLivingEntity().getEquipment().getItemInMainHand(), defender, InventorySlot.Primary);
-			triggerDefensiveProcs(defender, InventorySlot.Primary, false, 0);
-			
-			doAttackRounds(defender, InventorySlot.Primary, false);
-			
-			// AE Attack Rampage
-			
-			// BERSERK
-			
-			if (this.getClassObj() != null && this.canDualWield())
+			// Tidy up 
+			if (this.getBukkitLivingEntity().isDead())
 			{
+				EntityAutoAttack autoAttack = StateManager.getInstance().getEntityManager().getEntityAutoAttack(this.getBukkitLivingEntity());
+				if (!wasTriggeredManually && autoAttack.isAutoAttacking())
+				{
+					StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+				}
+				return;
+			}
+	
+			// TODO if (RespawnFromHoverTimer.Check())
+			
+			// TODO Tracking handled elsewhere now
+			//if (IsTracking() && (ClientVersion() >= EQEmu::versions::ClientVersion::SoD) && TrackingTimer.Check())
+			
+			// TODO
+			// SendHPUpdate calls hpupdate_timer.Start so it can delay this timer, so lets not reset with the check
+			// since the function will anyways
+			
+			// TODO if (linkdead_timer.Check()) {
+			// LeaveGroup();
+			
+			if (!wasTriggeredManually && !this.isPlayer())
+				AI_Process();
+			
+			boolean may_use_attacks = false;
+			/*
+			Things which prevent us from attacking:
+				- being under AI control, the AI does attacks
+				- being dead
+				- casting a spell and bard check
+				- not having a target
+				- being stunned or mezzed
+				- having used a ranged weapon recently
+			 */
+		
+			LivingEntity target = getEntityTarget();
+			boolean targetIsDead = false;
+			boolean targetIsInvul = false;
+			
+			ISoliniaLivingEntity defender = null;
+			if (target != null && target instanceof LivingEntity)
+				defender = SoliniaLivingEntityAdapter.Adapt(target);
+
+			if (target != null)
+			{
+				if (target.isDead())
+				{
+					if (this.getBukkitLivingEntity() instanceof Player)
+					this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target is dead!");
+					StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+					targetIsDead = true;
+				}
+				
+				if (defender != null && defender.isFeignedDeath())
+				{
+					if (this.getBukkitLivingEntity() instanceof Player)
+						this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target dead!?");
+					StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+					targetIsDead = true;
+				}
+				
+				if (defender != null && defender.isInvulnerable())
+				{
+					if (this.getBukkitLivingEntity() instanceof Player)
+						this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target invulnerable!");
+					StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+					targetIsInvul = true;
+				}
+				
+				if (target instanceof Player)
+				{
+					if (((Player)target).getGameMode() != GameMode.SURVIVAL)
+					{
+						if (this.getBukkitLivingEntity() instanceof Player)
+							this.getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* Your target is not in SURVIVAL gamemode!");
+						
+						StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+						targetIsInvul = true;
+					}
+				}
+			} else {
+				if (this.getBukkitLivingEntity() instanceof Player)
+				{
+					this.sendMessage(ChatColor.GRAY + "* You have no target to auto attack");
+					StateManager.getInstance().getEntityManager().setEntityAutoAttack(this.getBukkitLivingEntity(), false);
+				}
+			}
+			
+			EntityAutoAttack autoAttack = StateManager.getInstance().getEntityManager().getEntityAutoAttack(this.getBukkitLivingEntity());
+			if (autoAttack.canAutoAttack() && !targetIsInvul && !targetIsDead && canAttackTarget(defender))
+			{
+				if (isPlayer()
+					&& !this.isCasting()
+					&& !isStunned() && !isFeared() && !isMezzed() && (wasTriggeredManually || autoAttack.isAutoAttacking())
+					)
+					may_use_attacks = true;
+
+				/* TODO - Ranged has its own timer
+					if (may_use_attacks && ranged_timer.Enabled()) {
+						//if the range timer is enabled, we need to consider it
+						if (!ranged_timer.Check(false)) {
+							//the ranged timer has not elapsed, cannot attack.
+							may_use_attacks = false;
+						}
+					}*/
+			}
+			
+			//if (AutoFireEnabled()) {
+			if (autoAttack.canAutoAttack() && may_use_attacks && ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+			{
+				//if (ranged->GetItem() && ranged->GetItem()->ItemType == EQEmu::item::ItemTypeBow) {
+				if (!getSoliniaItemInMainHand().isThrowing())
+				{
+					// if (GetTarget() && (GetTarget()->IsNPC() || GetTarget()->IsClient())) {
+					if (target != null && target != this.getBukkitLivingEntity() && !target.isDead() && defender != null)
+					{
+						if (this.checkLosFN(defender,false)) {
+							// if (AutoFireEnabled()) {
+							RangedAttack(defender, false);
+							autoAttack.setLastUpdatedTimeNow(this);
+							//if (CheckDoubleRangedAttack())
+							//	RangedAttack(GetTarget(), true);
+						} else {
+							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You do not have line of sight to your target!");
+							autoAttack.setLastUpdatedTimeNow(this);
+						}
+					} else {
+						autoAttack.setLastUpdatedTimeNow(this);
+					}
+				} else {
+					//else if (ranged->GetItem() && (ranged->GetItem()->ItemType == EQEmu::item::ItemTypeLargeThrowing || ranged->GetItem()->ItemType == EQEmu::item::ItemTypeSmallThrowing)) {
+					// Throwing weapon
+					// if (GetTarget() && (GetTarget()->IsNPC() || GetTarget()->IsClient())) {
+					if (target != null && target != this.getBukkitLivingEntity() && !target.isDead() && defender != null)
+					{
+						if (this.checkLosFN(defender,false)) {
+							// if (AutoFireEnabled()) {
+							ThrowingAttack(defender, false);
+							autoAttack.setLastUpdatedTimeNow(this);
+							//if (CheckDoubleRangedAttack())
+							//	RangedAttack(GetTarget(), true);
+						} else {
+							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "* You do not have line of sight to your target!");
+							autoAttack.setLastUpdatedTimeNow(this);
+						}
+					} else {
+						autoAttack.setLastUpdatedTimeNow(this);
+					}
+				}
+			}
+			
+			if (autoAttack.canAutoAttack() && target != null && may_use_attacks && !ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+			{
+				Tuple<Boolean, String> canUseItem = this.canUseItem(getBukkitLivingEntity().getEquipment().getItemInMainHand());
+				
+				if (!combatRange(defender))
+				{
+					this.getBukkitLivingEntity().sendMessage("* You are too far from your target");
+				} else if (target == this.getBukkitLivingEntity())
+				{
+					this.getBukkitLivingEntity().sendMessage("* Try attack something other than yourself");
+				} else if (!this.isNPC() && !canUseItem.a())
+				{
+					if (getBukkitLivingEntity() instanceof Player)
+						getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "You cannot use this item ["+canUseItem.b()+"]");
+				} else if (target.getHealth() > 0D)
+				{
+					ItemStack wpn = getBukkitLivingEntity().getEquipment().getItemInMainHand();
+					tryWeaponProc(wpn, defender, InventorySlot.Primary);
+					//TriggerDefensiveProcs(target, InventorySlot.Primary, false);
+
+					doAttackRounds(defender, InventorySlot.Primary, false);
+					//if (CheckAATimer(aaTimerRampage))
+					//	entity_list.AEAttack(this, 30);
+				}
+
+			}
+			
+			if (autoAttack.canAutoAttack() && target != null && may_use_attacks && canThisClassDualWield() && !ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+			{
+				boolean los_status = this.checkLosFN(defender,false);
+				boolean los_status_facing= this.isFacingMob(defender);
+
 				// Range check
-				if (!defender.combatRange(this)) {
+				if (!combatRange(defender)) {
 					// this is a duplicate message don't use it.
 					//Message_StringID(MT_TooFarAway,TARGET_TOO_FAR);
 				}
-				
-				tryIncreaseSkill(SkillType.DualWield, 1);
-				if (checkDualWield()) {
-					tryWeaponProc(getBukkitLivingEntity().getEquipment().getItemInOffHand(), defender, InventorySlot.Secondary);
-					ChatUtils.SendHint(this.getBukkitLivingEntity(), HINT.DUALWIELD, "", false);
-					doAttackRounds(defender, InventorySlot.Secondary, false);
+				// Don't attack yourself
+				else if (target == this.getBukkitLivingEntity()) {
+					//Message_StringID(MT_TooFarAway,TRY_ATTACKING_SOMEONE);
+				}
+				else if (!los_status || !los_status_facing)
+				{
+					//you can't see your target
+				}
+				else if (target.getHealth() > 0D) {
+					tryIncreaseSkill(SkillType.DualWield, 1);
+					if (checkDualWield()) {
+						ItemStack wpn = getBukkitLivingEntity().getEquipment().getItemInOffHand();
+						tryWeaponProc(wpn, defender, InventorySlot.Secondary);
+
+						doAttackRounds(defender, InventorySlot.Secondary, false);
+					}
 				}
 			}
 			
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	private void ThrowingAttack(ISoliniaLivingEntity other, boolean CanDoubleAttack) {
+		//conditions to use an attack checked before we are called
+		if (other == null)
+			return;
+		
+		if (this.getBukkitLivingEntity() == null)
+			return;
+		
+		try
+		{
+			//make sure the attack and ranged timers are up
+			//if the ranged timer is disabled, then they have no ranged weapon and shouldent be attacking anyhow
+			EntityAutoAttack autoAttack = StateManager.getInstance().getEntityManager().getEntityAutoAttack(this.getBukkitLivingEntity());
+			if(!CanDoubleAttack && !autoAttack.canAutoAttack()) {
+				//Log(Logs::Detail, Logs::Combat, "Throwing attack canceled. Timer not up. Attack %d, ranged %d", attack_timer.GetRemainingTime(), ranged_timer.GetRemainingTime());
+				// The server and client timers are not exact matches currently, so this would spam too often if enabled
+				//Message(0, "Error: Timer not up. Attack %d, ranged %d", attack_timer.GetRemainingTime(), ranged_timer.GetRemainingTime());
+				return;
+			}
+	
+			//int ammo_slot = EQEmu::invslot::slotRange;
+			//const EQEmu::ItemInstance* RangeWeapon = m_inv[EQEmu::invslot::slotRange];
+			
+			ItemStack RangeWeapon = getBukkitLivingEntity().getEquipment().getItemInMainHand();
+			if (RangeWeapon == null)
+				return;
+			ISoliniaItem item = null;
+			try {
+				item = SoliniaItemAdapter.Adapt(RangeWeapon);
+			} catch (SoliniaItemException e) {
+				return;
+			}
+			
+			if (item == null || !ItemStackUtils.isRangedWeapon(RangeWeapon)) {
+				//Log(Logs::Detail, Logs::Combat, "Ranged attack canceled. Missing or invalid ranged weapon (%d) in slot %d", GetItemIDAt(EQEmu::invslot::slotRange), EQEmu::invslot::slotRange);
+				//Message(0, "Error: Rangeweapon: GetItem(%i)==0, you have nothing to throw!", GetItemIDAt(EQEmu::invslot::slotRange));
+				this.getBukkitLivingEntity().sendMessage("You have nothing to throw!");
+				return;
+			}
+	
+			if (!item.isThrowing()) {
+				//Log(Logs::Detail, Logs::Combat, "Ranged attack canceled. Ranged item %d is not a throwing weapon. type %d.", item->ItemType);
+				//Message(0, "Error: Rangeweapon: GetItem(%i)==0, you have nothing useful to throw!", GetItemIDAt(EQEmu::invslot::slotRange));
+				this.getBukkitLivingEntity().sendMessage("You have nothing useful to throw!");
+				return;
+			}
+	
+			//float range = item->Range + GetRangeDistTargetSizeMod(other);
+			//Log(Logs::Detail, Logs::Combat, "Calculated bow range to be %.1f", range);
+			//range *= range;
+			/*float dist = DistanceSquared(m_Position, other->GetPosition());
+			if(dist > range) {
+				Log(Logs::Detail, Logs::Combat, "Throwing attack out of range... client should catch this. (%f > %f).\n", dist, range);
+				Message_StringID(13,TARGET_OUT_OF_RANGE);//Client enforces range and sends the message, this is a backup just incase.
+				return;
+			}
+			else if(dist < (RuleI(Combat, MinRangedAttackDist)*RuleI(Combat, MinRangedAttackDist))){
+				Message_StringID(15,RANGED_TOO_CLOSE);//Client enforces range and sends the message, this is a backup just incase.
+			}*/
+			
+			double dist = other.getLocation().distanceSquared(this.getBukkitLivingEntity().getLocation());
+	
+			if (dist < Utils.MinRangedAttackDist)
+			{
+				this.getBukkitLivingEntity().sendMessage("Target too close");
+				return;
+			}
+	
+			if(!isAttackAllowed(other, false) ||
+					isCasting() ||
+					//isSitting() ||
+					(DivineAura() /*&& !GetGM()*/) ||
+					isStunned() ||
+					//isFeared() ||
+					isMezzed() //||
+					//(GetAppearance() == eaDead)
+					){
+					return;
+				}
+			
+			DoThrowingAttackDmg(other, RangeWeapon, item);
+			autoAttack.setLastUpdatedTimeNow(this);
+			
+			//consume ammo
+			
+			if (isPlayer())
+			{
+				Player player = (Player)this.getBukkitLivingEntity();
+				int newAmount = RangeWeapon.getAmount() - 1;
+	
+				if (newAmount < 1) {
+					player.getEquipment().setItemInMainHand(null);
+					player.updateInventory();
+	
+				} else {
+					// To prevent a trap you must cancel event here
+					RangeWeapon.setAmount(newAmount);
+					player.getEquipment().setItemInMainHand(RangeWeapon);
+					player.updateInventory();
+				}
+			}
+			
+			tryIncreaseSkill(SkillType.Throwing,1);
+			commonBreakInvisibleFromCombat();
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+
+	private void DoThrowingAttackDmg(ISoliniaLivingEntity other, ItemStack rangeWeapon, ISoliniaItem item) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public RampageList getRampageArray()
+	{
+		try {
+			return StateManager.getInstance().getEntityManager().getRampageList(this.getBukkitLivingEntity().getUniqueId());
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			return null;
+		}
+	}
+		
+	@Override
+	public boolean Rampage(ExtraAttackOptions opts)
+	{
+		RampageList rampageArray = getRampageArray();
+		if (rampageArray == null)
+			return false;
+		
+		int index_hit = 0;
+		if (!IsPet())
+			ChatUtils.SendHint(this.getBukkitLivingEntity(), HINT.NPC_RAMPAGE, "", true);
+		else
+			ChatUtils.SendHint(this.getBukkitLivingEntity(), HINT.PET_FLURRY, "", true);
+
+		// TODO
+		int rampage_targets = 0;
+		//int rampage_targets = GetSpecialAbilityParam(SpecialAbility.SPECATK_RAMPAGE, 1);
+		
+		if (rampage_targets == 0) // if set to 0 or not set in the DB
+			rampage_targets = 1; // DefaultRampageTargets
+		if (rampage_targets > 3) // MaxRampageTargets
+			rampage_targets = 3;
+
+		// TODO Active tracking of rampaging
+		//m_specialattacks = eSpecialAttacks::Rampage;
+		for (Integer hashKey : rampageArray.mobList.keySet()) {
+			if (index_hit >= rampage_targets)
+				break;
+			
+			UUID uuid = rampageArray.mobList.get(hashKey);
+			if (uuid == null)
+				continue;
+			
+			// range is important
+			Entity m_target = Bukkit.getEntity(uuid);
+			if (m_target != null) {
+				// never rampage my target
+				if (m_target == this.getEntityTarget())
+					continue;
+				
+				if (this.getBukkitLivingEntity().getLocation().distanceSquared(m_target.getLocation()) <= Utils.NPC_RAMPAGE_RANGE2)
+				{
+					ProcessAttackRounds(m_target, opts);
+					index_hit++;
+				}
+			}
+		}
+
+		/*
+		if (index_hit < rampage_targets) {
+			// so we go over in reverse order and skip range check
+			// lets do it this way to still support non-live-like >1 rampage targets
+			// likely live is just a fall through of the last valid mob
+			for (auto i = getRampageArray().crbegin(); i != RampageArray.crend(); ++i) {
+				if (index_hit >= rampage_targets)
+					break;
+				auto m_target = entity_list.GetMob(*i);
+				if (m_target) {
+					if (m_target == GetTarget())
+						continue;
+					ProcessAttackRounds(m_target, opts);
+					index_hit++;
+				}
+			}
+		}
+		*/
+
+		// TODO Active tracking of rampaging
+		//m_specialattacks = eSpecialAttacks::None;
+
+		return true;
+	}
+
+	private void ProcessAttackRounds(Entity target, ExtraAttackOptions opts) {
+		if (target != null) {
+			DoMainHandAttackRounds(target, opts);
+			if (canThisClassDualWield())
+				DoOffHandAttackRounds(target, opts);
+		}
+		return;
+	}
+	
+	void DoMainHandAttackRounds(Entity target, ExtraAttackOptions opts)
+	{
+		try
+		{
+			if (target == null || !(target instanceof LivingEntity))
+				return;
+			
+			ISoliniaLivingEntity solTarget = SoliniaLivingEntityAdapter.Adapt((LivingEntity)target);
+			if (solTarget == null)
+				return;
+	
+			/* TODO
+			if (RuleB(Combat, UseLiveCombatRounds)) {
+				// A "quad" on live really is just a successful dual wield where both double attack
+				// The mobs that could triple lost the ability to when the triple attack skill was added in
+				Attack(target, EQEmu::invslot::slotPrimary, false, false, false, opts);
+				if (CanThisClassDoubleAttack() && CheckDoubleAttack()) {
+					Attack(target, EQEmu::invslot::slotPrimary, false, false, false, opts);
+					if ((IsPet() || IsTempPet()) && IsPetOwnerClient()) {
+						int chance = spellbonuses.PC_Pet_Flurry + itembonuses.PC_Pet_Flurry + aabonuses.PC_Pet_Flurry;
+						if (chance && zone->random.Roll(chance))
+							Flurry(nullptr);
+					}
+				}
+				return;
+			}
+			*/
+	
+			if (isNPC()) {
+				int n_atk = 0;
+				//TODO int16 n_atk = CastToNPC()->GetNumberOfAttacks();
+				if (n_atk <= 1) {
+					Attack(solTarget, InventorySlot.Primary, false, false, false);
+				}
+				else {
+					for (int i = 0; i < n_atk; ++i) {
+						Attack(solTarget, InventorySlot.Primary, false, false, false);
+					}
+				}
+			}
+			else {
+				Attack(solTarget, InventorySlot.Primary, false, false, false);
+			}
+	
+			// we use this random value in three comparisons with different
+			// thresholds, and if its truely random, then this should work
+			// out reasonably and will save us compute resources.
+			int RandRoll = MathUtils.RandomBetween(0, 99);
+			if ((canThisClassDoubleAttack() || getSpecialAbility(SpecialAbility.SPECATK_TRIPLE) > 0 || getSpecialAbility(SpecialAbility.SPECATK_QUAD) > 0)
+				// check double attack, this is NOT the same rules that clients use...
+				&&
+				RandRoll < (getMentorLevel() + Utils.NPCDualAttackModifier)) {
+				Attack(solTarget, InventorySlot.Primary, false, false, false);
+				// lets see if we can do a triple attack with the main hand
+				// pets are excluded from triple and quads...
+				if ((getSpecialAbility(SpecialAbility.SPECATK_TRIPLE) > 0 || getSpecialAbility(SpecialAbility.SPECATK_QUAD) > 0) && !IsPet() &&
+					RandRoll < (getMentorLevel() + Utils.NPCTripleAttackModifier)) {
+					Attack(solTarget, InventorySlot.Primary, false, false, false);
+					// now lets check the quad attack
+					if (getSpecialAbility(SpecialAbility.SPECATK_QUAD) > 0 && RandRoll < (getMentorLevel() + Utils.NPCQuadAttackModifier)) {
+						Attack(solTarget, InventorySlot.Primary, false, false, false);
+					}
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+	
+	void DoOffHandAttackRounds(Entity target, ExtraAttackOptions opts)
+	{
+		if (target == null || !(target instanceof LivingEntity))
+			return;
+			
+			try
+			{
+			ISoliniaLivingEntity solTarget = SoliniaLivingEntityAdapter.Adapt((LivingEntity)target);
+			if (solTarget == null)
+				return;
+			// Mobs will only dual wield w/ the flag or have a secondary weapon
+			// For now, SPECATK_QUAD means innate DW when Combat:UseLiveCombatRounds is true
+			/*if (
+					//(GetSpecialAbility(SPECATK_INNATE_DW) ||
+					//(RuleB(Combat, UseLiveCombatRounds) && GetSpecialAbility(SPECATK_QUAD))) ||
+					//GetEquipment(EQEmu::textures::weaponSecondary) != 0) 
+			{			
+			}*/
+			
+			if (checkDualWield()) {
+				Attack(solTarget, InventorySlot.Secondary, false, false, false);
+				if (canThisClassDoubleAttack() && getMentorLevel() > 35 && checkDoubleAttack()) {
+					Attack(solTarget, InventorySlot.Secondary, false, false, false);
+	
+					if ((IsPet() || this.isCurrentlyNPCPet())// && IsPetOwnerClient()
+							) {
+						int chance = getSpellBonuses(SpellEffectType.PetFlurry) + getItemBonuses(SpellEffectType.PetFlurry) + getAABonuses(SpellEffectType.PetFlurry);
+						if (chance > 0 && MathUtils.Roll(chance))
+							Flurry(null);
+					}
+				}
+			}
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+	}
+
+	private boolean Flurry(ExtraAttackOptions opts) {
+		// this is wrong, flurry is extra attacks on the current target
+		LivingEntity target = getEntityTarget();
+		try
+		{
+			if (target != null) {
+				ISoliniaLivingEntity defender = null;
+				if (target != null && target instanceof LivingEntity)
+					defender = SoliniaLivingEntityAdapter.Adapt(target);
+				
+				if (defender == null)
+					return false;
+				
+				if (!isCurrentlyNPCPet()) {
+					ChatUtils.SendHint(this.getBukkitLivingEntity(), HINT.NPC_FLURRY, "", true);
+				} else {
+					ChatUtils.SendHint(this.getBukkitLivingEntity(), HINT.PET_FLURRY, "", true);
+				}
+	
+				//int num_attacks = GetSpecialAbilityParam(SPECATK_FLURRY, 1);
+				int num_attacks = 0;
+				//MaxFlurryHits = 2
+				num_attacks = num_attacks > 0 ? num_attacks : 2;
+				for (int i = 0; i < num_attacks; i++)
+					Attack(defender, InventorySlot.Primary, false, false, false);
+			} else {
+				return false;
+			}
+			return true;
+		} catch (CoreStateInitException e)
+		{
+			return false;
 		}
 	}
 
@@ -577,6 +1405,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return MathUtils.RandomBetween(1, 375) <= chance;
 	}
 
+	private void RangedAttack(ISoliniaLivingEntity other) {
+		RangedAttack(other, false);
+	}
+	
 	private void RangedAttack(ISoliniaLivingEntity other, boolean canDoubleAttack) {
 		//conditions to use an attack checked before we are called
 		if (other == null)
@@ -1281,7 +2113,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 	}
 
-	private void doAttackRounds(ISoliniaLivingEntity target, int hand, boolean isFromSpell) 
+	@Override
+	public void doAttackRounds(ISoliniaLivingEntity target, int hand, boolean isFromSpell) 
 	{
 		if (target == null)
 				return;
@@ -1311,28 +2144,27 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						Attack(target, hand, false, false, isFromSpell);
 					}
 				}
-
-				/*
-				// you can only triple from the main hand
-				if (hand == EQEmu::invslot::slotPrimary && CanThisClassTripleAttack()) {
-					CheckIncreaseSkill(EQEmu::skills::SkillTripleAttack, target, -10);
-					if (CheckTripleAttack()) {
-						Attack(target, hand, false, false, IsFromSpell);
-						auto flurrychance = aabonuses.FlurryChance + spellbonuses.FlurryChance +
-								    itembonuses.FlurryChance;
-						if (flurrychance && zone->random.Roll(flurrychance)) {
-							Attack(target, hand, false, false, IsFromSpell);
-							if (zone->random.Roll(flurrychance))
-								Attack(target, hand, false, false, IsFromSpell);
-							Message_StringID(MT_NPCFlurry, YOU_FLURRY);
+				
+				if (hand == InventorySlot.Primary && canThisClassTripleAttack()) {
+					tryIncreaseSkill(SkillType.TripleAttack, 1);
+					if (checkTripleAttack()) {
+						Attack(target, hand, false, false, isFromSpell);
+						int flurrychance = getAABonuses(SpellEffectType.Flurry) + getSpellBonuses(SpellEffectType.Flurry) +
+							    getItemBonuses(SpellEffectType.Flurry);
+						
+						if (flurrychance > 0 && MathUtils.Roll(flurrychance)) {
+							Attack(target, hand, false, false, isFromSpell);
+							if (MathUtils.Roll(flurrychance))
+								Attack(target, hand, false, false, isFromSpell);
+							
+							ChatUtils.SendHint(this.getBukkitLivingEntity(), HINT.YOU_FLURRY, "", false);
 						}
 					}
 				}
-				*/
 			}
 		}
 	}
-
+	
 	@Override
 	public boolean canDoubleAttack() {
 		if (getClassObj() == null)
@@ -1346,17 +2178,38 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		return true;
 	}
+	
+	@Override
+	public boolean canTripleAttack() {
+		if (getClassObj() == null)
+			return false;
+
+		if (getClassObj().canTripleAttack() == false)
+			return false;
+
+		if (getClassObj().getTripleattacklevel() > getMentorLevel())
+			return false;
+
+		return true;
+	}
 
 	private boolean hasTwoHanderEquipped() {
 		return holdingTwoHander();
 	}
 
 	private boolean canThisClassDoubleAttack() {
-		if (this.getClassObj() != null)
-			return this.getClassObj().canDoubleAttack();
-		return false;
+		return canDoubleAttack();
+	}
+	private boolean canThisClassTripleAttack() {
+		return canTripleAttack();
 	}
 
+	private boolean canThisClassDualWield() {
+		if (this.getClassObj() != null)
+			return this.getClassObj().canDualWield();
+		return false;
+	}
+	
 	@Override
 	public boolean Attack(ISoliniaLivingEntity other, int Hand, boolean bRiposte, boolean IsStrikethrough, boolean IsFromSpell) {
 		try
@@ -4211,6 +5064,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		
 		return false;
 	}
+	
+	@Override
+	public void doClassAttacks(ISoliniaLivingEntity ca_target)
+	{
+		doClassAttacks(ca_target, SkillType.None, false);
+	}
 
 	@Override
 	public void doClassAttacks(ISoliniaLivingEntity ca_target, SkillType skillType, boolean isRiposte)
@@ -7011,6 +7870,47 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			e.printStackTrace();
 		}
 	}
+	
+	private boolean AI_IdleCastCheck() {
+		if (isPlayer())
+			return false;
+
+		if (!isNPC())
+			return false;
+
+		if (this.getBukkitLivingEntity() == null)
+			return false;
+
+		ISoliniaNPC npc;
+		try {
+			npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
+			if (npc.getClassid() < 1)
+				return false;
+			
+			if (!aiCastSpell(StateManager.getInstance().getPlugin(),npc,this.getBukkitLivingEntity(), Utils.AI_IdleBeneficialChance, SpellType.Heal | SpellType.Buff | SpellType.Pet,this.getEffectiveLevel(true))) {
+				/* - TODO , Ally buffs
+				if(!entity_list.AICheckCloseBeneficialSpells(this, 33, MobAISpellRange, SpellType_Heal | SpellType_Buff)) {
+					//if we didnt cast any spells, our autocast timer just resets to the
+					//last duration it was set to... try to put up a more reasonable timer...
+					AIautocastspell_timer->Start(RandomTimer(AISpellVar.idle_no_sp_recast_min, AISpellVar.idle_no_sp_recast_max), false);
+
+					Log(Logs::Moderate, Logs::Spells, "Triggering AI_IdleCastCheck :: Mob %s - Min : %u Max : %u", this->GetCleanName(), AISpellVar.idle_no_sp_recast_min, AISpellVar.idle_no_sp_recast_max);
+
+				}	//else, spell casting finishing will reset the timer.
+				*/
+				
+				return false;
+			} else {
+				return(true);
+			}
+			
+		} catch (CoreStateInitException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
 
 	@Override
 	public void aiEngagedCastCheck(Plugin plugin, ISoliniaNPC npc, LivingEntity castingAtEntity, int npcEffectiveLevel)
@@ -7506,31 +8406,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return StateManager.getInstance().getEntityManager().startCasting(this.getBukkitLivingEntity(), castingSpell);
 		} catch (CoreStateInitException e) {
 			return false;
-		}
-	}
-	
-
-	@Override
-	public void doSpellCast(Plugin plugin, LivingEntity castingAtEntity) {
-		if (isPlayer())
-			return;
-
-		if (!isNPC())
-			return;
-
-		if (this.livingentity == null)
-			return;
-
-		ISoliniaNPC npc;
-		try {
-			npc = StateManager.getInstance().getConfigurationManager().getNPC(this.getNpcid());
-			if (npc.getClassid() < 1)
-				return;
-
-			aiEngagedCastCheck(plugin, npc, castingAtEntity, this.getEffectiveLevel(true));
-		} catch (CoreStateInitException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 
@@ -8475,6 +9350,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 
 		return true;
+	}
+
+	@Override
+	public boolean checkTripleAttack()
+	{
+		int chance = getSkill(SkillType.TripleAttack);
+		if (chance < 1)
+			return false;
+
+		int inc = getAABonuses(SpellEffectType.TripleAttackChance) + getSpellBonuses(SpellEffectType.TripleAttackChance) + getItemBonuses(SpellEffectType.TripleAttackChance);
+		chance = (int)(chance * (1 + inc / 100.0f));
+		chance = (chance * 100) / (chance + 800);
+
+		return MathUtils.RandomBetween(1, 100) <= chance;
 	}
 	
 	@Override
@@ -11225,6 +12114,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		return;
 	}
+
+	@Override
+	public boolean isAttackAllowed(ISoliniaLivingEntity target)
+	{
+		return isAttackAllowed(target,false);
+	}
 	
 	@Override
 	public boolean isAttackAllowed(ISoliniaLivingEntity target, boolean isSpellAttack)
@@ -11506,7 +12401,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	@Override
-	public boolean isFacingMob(SoliniaLivingEntity soliniaLivingEntity) {
+	public boolean isFacingMob(ISoliniaLivingEntity soliniaLivingEntity) {
 		// is my target - not - behind me
 		return !TargetHelper.isBehind(soliniaLivingEntity.getBukkitLivingEntity(),this.getBukkitLivingEntity());
 	}
@@ -12387,5 +13282,14 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				return this.getPlayer().hasReagents(spell);
 		}
 		return true;
+	}
+
+	@Override
+	public boolean IsCorpse() {
+		if (this.getBukkitLivingEntity() == null)
+			return true;
+		
+		return this.getBukkitLivingEntity().isDead();
+		
 	}
 }

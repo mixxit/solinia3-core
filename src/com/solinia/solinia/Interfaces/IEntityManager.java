@@ -13,6 +13,7 @@ import org.bukkit.inventory.Inventory;
 import com.solinia.solinia.Models.ActiveSongs;
 import com.solinia.solinia.Models.CastingSpell;
 import com.solinia.solinia.Models.EntityAutoAttack;
+import com.solinia.solinia.Models.RampageList;
 import com.solinia.solinia.Models.SoliniaActiveSpell;
 import com.solinia.solinia.Models.SoliniaEntitySpells;
 import com.solinia.solinia.Models.SpellEffectType;
@@ -239,6 +240,14 @@ public interface IEntityManager {
 	int getPetFocus(UUID uniqueId);
 
 	ConcurrentHashMap<UUID, UUID> getPetOwnerData();
+
+	void addToRampageList(UUID entity, UUID provoker);
+
+	void clearRampageList(UUID entity);
+
+	void removeFromRampageList(UUID entity, UUID provoker);
+
+	RampageList getRampageList(UUID entity);
 
 
 }

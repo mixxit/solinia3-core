@@ -24,7 +24,6 @@ import com.solinia.solinia.Interfaces.ISoliniaSpawnGroup;
 import com.solinia.solinia.Managers.ConfigurationManager;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Utils.BukkitUtils;
-import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.NPCUtils;
 import com.solinia.solinia.Utils.Utils;
 

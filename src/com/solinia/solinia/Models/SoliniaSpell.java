@@ -34,7 +34,6 @@ import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Interfaces.ISoliniaSpell;
 import com.solinia.solinia.Managers.StateManager;
-import com.solinia.solinia.Utils.DebugUtils;
 import com.solinia.solinia.Utils.EntityUtils;
 import com.solinia.solinia.Utils.MathUtils;
 import com.solinia.solinia.Models.SpellTargetType;

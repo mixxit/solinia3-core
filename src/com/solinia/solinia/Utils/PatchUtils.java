@@ -7,7 +7,6 @@ import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftInventory;
 import org.bukkit.inventory.Inventory;
 
 import com.solinia.solinia.Exceptions.CoreStateInitException;
-import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Managers.StateManager;
 import com.solinia.solinia.Models.SoliniaDisguise;
 
