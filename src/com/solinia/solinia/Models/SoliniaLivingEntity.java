@@ -3382,8 +3382,36 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	private void DoAnim(int animnum, int type, boolean ackreq) {
-		// TODO Auto-generated method stub
+		System.out.println("DoAnim call");
 		
+		SolAnimationType animationType = null;
+		
+		switch (animnum)
+		{
+			case AnimType.anim1HWeapon:
+			case AnimType.anim1HPiercing:
+			case AnimType.anim2HSlashing:
+			case AnimType.anim2HWeapon:
+			case AnimType.animHand2Hand:
+				animationType = SolAnimationType.SwingArm;
+				break;
+			case AnimType.animDualWield:
+				animationType = SolAnimationType.SwingArm;
+				break;
+			default:
+				animationType = SolAnimationType.SwingOffArm;
+				break;
+		}
+
+		if (this.getBukkitLivingEntity() instanceof Player)
+			EntityUtils.sendAnimationPacket(this.getBukkitLivingEntity(), (Player)this.getBukkitLivingEntity(), animationType);
+		
+		// Nearby entities
+		// Send shoot arrow to nearby people
+		for (Entity listening : getBukkitLivingEntity().getNearbyEntities(20, 20, 20)) {
+			if (listening instanceof Player)
+				EntityUtils.sendAnimationPacket(getBukkitLivingEntity(),(Player)listening, animationType);
+		}
 	}
 
 	private boolean getGM() {
