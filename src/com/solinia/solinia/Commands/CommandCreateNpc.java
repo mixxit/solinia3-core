@@ -109,12 +109,6 @@ public class CommandCreateNpc implements CommandExecutor {
 			return false;
 		}
 		
-		if (name.length() > 16)
-		{
-			sender.sendMessage("Name of NPC cannot exceed 16 characters");
-			return false;
-		}
-		
 		name = name.replace(" ", "_");
 		
 		try {

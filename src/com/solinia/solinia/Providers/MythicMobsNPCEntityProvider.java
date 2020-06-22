@@ -333,7 +333,7 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		mob = mob + "    Persistent: false\r" + System.lineSeparator();
 		mob = mob + "    PreventSunburn: true\r" + System.lineSeparator();
 		mob = mob + "    PreventItemPickup: true\r" + System.lineSeparator();
-		mob = mob + "    Collidable: true\r" + System.lineSeparator();
+		mob = mob + "    Collidable: false\r" + System.lineSeparator();
 		//if (npc.isCorePet()) - Seems to crash server on login
 		//	mob = mob + "    Despawn: false\r" + System.lineSeparator();
 		//else

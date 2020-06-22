@@ -871,7 +871,6 @@ public class EntityUtils {
 			int maxSkill = EntityUtils.maxSkill(skillType, profession.getName().toUpperCase(),level, currentskillamount);
 			if (solEntity != null && SkillUtils.IsTradeskill(skillType))
 			{
-				System.out.println("We gonna get aa");
 				int aaBonus = solEntity.getAABonuses(SpellEffectType.TradeSkillMastery);
 				int aaBonuses = solEntity.getSpellBonuses(SpellEffectType.TradeSkillMastery) + solEntity.getItemBonuses(SpellEffectType.TradeSkillMastery) + aaBonus; 
 				maxSkill += (aaBonuses * 50);
@@ -2269,7 +2268,6 @@ public class EntityUtils {
 											}
 										}
 									case Piercing:
-									case Slashing:
 									case TwoHandSlashing: {
 											r_value = 0;
 											break;

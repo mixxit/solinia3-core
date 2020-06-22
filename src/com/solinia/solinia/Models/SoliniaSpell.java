@@ -2813,9 +2813,6 @@ public class SoliniaSpell implements ISoliniaSpell {
 		case "name":
 			if (value.equals(""))
 				throw new InvalidSpellSettingException("Name is empty");
-
-			if (value.length() > 30)
-				throw new InvalidSpellSettingException("Name is longer than 30 characters");
 			setName(value);
 			break;
 		case "components1":

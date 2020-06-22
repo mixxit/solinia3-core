@@ -133,9 +133,6 @@ public class SoliniaLootDrop implements ISoliniaLootDrop,IPersistable {
 		case "name":
 			if (value.equals(""))
 				throw new InvalidLootDropSettingException("Name is empty");
-
-			if (value.length() > 25)
-				throw new InvalidLootDropSettingException("Name is longer than 25 characters");
 			setName(value);
 			break;
 		case "remove":

@@ -43,12 +43,6 @@ public class CommandCreateLootDrop implements CommandExecutor {
 		
 		lootdropname = lootdropname.replace(" ", "_").toUpperCase();
 		
-		if (lootdropname.length() > 25)
-		{
-			sender.sendMessage("Lootdrop name cannot be longer than 25 characters");
-			return true;
-		}
-		
 		try
 		{
 			if (StateManager.getInstance().getConfigurationManager().getLootDrop(lootdropname) != null)

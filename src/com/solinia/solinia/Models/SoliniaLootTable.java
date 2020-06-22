@@ -110,9 +110,6 @@ public class SoliniaLootTable implements ISoliniaLootTable,IPersistable {
 		case "name":
 			if (value.equals(""))
 				throw new InvalidLootTableSettingException("Name is empty");
-
-			if (value.length() > 25)
-				throw new InvalidLootTableSettingException("Name is longer than 25 characters");
 			setName(value);
 			break;
 		case "remove":

@@ -296,9 +296,6 @@ public class SoliniaClass implements ISoliniaClass,IPersistable {
 		case "name":
 			if (value.equals(""))
 				throw new InvalidClassSettingException("Name is empty");
-
-			if (value.length() > 15)
-				throw new InvalidClassSettingException("Name is longer than 15 characters");
 			setName(value);
 			break;
 		case "defaultheadmaterial":

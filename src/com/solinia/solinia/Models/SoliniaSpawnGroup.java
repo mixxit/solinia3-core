@@ -170,9 +170,6 @@ public class SoliniaSpawnGroup implements ISoliniaSpawnGroup,IPersistable {
 		case "name":
 			if (value.equals(""))
 				throw new InvalidSpawnGroupSettingException("Name is empty");
-
-			if (value.length() > 25)
-				throw new InvalidSpawnGroupSettingException("Name is longer than 25 characters");
 			setName(value);
 			break;
 		case "respawntime":

@@ -376,7 +376,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return;
 		
 		this.mana = mana;
-		//Bukkit.broadcastMessage("PLAYE set mana to " + mana + " on " + getFullName());
 		PartyWindowUtils.UpdateWindow(this.getBukkitPlayer(), true, false);
 		this.setLastUpdatedTimeNow();
 	}

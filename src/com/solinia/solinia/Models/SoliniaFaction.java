@@ -104,9 +104,6 @@ public class SoliniaFaction implements ISoliniaFaction,IPersistable {
 		case "name":
 			if (value.equals(""))
 				throw new InvalidFactionSettingException("Name is empty");
-
-			if (value.length() > 25)
-				throw new InvalidFactionSettingException("Name is longer than 25 characters");
 			setName(value);
 			break;
 		case "base":

@@ -66,12 +66,6 @@ public class CommandCreateSpellCopy implements CommandExecutor {
 				return false;
 			}
 			
-			if (name.length() > 16)
-			{
-				sender.sendMessage("Name of spell cannot exceed 16 characters");
-				return false;
-			}
-			
 			name = name.replace(" ", "_");
 		
 			SoliniaSpellFactory.CreateSpellCopy(spellid,name);

@@ -537,9 +537,6 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 		case "name":
 			if (value.equals(""))
 				throw new InvalidNpcSettingException("Name is empty");
-
-			if (value.length() > 25)
-				throw new InvalidNpcSettingException("Name is longer than 25 characters");
 			setName(value);
 			break;
 		case "canseeinvis":

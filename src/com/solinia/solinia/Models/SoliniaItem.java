@@ -808,9 +808,6 @@ public class SoliniaItem implements ISoliniaItem,IPersistable {
 		case "displayname":
 			if (value.equals(""))
 				throw new InvalidItemSettingException("Name is empty");
-
-			if (value.length() > 36)
-				throw new InvalidItemSettingException("Name is longer than 36 characters");
 			setDisplayname(value);
 			break;
 		case "appearanceid":

@@ -81,9 +81,6 @@ public class SoliniaNPCMerchant implements ISoliniaNPCMerchant,IPersistable {
 			case "name":
 				if (value.equals(""))
 					throw new InvalidNPCMerchantListSettingException("Name is empty");
-
-				if (value.length() > 25)
-					throw new InvalidNPCMerchantListSettingException("Name is longer than 25 characters");
 				setName(value);
 				break;
 			case "publishedbookstore":

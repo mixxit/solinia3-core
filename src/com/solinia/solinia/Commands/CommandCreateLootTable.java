@@ -41,12 +41,6 @@ public class CommandCreateLootTable implements CommandExecutor {
 		
 		loottablename = loottablename.replace(" ", "_").toUpperCase();
 		
-		if (loottablename.length() > 25)
-		{
-			sender.sendMessage("Loottable name cannot be longer than 25 characters");
-			return true;
-		}
-		
 		try
 		{
 			if (StateManager.getInstance().getConfigurationManager().getLootTable(loottablename) != null)

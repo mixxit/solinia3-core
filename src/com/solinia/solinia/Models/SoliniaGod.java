@@ -90,9 +90,6 @@ public class SoliniaGod implements ISoliniaGod,IPersistable {
 		case "name":
 			if (value.equals(""))
 				throw new InvalidGodSettingException("Name is empty");
-
-			if (value.length() > 25)
-				throw new InvalidGodSettingException("Name is longer than 25 characters");
 			setName(value);
 			break;
 		case "description":
