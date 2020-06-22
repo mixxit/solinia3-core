@@ -3382,8 +3382,6 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	}
 
 	private void DoAnim(int animnum, int type, boolean ackreq) {
-		System.out.println("DoAnim call");
-		
 		SolAnimationType animationType = null;
 		
 		switch (animnum)
@@ -3396,10 +3394,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				animationType = SolAnimationType.SwingArm;
 				break;
 			case AnimType.animDualWield:
-				animationType = SolAnimationType.SwingArm;
+				animationType = SolAnimationType.SwingOffArm;
 				break;
 			default:
-				animationType = SolAnimationType.SwingOffArm;
+				animationType = SolAnimationType.SwingArm;
 				break;
 		}
 
