@@ -249,5 +249,9 @@ public interface IEntityManager {
 
 	RampageList getRampageList(UUID entity);
 
+	ConcurrentHashMap<UUID, Timestamp> getAiLastCast();
+
+	void setAILastCast(UUID uuid, Timestamp lasttimestamp);
+
 
 }

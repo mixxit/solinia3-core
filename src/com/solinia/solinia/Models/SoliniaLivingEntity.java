@@ -642,7 +642,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 						}
 	
 					}
-					AI_EngagedCastCheck();
+					
+					if (getAiLastCastCheck())
+					{
+						AI_EngagedCastCheck();
+						this.setAiLastCast();
+					}
 	
 				}	//end is within combat rangepet
 				else {
@@ -8767,6 +8772,16 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		}
 		return null;
 	}
+	
+	@Override
+	public Timestamp getAiLastCast() {
+		try {
+			return StateManager.getInstance().getEntityManager().getAiLastCast()
+					.get(this.getBukkitLivingEntity().getUniqueId());
+		} catch (CoreStateInitException e) {
+		}
+		return null;
+	}
 
 	@Override
 	public void setLastDoubleAttack() {
@@ -8796,6 +8811,18 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			LocalDateTime datetime = LocalDateTime.now();
 			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
 			StateManager.getInstance().getEntityManager().setLastRiposte(this.getBukkitLivingEntity().getUniqueId(),
+					nowtimestamp);
+		} catch (CoreStateInitException e) {
+
+		}
+	}
+	
+	@Override
+	public void setAiLastCast() {
+		try {
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+			StateManager.getInstance().getEntityManager().setAILastCast(this.getBukkitLivingEntity().getUniqueId(),
 					nowtimestamp);
 		} catch (CoreStateInitException e) {
 
@@ -9373,6 +9400,33 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		return false;
 	}
 	
+	@Override
+	public boolean getAiLastCastCheck()
+	{
+		if (isPlayer())
+			return false;
+
+		// If dual wield less than 3 second ago return false
+		// Ugly hack to work around looping dual wields (cant get source of offhand on
+		// damage event)
+		Timestamp expiretimestamp = getAiLastCast();
+		if (expiretimestamp != null) {
+			LocalDateTime datetime = LocalDateTime.now();
+			Timestamp nowtimestamp = Timestamp.valueOf(datetime);
+			Timestamp mintimestamp = Timestamp.valueOf(expiretimestamp.toLocalDateTime().plus((long) (getAiCastFrequency()*1000), ChronoUnit.MILLIS));
+
+			if (nowtimestamp.before(mintimestamp))
+				return false;
+		}
+
+		return true;
+	}
+	
+	private int getAiCastFrequency() {
+		// TODO Auto-generated method stub
+		return 6;
+	}
+
 	@Override
 	public boolean getLastMeleeAttackCheck()
 	{

@@ -97,6 +97,7 @@ public class EntityManager implements IEntityManager {
 	private ConcurrentHashMap<UUID, Timestamp> lastRiposte = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastBindwound = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> lastMeleeAttack = new ConcurrentHashMap<UUID, Timestamp>();
+	private ConcurrentHashMap<UUID, Timestamp> aiLastCast = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontHealMe = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontRootMe = new ConcurrentHashMap<UUID, Timestamp>();
 	private ConcurrentHashMap<UUID, Timestamp> dontBuffMe = new ConcurrentHashMap<UUID, Timestamp>();
@@ -1618,8 +1619,8 @@ public class EntityManager implements IEntityManager {
 	
 	@Override
 	public boolean startCasting(LivingEntity livingEntity, CastingSpell castingSpell) {
-		interruptCasting(livingEntity);
 		try {
+			interruptCasting(livingEntity);
 			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(livingEntity);
 			if (solLivingEntity == null)
 				return false;
@@ -2053,6 +2054,17 @@ public class EntityManager implements IEntityManager {
 		this.lastMeleeAttack.put(uuid, lasttimestamp);
 	}
 
+	@Override
+	public ConcurrentHashMap<UUID, Timestamp> getAiLastCast() {
+		return this.aiLastCast;
+	}
+
+	@Override
+	public void setAILastCast(UUID uuid, Timestamp lasttimestamp) {
+		this.aiLastCast.put(uuid, lasttimestamp);
+	}
+
+	
 	@Override
 	public ConcurrentHashMap<UUID, Timestamp> getLastBindwound() {
 		return this.lastBindwound;

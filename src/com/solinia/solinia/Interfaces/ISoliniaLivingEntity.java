@@ -578,4 +578,10 @@ public interface ISoliniaLivingEntity  {
 
 	void AI_EngagedCastCheck();
 
+	Timestamp getAiLastCast();
+
+	void setAiLastCast();
+
+	boolean getAiLastCastCheck();
+
 }
