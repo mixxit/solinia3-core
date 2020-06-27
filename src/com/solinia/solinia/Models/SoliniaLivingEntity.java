@@ -7744,6 +7744,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (getBukkitLivingEntity() == null)
 			return;
 		
+		if (this.isNPC())
+		System.out.println("NPCEMOTE|"+message);
 		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "<LC> * " + message,
 				getBukkitLivingEntity().getEquipment().getItemInMainHand());
 	}
@@ -7782,6 +7784,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (npc == null)
 			return;
 
+		System.out.println("NPCSAY|"+npc.getName() + " says '" + message);
 		String decoratedMessage = ChatColor.AQUA + npc.getName() + " says '" + message + "'" + ChatColor.RESET;
 		StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage,
 				true, message, getBukkitLivingEntity().getEquipment().getItemInMainHand());

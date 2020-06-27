@@ -9,5 +9,9 @@ public enum EquipmentSlot {
 	Forearms,
 	Arms,
 	Hands,
-	Waist
+	Waist,
+	Head,
+	Chest,
+	Legs,
+	Feet
 }

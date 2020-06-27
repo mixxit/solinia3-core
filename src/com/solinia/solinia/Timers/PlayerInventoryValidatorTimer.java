@@ -235,6 +235,11 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 			validateEquipSlot(solplayer, solplayer.getShouldersItem(),solplayer.getShouldersItemInstance(), EquipmentSlot.Shoulders);
 			validateEquipSlot(solplayer, solplayer.getWaistItem(),solplayer.getWaistItemInstance(), EquipmentSlot.Waist);
 
+			validateEquipSlot(solplayer, solplayer.getHeadItem(),solplayer.getHeadItemInstance(), EquipmentSlot.Head);
+			validateEquipSlot(solplayer, solplayer.getChestItem(),solplayer.getChestItemInstance(), EquipmentSlot.Chest);
+			validateEquipSlot(solplayer, solplayer.getLegsItem(),solplayer.getLegsItemInstance(), EquipmentSlot.Legs);
+			validateEquipSlot(solplayer, solplayer.getFeetItem(),solplayer.getFeetItemInstance(), EquipmentSlot.Feet);
+
 			backupInventory(solplayer);
 
 		} catch (CoreStateInitException e)
@@ -270,13 +275,13 @@ public class PlayerInventoryValidatorTimer extends BukkitRunnable {
 					{
 						// Delete temporary item
 						solPlayer.getBukkitPlayer().sendMessage("Your temporary item has faded from existence");
-						solPlayer.setEquipSlotItem(slot, 0);
+						solPlayer.setSoliniaItemByEquipmentSlot(slot, 0);
 					}
 				}
 				
 				if (i.getMinLevel() > solPlayer.getActualLevel())
 	    		{
-					solPlayer.setEquipSlotItem(slot, 0);
+					solPlayer.setSoliniaItemByEquipmentSlot(slot, 0);
 					PlayerUtils.AddAccountClaim(solPlayer.getBukkitPlayer().getName(),i.getId());
 					solPlayer.getBukkitPlayer().sendMessage(ChatColor.GRAY + "You cannot wear equip item " + i.getDisplayname() + " so it has been added to your /claims");
 	    		}

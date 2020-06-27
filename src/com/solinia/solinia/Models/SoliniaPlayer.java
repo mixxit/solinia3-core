@@ -124,6 +124,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private int armsItem = 0;
 	private int handsItem = 0;
 	private int waistItem = 0;
+	private int headItem = 0;
+	private int chestItem = 0;
+	private int legsItem = 0;
+	private int feetItem = 0;
 	private Personality personality = new Personality();
 	private int memorisedSpellSlot1 = 0;
 	private int memorisedSpellSlot2 = 0;
@@ -149,6 +153,10 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	private String armsItemInstance = "";
 	private String handsItemInstance = "";
 	private String waistItemInstance = "";
+	private String headItemInstance = "";
+	private String chestItemInstance = "";
+	private String legsItemInstance = "";
+	private String feetItemInstance = "";
 	private boolean deleted = false;
 
 	private List<Integer> spellBookItems = new ArrayList<Integer>();
@@ -3286,7 +3294,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return fingersItem;
 	}
 
-	@Override
 	public void setFingersItem(int fingersItem) {
 		this.fingersItem = fingersItem;
 		sendSlotsAsPacket();
@@ -3299,7 +3306,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return shouldersItem;
 	}
 
-	@Override
 	public void setShouldersItem(int shouldersItem) {
 		this.shouldersItem = shouldersItem;
 		sendSlotsAsPacket();
@@ -3312,7 +3318,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return earsItem;
 	}
 
-	@Override
 	public void setEarsItem(int earsItem) {
 		this.earsItem = earsItem;
 		sendSlotsAsPacket();
@@ -3325,7 +3330,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return neckItem;
 	}
 
-	@Override
 	public void setNeckItem(int neckItem) {
 		this.neckItem = neckItem;
 		sendSlotsAsPacket();
@@ -3484,6 +3488,38 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 
 			if (this.getWaistItem() > 0) {
 				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(this.getWaistItem());
+				if (item != null) {
+					if (!item.isSpellscroll())
+						items.add(item);
+				}
+			}
+			
+			if (this.getHeadItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(this.getHeadItem());
+				if (item != null) {
+					if (!item.isSpellscroll())
+						items.add(item);
+				}
+			}
+			
+			if (this.getChestItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(this.getChestItem());
+				if (item != null) {
+					if (!item.isSpellscroll())
+						items.add(item);
+				}
+			}
+			
+			if (this.getLegsItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(this.getLegsItem());
+				if (item != null) {
+					if (!item.isSpellscroll())
+						items.add(item);
+				}
+			}
+			
+			if (this.getFeetItem() > 0) {
+				ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(this.getFeetItem());
 				if (item != null) {
 					if (!item.isSpellscroll())
 						items.add(item);
@@ -3998,7 +4034,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return forearmsItem;
 	}
 
-	@Override
 	public void setForearmsItem(int forearmsItem) {
 		this.forearmsItem = forearmsItem;
 		sendSlotsAsPacket();
@@ -4011,7 +4046,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return armsItem;
 	}
 
-	@Override
 	public void setArmsItem(int armsItem) {
 		this.armsItem = armsItem;
 		sendSlotsAsPacket();
@@ -4024,7 +4058,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return handsItem;
 	}
 
-	@Override
 	public void setHandsItem(int handsItem) {
 		this.handsItem = handsItem;
 		sendSlotsAsPacket();
@@ -4037,7 +4070,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return waistItem;
 	}
 
-	@Override
 	public void setWaistItem(int waistItem) {
 		this.waistItem = waistItem;
 		sendSlotsAsPacket();
@@ -4050,7 +4082,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return fingersItemInstance;
 	}
 
-	@Override
 	public void setFingersItemInstance(String fingersItemInstance) {
 		this.fingersItemInstance = fingersItemInstance;
 		this.setLastUpdatedTimeNow();
@@ -4062,7 +4093,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return shouldersItemInstance;
 	}
 
-	@Override
 	public void setShouldersItemInstance(String shouldersItemInstance) {
 		this.shouldersItemInstance = shouldersItemInstance;
 		this.setLastUpdatedTimeNow();
@@ -4074,7 +4104,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return neckItemInstance;
 	}
 
-	@Override
 	public void setNeckItemInstance(String neckItemInstance) {
 		this.neckItemInstance = neckItemInstance;
 		this.setLastUpdatedTimeNow();
@@ -4086,7 +4115,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return earsItemInstance;
 	}
 
-	@Override
 	public void setEarsItemInstance(String earsItemInstance) {
 		this.earsItemInstance = earsItemInstance;
 		this.setLastUpdatedTimeNow();
@@ -4098,7 +4126,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return forearmsItemInstance;
 	}
 
-	@Override
 	public void setForearmsItemInstance(String forearmsItemInstance) {
 		this.forearmsItemInstance = forearmsItemInstance;
 		this.setLastUpdatedTimeNow();
@@ -4110,7 +4137,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return armsItemInstance;
 	}
 
-	@Override
 	public void setArmsItemInstance(String armsItemInstance) {
 		this.armsItemInstance = armsItemInstance;
 		this.setLastUpdatedTimeNow();
@@ -4122,7 +4148,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return handsItemInstance;
 	}
 
-	@Override
 	public void setHandsItemInstance(String handsItemInstance) {
 		this.handsItemInstance = handsItemInstance;
 		this.setLastUpdatedTimeNow();
@@ -4134,7 +4159,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		return waistItemInstance;
 	}
 
-	@Override
 	public void setWaistItemInstance(String waistItemInstance) {
 		this.waistItemInstance = waistItemInstance;
 		this.setLastUpdatedTimeNow();
@@ -4201,42 +4225,6 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return 0;
 		}
 		return this.monthlyVote.get(month);
-	}
-
-	@Override
-	public void setEquipSlotItem(com.solinia.solinia.Models.EquipmentSlot slot, int itemId) {
-
-		switch (slot) {
-		case Arms:
-			setArmsItem(0);
-			break;
-		case Ears:
-			setEarsItem(0);
-			break;
-		case Fingers:
-			setFingersItem(0);
-			break;
-		case Forearms:
-			setForearmsItem(0);
-			break;
-		case Hands:
-			setHandsItem(0);
-			break;
-		case Neck:
-			setNeckItem(0);
-			break;
-		case Shoulders:
-			setShouldersItem(0);
-			break;
-		case Waist:
-			setWaistItem(0);
-			break;
-		case None:
-		default:
-			break;
-		}
-		this.setLastUpdatedTimeNow();
-
 	}
 
 	@Override
@@ -5761,6 +5749,207 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (Exception e) {
 			getBukkitPlayer().sendMessage(e.getMessage() + " "+ e.getStackTrace());
 			return;
+		}
+	}
+
+	@Override
+	public int getHeadItem() {
+		return headItem;
+	}
+
+	public void setHeadItem(int headItem) {
+		this.headItem = headItem;
+	}
+
+	@Override
+	public int getChestItem() {
+		return chestItem;
+	}
+
+	public void setChestItem(int chestItem) {
+		this.chestItem = chestItem;
+	}
+
+	@Override
+	public int getLegsItem() {
+		return legsItem;
+	}
+
+	public void setLegsItem(int legsItem) {
+		this.legsItem = legsItem;
+	}
+
+	@Override
+	public int getFeetItem() {
+		return feetItem;
+	}
+
+	public void setFeetItem(int feetItem) {
+		this.feetItem = feetItem;
+	}
+
+	@Override
+	public String getHeadItemInstance() {
+		return headItemInstance;
+	}
+
+	public void setHeadItemInstance(String headItemInstance) {
+		this.headItemInstance = headItemInstance;
+	}
+
+	@Override
+	public String getChestItemInstance() {
+		return chestItemInstance;
+	}
+
+	public void setChestItemInstance(String chestItemInstance) {
+		this.chestItemInstance = chestItemInstance;
+	}
+
+	@Override
+	public String getLegsItemInstance() {
+		return legsItemInstance;
+	}
+
+	public void setLegsItemInstance(String legsItemInstance) {
+		this.legsItemInstance = legsItemInstance;
+	}
+
+	@Override
+	public String getFeetItemInstance() {
+		return feetItemInstance;
+	}
+
+	public void setFeetItemInstance(String feetItemInstance) {
+		this.feetItemInstance = feetItemInstance;
+	}
+	
+	@Override
+	public void setSoliniaItemInstanceByEquipmentSlot(com.solinia.solinia.Models.EquipmentSlot equipSlot, String instance) {
+		switch (equipSlot)
+		{
+		case Arms:
+			this.setArmsItemInstance(instance);
+			break;
+		case Chest:
+			this.setChestItemInstance(instance);
+			break;
+		case Ears:
+			this.setEarsItemInstance(instance);
+			break;
+		case Feet:
+			this.setFeetItemInstance(instance);
+			break;
+		case Fingers:
+			this.setFingersItemInstance(instance);
+			break;
+		case Forearms:
+			this.setForearmsItemInstance(instance);
+			break;
+		case Hands:
+			this.setHandsItemInstance(instance);
+			break;
+		case Head:
+			this.setHeadItemInstance(instance);
+			break;
+		case Legs:
+			this.setLegsItemInstance(instance);
+			break;
+		case Neck:
+			this.setNeckItemInstance(instance);
+			break;
+		case None:
+			return;
+		case Shoulders:
+			this.setShouldersItemInstance(instance);
+			break;
+		case Waist:
+			this.setWaistItemInstance(instance);
+			break;
+		default:
+			return;
+		}
+	}
+
+	@Override
+	public void setSoliniaItemByEquipmentSlot(com.solinia.solinia.Models.EquipmentSlot equipSlot, int soliniaItemId) {
+		switch (equipSlot)
+		{
+		case Arms:
+			this.setArmsItem(soliniaItemId);
+			break;
+		case Chest:
+			this.setChestItem(soliniaItemId);
+			break;
+		case Ears:
+			this.setEarsItem(soliniaItemId);
+			break;
+		case Feet:
+			this.setFeetItem(soliniaItemId);
+			break;
+		case Fingers:
+			this.setFingersItem(soliniaItemId);
+			break;
+		case Forearms:
+			this.setForearmsItem(soliniaItemId);
+			break;
+		case Hands:
+			this.setHandsItem(soliniaItemId);
+			break;
+		case Head:
+			this.setHeadItem(soliniaItemId);
+			break;
+		case Legs:
+			this.setLegsItem(soliniaItemId);
+			break;
+		case Neck:
+			this.setNeckItem(soliniaItemId);
+			break;
+		case None:
+			return;
+		case Shoulders:
+			this.setShouldersItem(soliniaItemId);
+			break;
+		case Waist:
+			this.setWaistItem(soliniaItemId);
+			break;
+		default:
+			return;
+		}
+	}
+	
+	@Override
+	public int getSoliniaItemByEquipmentSlot(com.solinia.solinia.Models.EquipmentSlot equipSlot) {
+		switch (equipSlot)
+		{
+		case Arms:
+			return this.getArmsItem();
+		case Chest:
+			return this.getChestItem();
+		case Ears:
+			return this.getEarsItem();
+		case Feet:
+			return this.getFeetItem();
+		case Fingers:
+			return this.getFingersItem();
+		case Forearms:
+			return this.getForearmsItem();
+		case Hands:
+			return this.getHandsItem();
+		case Head:
+			return this.getHeadItem();
+		case Legs:
+			return this.getLegsItem();
+		case Neck:
+			return this.getNeckItem();
+		case None:
+			return 0;
+		case Shoulders:
+			return this.getShouldersItem();
+		case Waist:
+			return this.getWaistItem();
+		default:
+			return 0;
 		}
 	}
 }

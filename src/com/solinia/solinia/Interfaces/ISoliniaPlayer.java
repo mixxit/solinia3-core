@@ -269,19 +269,11 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 
 	int getFingersItem();
 
-	void setFingersItem(int fingersItem);
-
 	int getShouldersItem();
 
-	void setShouldersItem(int earsItem);
-	
 	int getEarsItem();
 
-	void setEarsItem(int earsItem);
-
 	int getNeckItem();
-
-	void setNeckItem(int neckItem);
 
 	void clearAAs();
 
@@ -340,15 +332,9 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 
 	int getForearmsItem();
 
-	void setForearmsItem(int forearmsItem);
-
 	int getArmsItem();
 
-	void setArmsItem(int armsItem);
-
 	int getHandsItem();
-
-	void setHandsItem(int handsItem);
 
 	public String getEarsItemInstance();
 
@@ -363,20 +349,6 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public String getArmsItemInstance();
 
 	public String getHandsItemInstance();
-
-	void setFingersItemInstance(String fingersItemInstance);
-
-	void setShouldersItemInstance(String shouldersItemInstance);
-
-	void setNeckItemInstance(String neckItemInstance);
-
-	void setEarsItemInstance(String earsItemInstance);
-
-	void setForearmsItemInstance(String forearmsItemInstance);
-
-	void setArmsItemInstance(String armsItemInstance);
-
-	void setHandsItemInstance(String handsItemInstance);
 
 	void setLastLocation(Location location);
 
@@ -400,13 +372,10 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 
 	int getWaistItem();
 
-	void setWaistItem(int waistItem);
-
 	String getWaistItemInstance();
 
-	void setWaistItemInstance(String waistItemInstance);
-
-	public void setEquipSlotItem(EquipmentSlot slot, int itemId);
+	//public void setEquipSlotItem(EquipmentSlot slot, int itemId);
+	//public void setEquipSlotItemInstance(EquipmentSlot slot, String guid);
 
 	String getBase64InventoryContents();
 
@@ -662,4 +631,15 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public void setAutoCast(int slotId);
 	public double getStatMaxHP(int stamina);
 	public void MakeHotzone();
+	String getHeadItemInstance();
+	String getChestItemInstance();
+	String getLegsItemInstance();
+	String getFeetItemInstance();
+	int getHeadItem();
+	int getChestItem();
+	int getLegsItem();
+	int getFeetItem();
+	public int getSoliniaItemByEquipmentSlot(EquipmentSlot equipSlot);
+	void setSoliniaItemInstanceByEquipmentSlot(EquipmentSlot equipSlot, String instance);
+	void setSoliniaItemByEquipmentSlot(EquipmentSlot equipSlot, int soliniaItemId);
 }

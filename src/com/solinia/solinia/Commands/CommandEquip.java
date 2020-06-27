@@ -49,7 +49,11 @@ public class CommandEquip implements CommandExecutor {
 					args[0].toUpperCase().equals("ARMS") ||
 					args[0].toUpperCase().equals("FOREARMS") ||
 					args[0].toUpperCase().equals("HANDS") ||
-					args[0].toUpperCase().equals("WAIST")
+					args[0].toUpperCase().equals("WAIST") ||
+					args[0].toUpperCase().equals("HEAD") ||
+					args[0].toUpperCase().equals("CHEST") ||
+					args[0].toUpperCase().equals("LEGS") ||
+					args[0].toUpperCase().equals("FEET")
 					) {
 				try {
 					ItemStack primaryItem = player.getItemOnCursor();
@@ -109,12 +113,7 @@ public class CommandEquip implements CommandExecutor {
 							player.sendMessage("You have already equipped an item in that slot");
 							return true;
 						} else {
-							solPlayer.setFingersItem(item.getId());
-							solPlayer.setFingersItemInstance(StateManager.getInstance().getInstanceGuid());
-							player.setItemOnCursor(null);
-							player.updateInventory();
-							player.sendMessage("You have equipped this item");
-							solPlayer.updateMaxHp();
+							MoveItemToSlot(solPlayer, EquipmentSlot.Fingers,item);
 							return true;
 						}
 					
@@ -123,12 +122,7 @@ public class CommandEquip implements CommandExecutor {
 							player.sendMessage("You have already equipped an item in that slot");
 							return true;
 						} else {
-							solPlayer.setWaistItem(item.getId());
-							solPlayer.setWaistItemInstance(StateManager.getInstance().getInstanceGuid());
-							player.setItemOnCursor(null);
-							player.updateInventory();
-							player.sendMessage("You have equipped this item");
-							solPlayer.updateMaxHp();
+							MoveItemToSlot(solPlayer, EquipmentSlot.Waist,item);
 							return true;
 						}
 
@@ -137,12 +131,7 @@ public class CommandEquip implements CommandExecutor {
 							player.sendMessage("You have already equipped an item in that slot");
 							return true;
 						} else {
-							solPlayer.setShouldersItem(item.getId());
-							solPlayer.setShouldersItemInstance(StateManager.getInstance().getInstanceGuid());
-							player.setItemOnCursor(null);
-							player.updateInventory();
-							player.sendMessage("You have equipped this item");
-							solPlayer.updateMaxHp();
+							MoveItemToSlot(solPlayer, EquipmentSlot.Shoulders,item);
 							return true;
 						}
 
@@ -151,12 +140,7 @@ public class CommandEquip implements CommandExecutor {
 							player.sendMessage("You have already equipped an item in that slot");
 							return true;
 						} else {
-							solPlayer.setEarsItem(item.getId());
-							solPlayer.setEarsItemInstance(StateManager.getInstance().getInstanceGuid());
-							player.setItemOnCursor(null);
-							player.updateInventory();
-							player.sendMessage("You have equipped this item");
-							solPlayer.updateMaxHp();
+							MoveItemToSlot(solPlayer, EquipmentSlot.Ears,item);
 							return true;
 						}
 
@@ -165,12 +149,7 @@ public class CommandEquip implements CommandExecutor {
 							player.sendMessage("You have already equipped an item in that slot");
 							return true;
 						} else {
-							solPlayer.setNeckItem(item.getId());
-							solPlayer.setNeckItemInstance(StateManager.getInstance().getInstanceGuid());
-							player.setItemOnCursor(null);
-							player.updateInventory();
-							player.sendMessage("You have equipped this item");
-							solPlayer.updateMaxHp();
+							MoveItemToSlot(solPlayer, EquipmentSlot.Neck,item);
 							return true;
 						}
 					
@@ -179,12 +158,7 @@ public class CommandEquip implements CommandExecutor {
 							player.sendMessage("You have already equipped an item in that slot");
 							return true;
 						} else {
-							solPlayer.setForearmsItem(item.getId());
-							solPlayer.setForearmsItemInstance(StateManager.getInstance().getInstanceGuid());
-							player.setItemOnCursor(null);
-							player.updateInventory();
-							player.sendMessage("You have equipped this item");
-							solPlayer.updateMaxHp();
+							MoveItemToSlot(solPlayer, EquipmentSlot.Forearms,item);
 							return true;
 						}
 					
@@ -193,12 +167,7 @@ public class CommandEquip implements CommandExecutor {
 							player.sendMessage("You have already equipped an item in that slot");
 							return true;
 						} else {
-							solPlayer.setArmsItem(item.getId());
-							solPlayer.setArmsItemInstance(StateManager.getInstance().getInstanceGuid());
-							player.setItemOnCursor(null);
-							player.updateInventory();
-							player.sendMessage("You have equipped this item");
-							solPlayer.updateMaxHp();
+							MoveItemToSlot(solPlayer, EquipmentSlot.Arms,item);
 							return true;
 						}
 					
@@ -207,12 +176,43 @@ public class CommandEquip implements CommandExecutor {
 							player.sendMessage("You have already equipped an item in that slot");
 							return true;
 						} else {
-							solPlayer.setHandsItem(item.getId());
-							solPlayer.setHandsItemInstance(StateManager.getInstance().getInstanceGuid());
-							player.setItemOnCursor(null);
-							player.updateInventory();
-							player.sendMessage("You have equipped this item");
-							solPlayer.updateMaxHp();
+							MoveItemToSlot(solPlayer, EquipmentSlot.Hands,item);
+							return true;
+						}
+					
+					if (item.getEquipmentSlot().equals(EquipmentSlot.Head))
+						if (solPlayer.getHeadItem() > 0) {
+							player.sendMessage("You have already equipped an item in that slot");
+							return true;
+						} else {
+							MoveItemToSlot(solPlayer, EquipmentSlot.Head,item);
+							return true;
+						}
+					
+					if (item.getEquipmentSlot().equals(EquipmentSlot.Chest))
+						if (solPlayer.getChestItem() > 0) {
+							player.sendMessage("You have already equipped an item in that slot");
+							return true;
+						} else {
+							MoveItemToSlot(solPlayer, EquipmentSlot.Chest,item);
+							return true;
+						}
+					
+					if (item.getEquipmentSlot().equals(EquipmentSlot.Legs))
+						if (solPlayer.getLegsItem() > 0) {
+							player.sendMessage("You have already equipped an item in that slot");
+							return true;
+						} else {
+							MoveItemToSlot(solPlayer, EquipmentSlot.Legs,item);
+							return true;
+						}
+					
+					if (item.getEquipmentSlot().equals(EquipmentSlot.Feet))
+						if (solPlayer.getFeetItem() > 0) {
+							player.sendMessage("You have already equipped an item in that slot");
+							return true;
+						} else {
+							MoveItemToSlot(solPlayer, EquipmentSlot.Feet,item);
 							return true;
 						}
 					
@@ -231,415 +231,31 @@ public class CommandEquip implements CommandExecutor {
 			{
 				if (args.length < 2) {
 					if (solPlayer.getEarsItem() > 0) {
-						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-								.getItem(solPlayer.getEarsItem());
-						if (item.isTemporary())
-						if (!solPlayer.getEarsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
-						{
-							// Delete temporary item
-							player.sendMessage("Your temporary item has faded from existence");
-							solPlayer.setEarsItem(0);
-							return true;
-						}
-						
-						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-						newclaim.setMcname(player.getName());
-						newclaim.setItemid(solPlayer.getEarsItem());
-						newclaim.setClaimed(false);
-						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-						solPlayer.setEarsItem(0);
-						TextComponent tc = new TextComponent();
-						tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
-						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
-						sender.spigot().sendMessage(tc);
-						
+						MoveSlotToClaims(solPlayer,EquipmentSlot.Ears);
 					}
 					if (solPlayer.getNeckItem() > 0) {
-						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-								.getItem(solPlayer.getNeckItem());
-						if (item.isTemporary())
-						if (!solPlayer.getNeckItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
-						{
-							// Delete temporary item
-							player.sendMessage("Your temporary item has faded from existence");
-							solPlayer.setNeckItem(0);
-							return true;
-						}
-						
-						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-						newclaim.setMcname(player.getName());
-						newclaim.setItemid(solPlayer.getNeckItem());
-						newclaim.setClaimed(false);
-						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-						solPlayer.setNeckItem(0);
-						TextComponent tc = new TextComponent();
-						tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
-						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
-						sender.spigot().sendMessage(tc);
+						MoveSlotToClaims(solPlayer,EquipmentSlot.Neck);
 					}
 					if (solPlayer.getFingersItem() > 0) {
-						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-								.getItem(solPlayer.getFingersItem());
-						if (item.isTemporary())
-						if (!solPlayer.getFingersItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
-						{
-							// Delete temporary item
-							player.sendMessage("Your temporary item has faded from existence");
-							solPlayer.setFingersItem(0);
-							return true;
-						}
-						
-						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-						newclaim.setMcname(player.getName());
-						newclaim.setItemid(solPlayer.getFingersItem());
-						newclaim.setClaimed(false);
-						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-						solPlayer.setFingersItem(0);
-						TextComponent tc = new TextComponent();
-						tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
-						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
-						sender.spigot().sendMessage(tc);
+						MoveSlotToClaims(solPlayer,EquipmentSlot.Fingers);
 					}
 					if (solPlayer.getShouldersItem() > 0) {
-						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-								.getItem(solPlayer.getShouldersItem());
-						if (item.isTemporary())
-						if (!solPlayer.getShouldersItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
-						{
-							// Delete temporary item
-							player.sendMessage("Your temporary item has faded from existence");
-							solPlayer.setShouldersItem(0);
-							return true;
-						}
-						
-						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-						newclaim.setMcname(player.getName());
-						newclaim.setItemid(solPlayer.getShouldersItem());
-						newclaim.setClaimed(false);
-						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-						solPlayer.setShouldersItem(0);
-						TextComponent tc = new TextComponent();
-						tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
-						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
-						sender.spigot().sendMessage(tc);
+						MoveSlotToClaims(solPlayer,EquipmentSlot.Shoulders);
 					}
-					
 					if (solPlayer.getForearmsItem() > 0) {
-						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-								.getItem(solPlayer.getForearmsItem());
-						if (item.isTemporary())
-						if (!solPlayer.getForearmsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
-						{
-							// Delete temporary item
-							player.sendMessage("Your temporary item has faded from existence");
-							solPlayer.setForearmsItem(0);
-							return true;
-						}
-						
-						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-						newclaim.setMcname(player.getName());
-						newclaim.setItemid(solPlayer.getForearmsItem());
-						newclaim.setClaimed(false);
-						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-						solPlayer.setForearmsItem(0);
-						TextComponent tc = new TextComponent();
-						tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
-						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
-						sender.spigot().sendMessage(tc);
+						MoveSlotToClaims(solPlayer,EquipmentSlot.Forearms);
 					}
 					if (solPlayer.getArmsItem() > 0) {
-						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-								.getItem(solPlayer.getArmsItem());
-						if (item.isTemporary())
-						if (!solPlayer.getArmsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
-						{
-							// Delete temporary item
-							player.sendMessage("Your temporary item has faded from existence");
-							solPlayer.setArmsItem(0);
-							return true;
-						}
-						
-						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-						newclaim.setMcname(player.getName());
-						newclaim.setItemid(solPlayer.getArmsItem());
-						newclaim.setClaimed(false);
-						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-						solPlayer.setArmsItem(0);
-						TextComponent tc = new TextComponent();
-						tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
-						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
-						sender.spigot().sendMessage(tc);
+						MoveSlotToClaims(solPlayer,EquipmentSlot.Arms);
 					}
 					if (solPlayer.getHandsItem() > 0) {
-						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-								.getItem(solPlayer.getHandsItem());
-						if (item.isTemporary())
-						if (!solPlayer.getHandsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
-						{
-							// Delete temporary item
-							player.sendMessage("Your temporary item has faded from existence");
-							solPlayer.setHandsItem(0);
-							return true;
-						}
-						
-						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-						newclaim.setMcname(player.getName());
-						newclaim.setItemid(solPlayer.getHandsItem());
-						newclaim.setClaimed(false);
-						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-						solPlayer.setHandsItem(0);
-						TextComponent tc = new TextComponent();
-						tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
-						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
-						sender.spigot().sendMessage(tc);
+						MoveSlotToClaims(solPlayer,EquipmentSlot.Hands);
 					}
-					
 					if (solPlayer.getWaistItem() > 0) {
-						ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-								.getItem(solPlayer.getWaistItem());
-						if (item.isTemporary())
-						if (!solPlayer.getWaistItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
-						{
-							// Delete temporary item
-							player.sendMessage("Your temporary item has faded from existence");
-							solPlayer.setWaistItem(0);
-							return true;
-						}
-						
-						SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-						newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-						newclaim.setMcname(player.getName());
-						newclaim.setItemid(solPlayer.getWaistItem());
-						newclaim.setClaimed(false);
-						StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-						solPlayer.setWaistItem(0);
-						TextComponent tc = new TextComponent();
-						tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
-						tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
-						sender.spigot().sendMessage(tc);
+						MoveSlotToClaims(solPlayer,EquipmentSlot.Waist);
 					}
 				} else {
-					switch(args[1].toUpperCase())
-					{
-						case "EARS":
-							if (solPlayer.getEarsItem() > 0) {
-								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-										.getItem(solPlayer.getEarsItem());
-								if (item.isTemporary())
-								if (!solPlayer.getEarsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
-								{
-									// Delete temporary item
-									player.sendMessage("Your temporary item has faded from existence");
-									solPlayer.setEarsItem(0);
-									return true;
-								}
-								
-								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-								newclaim.setMcname(player.getName());
-								newclaim.setItemid(solPlayer.getEarsItem());
-								newclaim.setClaimed(false);
-								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-								solPlayer.setEarsItem(0);
-								TextComponent tc = new TextComponent();
-								tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
-								tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
-								sender.spigot().sendMessage(tc);
-							}
-							break;
-						case "NECK":
-							if (solPlayer.getNeckItem() > 0) {
-								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-										.getItem(solPlayer.getNeckItem());
-								if (item.isTemporary())
-								if (!solPlayer.getNeckItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
-								{
-									// Delete temporary item
-									player.sendMessage("Your temporary item has faded from existence");
-									solPlayer.setNeckItem(0);
-									return true;
-								}
-								
-								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-								newclaim.setMcname(player.getName());
-								newclaim.setItemid(solPlayer.getNeckItem());
-								newclaim.setClaimed(false);
-								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-								solPlayer.setNeckItem(0);
-								TextComponent tc = new TextComponent();
-								tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
-								tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
-								sender.spigot().sendMessage(tc);
-							}
-							break;
-						case "FINGERS":
-							if (solPlayer.getFingersItem() > 0) {
-								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-										.getItem(solPlayer.getFingersItem());
-								if (item.isTemporary())
-								if (!solPlayer.getFingersItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
-								{
-									// Delete temporary item
-									player.sendMessage("Your temporary item has faded from existence");
-									solPlayer.setFingersItem(0);
-									return true;
-								}
-								
-								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-								newclaim.setMcname(player.getName());
-								newclaim.setItemid(solPlayer.getFingersItem());
-								newclaim.setClaimed(false);
-								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-								solPlayer.setFingersItem(0);
-								TextComponent tc = new TextComponent();
-								tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
-								tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
-								sender.spigot().sendMessage(tc);
-							}
-							break;
-						case "SHOULDERS":
-							if (solPlayer.getShouldersItem() > 0) {
-								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-										.getItem(solPlayer.getShouldersItem());
-								if (item.isTemporary())
-								if (!solPlayer.getShouldersItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
-								{
-									// Delete temporary item
-									player.sendMessage("Your temporary item has faded from existence");
-									solPlayer.setShouldersItem(0);
-									return true;
-								}
-								
-								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-								newclaim.setMcname(player.getName());
-								newclaim.setItemid(solPlayer.getShouldersItem());
-								newclaim.setClaimed(false);
-								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-								solPlayer.setShouldersItem(0);
-								TextComponent tc = new TextComponent();
-								tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
-								tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
-								sender.spigot().sendMessage(tc);
-							}
-							break;
-						case "ARMS":
-							if (solPlayer.getArmsItem() > 0) {
-								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-										.getItem(solPlayer.getArmsItem());
-								if (item.isTemporary())
-								if (!solPlayer.getArmsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
-								{
-									// Delete temporary item
-									player.sendMessage("Your temporary item has faded from existence");
-									solPlayer.setArmsItem(0);
-									return true;
-								}
-								
-								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-								newclaim.setMcname(player.getName());
-								newclaim.setItemid(solPlayer.getArmsItem());
-								newclaim.setClaimed(false);
-								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-								solPlayer.setArmsItem(0);
-								TextComponent tc = new TextComponent();
-								tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
-								tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
-								sender.spigot().sendMessage(tc);
-							}
-							break;
-						case "FOREARMS":
-							if (solPlayer.getForearmsItem() > 0) {
-								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-										.getItem(solPlayer.getForearmsItem());
-								if (item.isTemporary())
-								if (!solPlayer.getForearmsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
-								{
-									// Delete temporary item
-									player.sendMessage("Your temporary item has faded from existence");
-									solPlayer.setForearmsItem(0);
-									return true;
-								}
-								
-								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-								newclaim.setMcname(player.getName());
-								newclaim.setItemid(solPlayer.getForearmsItem());
-								newclaim.setClaimed(false);
-								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-								solPlayer.setForearmsItem(0);
-								TextComponent tc = new TextComponent();
-								tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
-								tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
-								sender.spigot().sendMessage(tc);
-							}
-							break;
-						case "HANDS":
-							if (solPlayer.getHandsItem() > 0) {
-								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-										.getItem(solPlayer.getHandsItem());
-								if (item.isTemporary())
-								if (!solPlayer.getHandsItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
-								{
-									// Delete temporary item
-									player.sendMessage("Your temporary item has faded from existence");
-									solPlayer.setHandsItem(0);
-									return true;
-								}
-								
-								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-								newclaim.setMcname(player.getName());
-								newclaim.setItemid(solPlayer.getHandsItem());
-								newclaim.setClaimed(false);
-								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-								solPlayer.setHandsItem(0);
-								TextComponent tc = new TextComponent();
-								tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
-								tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
-								sender.spigot().sendMessage(tc);
-							}
-							break;
-						case "WAIST":
-							if (solPlayer.getWaistItem() > 0) {
-								ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-										.getItem(solPlayer.getWaistItem());
-								if (item.isTemporary())
-								if (!solPlayer.getWaistItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
-								{
-									// Delete temporary item
-									player.sendMessage("Your temporary item has faded from existence");
-									solPlayer.setWaistItem(0);
-									return true;
-								}
-								
-								SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
-								newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
-								newclaim.setMcname(player.getName());
-								newclaim.setItemid(solPlayer.getWaistItem());
-								newclaim.setClaimed(false);
-								StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
-								solPlayer.setWaistItem(0);
-								TextComponent tc = new TextComponent();
-								tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
-								tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
-								sender.spigot().sendMessage(tc);
-							}
-							break;
-						default:
-							sender.sendMessage("Unknown slot to unequip");
-							break;
-					}
+					UnequipSlotByName(solPlayer,args[1].toUpperCase());
 				}
 				
 				solPlayer.updateMaxHp();
@@ -655,118 +271,181 @@ public class CommandEquip implements CommandExecutor {
 		}
 		return true;
 	}
+	
+	public EquipmentSlot getEquipmentSlotByName(String slotName)
+	{
+		switch(slotName.toUpperCase())
+		{
+			case "EARS":
+				return EquipmentSlot.Ears;
+			case "NECK":
+				return EquipmentSlot.Neck;
+			case "FINGERS":
+				return EquipmentSlot.Fingers;
+			case "SHOULDERS":
+				return EquipmentSlot.Shoulders;
+			case "ARMS":
+				return EquipmentSlot.Arms;
+			case "FOREARMS":
+				return EquipmentSlot.Forearms;
+			case "HANDS":
+				return EquipmentSlot.Hands;
+			case "WAIST":
+				return EquipmentSlot.Waist;
+			case "HEAD":
+				return EquipmentSlot.Head;
+			case "CHEST":
+				return EquipmentSlot.Chest;
+			case "LEGS":
+				return EquipmentSlot.Legs;
+			case "FEET":
+				return EquipmentSlot.Feet;
+			default:
+				return EquipmentSlot.None;
+		}
+	}
+	
+	private void UnequipSlotByName(ISoliniaPlayer solPlayer, String equipmentSlot) {
+		MoveSlotToClaims(solPlayer,getEquipmentSlotByName(equipmentSlot));
+	}
+
+	
+	public boolean MoveSlotToClaims(ISoliniaPlayer solPlayer, EquipmentSlot equipSlot)
+	{
+		try
+		{
+			ISoliniaItem item = StateManager.getInstance().getConfigurationManager().getItem(solPlayer.getSoliniaItemByEquipmentSlot(equipSlot));
+			if (item.isTemporary())
+			if (!solPlayer.getWaistItemInstance().equals(StateManager.getInstance().getInstanceGuid()))
+			{
+				// Delete temporary item
+				solPlayer.getBukkitPlayer().sendMessage("Your temporary item has faded from existence");
+				solPlayer.setSoliniaItemByEquipmentSlot(equipSlot, 0);
+				return true;
+			}
+			
+			SoliniaAccountClaim newclaim = new SoliniaAccountClaim();
+			newclaim.setId(StateManager.getInstance().getConfigurationManager().getNextAccountClaimId());
+			newclaim.setMcname(solPlayer.getBukkitPlayer().getName());
+			newclaim.setItemid(solPlayer.getSoliniaItemByEquipmentSlot(equipSlot));
+			newclaim.setClaimed(false);
+			StateManager.getInstance().getConfigurationManager().addAccountClaim(newclaim);
+			solPlayer.setSoliniaItemByEquipmentSlot(equipSlot,0);
+			TextComponent tc = new TextComponent();
+			tc.setText("Item moved to your your /claim list " + ChatColor.AQUA + "[ Click here ]" + ChatColor.RESET);
+			tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/claim list"));
+			solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
+		} catch (CoreStateInitException e)
+		{
+			
+		}
+		return true;
+	}
+
+	private void MoveItemToSlot(ISoliniaPlayer solPlayer, EquipmentSlot slot, ISoliniaItem item) {
+		solPlayer.setSoliniaItemByEquipmentSlot(slot,item.getId());
+		solPlayer.setSoliniaItemInstanceByEquipmentSlot(slot, StateManager.getInstance().getInstanceGuid());
+		solPlayer.getBukkitPlayer().setItemOnCursor(null);
+		solPlayer.getBukkitPlayer().updateInventory();
+		solPlayer.getBukkitPlayer().sendMessage("You have equipped this item");
+		solPlayer.updateMaxHp();
+	}
 
 	private void showCurrentEquippedItems(ISoliniaPlayer solPlayer) {
 		try {
 			solPlayer.sendSlotsAsPacket();
 			
 			if (solPlayer.getNeckItem() > 0) {
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-						.getItem(solPlayer.getNeckItem());
-				TextComponent tc = new TextComponent();
-				tc.setText("Neck Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
-				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip NECK"));
-				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
-						new ComponentBuilder(item.asJsonString()).create()));
-				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
+				showEquippedItem(solPlayer,EquipmentSlot.Neck);
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Neck Item: EMPTY");
 			}
 			if (solPlayer.getFingersItem() > 0) {
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-						.getItem(solPlayer.getFingersItem());
-				TextComponent tc = new TextComponent();
-				tc.setText("Fingers Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
-				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip FINGERS"));
-				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
-						new ComponentBuilder(item.asJsonString()).create()));
-				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
+				showEquippedItem(solPlayer,EquipmentSlot.Fingers);
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Fingers Item: EMPTY");
 			}
 
 			if (solPlayer.getEarsItem() > 0) {
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-						.getItem(solPlayer.getEarsItem());
-				TextComponent tc = new TextComponent();
-				tc.setText("Ears Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
-				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip EARS"));
-				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
-						new ComponentBuilder(item.asJsonString()).create()));
-				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
+				showEquippedItem(solPlayer,EquipmentSlot.Ears);
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Ears Item: EMPTY");
 			}
 
 			if (solPlayer.getShouldersItem() > 0) {
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-						.getItem(solPlayer.getShouldersItem());
-				TextComponent tc = new TextComponent();
-				tc.setText("Shoulders Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
-				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip SHOULDERS"));
-				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
-						new ComponentBuilder(item.asJsonString()).create()));
-				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
+				showEquippedItem(solPlayer,EquipmentSlot.Shoulders);
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Shoulders Item: EMPTY");
 			}
 			
 			if (solPlayer.getForearmsItem() > 0) {
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-						.getItem(solPlayer.getForearmsItem());
-				TextComponent tc = new TextComponent();
-				tc.setText("Forearms Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
-				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip FOREARMS"));
-				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
-						new ComponentBuilder(item.asJsonString()).create()));
-				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
+				showEquippedItem(solPlayer,EquipmentSlot.Forearms);
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Forearms Item: EMPTY");
 			}
 			
 			if (solPlayer.getArmsItem() > 0) {
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-						.getItem(solPlayer.getArmsItem());
-				TextComponent tc = new TextComponent();
-				tc.setText("Arms Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
-				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip ARMS"));
-				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
-						new ComponentBuilder(item.asJsonString()).create()));
-				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
+				showEquippedItem(solPlayer,EquipmentSlot.Arms);
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Arms Item: EMPTY");
 			}
 			
 			if (solPlayer.getHandsItem() > 0) {
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-						.getItem(solPlayer.getHandsItem());
-				TextComponent tc = new TextComponent();
-				tc.setText("Hands Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
-				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip HANDS"));
-				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
-						new ComponentBuilder(item.asJsonString()).create()));
-				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
+				showEquippedItem(solPlayer,EquipmentSlot.Hands);
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Hands Item: EMPTY");
 			}
 			
 			if (solPlayer.getWaistItem() > 0) {
-				ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
-						.getItem(solPlayer.getWaistItem());
-				TextComponent tc = new TextComponent();
-				tc.setText("Waist Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
-				tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip WAIST"));
-				tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
-						new ComponentBuilder(item.asJsonString()).create()));
-				solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
+				showEquippedItem(solPlayer,EquipmentSlot.Waist);
 			} else {
 				solPlayer.getBukkitPlayer().sendMessage("Waist Item: EMPTY");
 			}
-		} catch (CoreStateInitException e) {
+
+			if (solPlayer.getHeadItem() > 0) {
+				showEquippedItem(solPlayer,EquipmentSlot.Head);
+			} else {
+				solPlayer.getBukkitPlayer().sendMessage("Head Item: EMPTY");
+			}
+
+			if (solPlayer.getChestItem() > 0) {
+				showEquippedItem(solPlayer,EquipmentSlot.Chest);
+			} else {
+				solPlayer.getBukkitPlayer().sendMessage("Chest Item: EMPTY");
+			}
+
+			if (solPlayer.getLegsItem() > 0) {
+				showEquippedItem(solPlayer,EquipmentSlot.Legs);
+			} else {
+				solPlayer.getBukkitPlayer().sendMessage("Legs Item: EMPTY");
+			}
+
+			if (solPlayer.getFeetItem() > 0) {
+				showEquippedItem(solPlayer,EquipmentSlot.Feet);
+			} else {
+				solPlayer.getBukkitPlayer().sendMessage("Feet Item: EMPTY");
+			}
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	private void showEquippedItem(ISoliniaPlayer solPlayer, EquipmentSlot slot) {
+		try
+		{
+			ISoliniaItem item = StateManager.getInstance().getConfigurationManager()
+					.getItem(solPlayer.getSoliniaItemByEquipmentSlot(slot));
+			TextComponent tc = new TextComponent();
+			tc.setText(slot.name() + " Item: " + ChatColor.LIGHT_PURPLE + item.getDisplayname() + ChatColor.AQUA + " [ Click here to remove ]");
+			tc.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/equip unequip " + slot.name().toUpperCase()));
+			tc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM,
+					new ComponentBuilder(item.asJsonString()).create()));
+			solPlayer.getBukkitPlayer().spigot().sendMessage(tc);
+		} catch (CoreStateInitException e)
+		{
+			
 		}
 	}
 }
