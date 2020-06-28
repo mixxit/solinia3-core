@@ -205,8 +205,8 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		spawner += "  Warmup: " + respawnTime + "\r" + System.lineSeparator();
 		spawner += "  WarmupTimer: 0\r" + System.lineSeparator();
 		spawner += "  CheckForPlayers: false\r" + System.lineSeparator();
-		spawner += "  ActivationRange: 112\r" + System.lineSeparator();
-		spawner += "  LeashRange: 112\r" + System.lineSeparator();
+		spawner += "  ActivationRange: 256\r" + System.lineSeparator();
+		spawner += "  LeashRange: 256\r" + System.lineSeparator();
 		spawner += "  HealOnLeash: true\r" + System.lineSeparator();
 		spawner += "  ResetThreatOnLeash: true\r" + System.lineSeparator();
 		spawner += "  ShowFlames: false\r" + System.lineSeparator();

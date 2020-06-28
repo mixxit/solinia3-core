@@ -496,7 +496,7 @@ public class EntityUtils {
 					ISoliniaLivingEntity solEntity = SoliniaLivingEntityAdapter.Adapt((LivingEntity) entity);
 					solEntity.clearHateList();
 					solEntity.setAttackTarget(null);
-					solEntity.resetPosition(true);
+					//solEntity.resetPosition(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

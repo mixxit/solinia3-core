@@ -226,7 +226,7 @@ public class CoreState {
 				// Newb Holidays
 				if (simpleDateformat.format(now).equals("28.06") || simpleDateformat.format(now).equals("29.06"))
 				{
-					xpdaybonus += 200;
+					xpdaybonus += 400;
 				}
 				
 				// Easter Holidays

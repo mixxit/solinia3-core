@@ -9769,7 +9769,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 			if (!this.hasHate()) {
 				setAttackTarget(null);
-				resetPosition(true);
+				//resetPosition(true);
 				return false;
 			}
 		}
@@ -10914,7 +10914,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			{
 				this.say("Hmm, he must have gone...");
 				this.setAttackTarget(null);
-				this.resetPosition(true);
+				//this.resetPosition(true);
 			}
 			
 			return;
@@ -11037,7 +11037,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			e.printStackTrace();
 		}
 
-		this.resetPosition(true);
+		//this.resetPosition(true);
 	}
 
 	@Override
