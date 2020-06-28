@@ -43,7 +43,7 @@ public class Solinia3CoreItemPickupListener implements Listener {
         String temporaryGuid = null;
         Integer augmentationItemId = null;
         
-        if (pickedUpItemStack.getType().equals(Material.SHULKER_BOX))
+        if (pickedUpItemStack.getType().name().toUpperCase().endsWith("SHULKER_BOX"))
         {
         	// Dont ever reset a shulker, its probably got something in it
         	return;
