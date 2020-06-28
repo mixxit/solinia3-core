@@ -223,6 +223,12 @@ public class CoreState {
 				}
 				simpleDateformat = new SimpleDateFormat("dd.MM");
 
+				// Newb Holidays
+				if (simpleDateformat.format(now).equals("28.06") || simpleDateformat.format(now).equals("29.06"))
+				{
+					xpdaybonus += 200;
+				}
+				
 				// Easter Holidays
 				if (simpleDateformat.format(now).equals("10.04") || simpleDateformat.format(now).equals("11.04") || simpleDateformat.format(now).equals("12.04") || simpleDateformat.format(now).equals("13.04"))
 				{
