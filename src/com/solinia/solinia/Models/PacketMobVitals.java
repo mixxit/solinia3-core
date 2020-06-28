@@ -26,7 +26,7 @@ public class PacketMobVitals implements ISoliniaPacket {
 			throw new InvalidPacketException("Packet data is wrong format");
 
 		String[] dataArray = data.split("\\^",-1);
-		if (dataArray.length < 4)
+		if (dataArray.length < 5)
 			throw new InvalidPacketException("Packet data missing elements");
 		
 		int partyMember = Integer.parseInt(dataArray[0]);
