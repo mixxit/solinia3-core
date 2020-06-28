@@ -214,9 +214,9 @@ public interface ISoliniaNPC extends IPersistable {
 
 	void setSpeaksAllLanguages(boolean speaksAllLanguages);
 
-	List<ISoliniaItem> getEquippedSoliniaItems(LivingEntity livingEntity, boolean excludeMainHand);
+	List<ISoliniaItem> getEquippedSoliniaItems(ISoliniaLivingEntity solLivingEntity, boolean excludeMainHand);
 
-	List<ISoliniaItem> getEquippedSoliniaItems(LivingEntity livingEntity);
+	List<ISoliniaItem> getEquippedSoliniaItems(ISoliniaLivingEntity solLivingEntity);
 
 	boolean isPetControllable();
 

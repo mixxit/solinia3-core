@@ -21,6 +21,7 @@ import com.solinia.solinia.Interfaces.IPersistable;
 import com.solinia.solinia.Interfaces.ISoliniaClass;
 import com.solinia.solinia.Interfaces.ISoliniaFaction;
 import com.solinia.solinia.Interfaces.ISoliniaItem;
+import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaLootDrop;
 import com.solinia.solinia.Interfaces.ISoliniaLootTable;
 import com.solinia.solinia.Interfaces.ISoliniaLootTableEntry;
@@ -1553,22 +1554,22 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	}
 
 	@Override
-	public List<ISoliniaItem> getEquippedSoliniaItems(LivingEntity livingEntity) {
-		return getEquippedSoliniaItems(livingEntity, false);
+	public List<ISoliniaItem> getEquippedSoliniaItems(ISoliniaLivingEntity solLivingEntity) {
+		return getEquippedSoliniaItems(solLivingEntity, false);
 	}
 
 	@Override
-	public List<ISoliniaItem> getEquippedSoliniaItems(LivingEntity livingEntity, boolean excludeMainHand) {
+	public List<ISoliniaItem> getEquippedSoliniaItems(ISoliniaLivingEntity solLivingEntity, boolean excludeMainHand) {
 		List<ISoliniaItem> items = new ArrayList<ISoliniaItem>();
 
 		try {
 			List<ItemStack> itemStacks = new ArrayList<ItemStack>();
 			if (excludeMainHand == false) {
 
-				itemStacks.add(livingEntity.getEquipment().getItemInMainHand());
+				itemStacks.add(solLivingEntity.getEquipment().getItemInMainHand());
 			}
-			itemStacks.add(livingEntity.getEquipment().getItemInOffHand());
-			itemStacks.addAll(Arrays.asList(livingEntity.getEquipment().getArmorContents()));
+			itemStacks.add(solLivingEntity.getEquipment().getItemInOffHand());
+			itemStacks.addAll(Arrays.asList(solLivingEntity.getEquipment().getArmorContents()));
 			
 			for (ItemStack itemstack : itemStacks) {
 				if (itemstack == null)

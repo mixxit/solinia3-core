@@ -208,7 +208,7 @@ public class EQUtils {
 		if ((slots & (1L << LEar)) != 0)
 			return EquipmentSlot.Ears;
 		if ((slots & (1L << Head)) != 0)
-			return EquipmentSlot.None;
+			return EquipmentSlot.Head;
 		if ((slots & (1L << Face)) != 0)
 			return EquipmentSlot.None;
 		if ((slots & (1L << REar)) != 0)
@@ -238,11 +238,11 @@ public class EQUtils {
 		if ((slots & (1L << RFinger)) != 0)
 			return EquipmentSlot.Fingers;
 		if ((slots & (1L << Chest)) != 0)
-			return EquipmentSlot.None;
+			return EquipmentSlot.Chest;
 		if ((slots & (1L << Legs)) != 0)
-			return EquipmentSlot.None;
+			return EquipmentSlot.Legs;
 		if ((slots & (1L << Feet)) != 0)
-			return EquipmentSlot.None;
+			return EquipmentSlot.Feet;
 		if ((slots & (1L << Belt)) != 0)
 			return EquipmentSlot.Waist;
 		if ((slots & (1L << Ammo)) != 0)

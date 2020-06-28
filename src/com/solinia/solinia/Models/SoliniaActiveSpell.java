@@ -1401,6 +1401,9 @@ public class SoliniaActiveSpell {
 		Entity sourceEntity = Bukkit.getEntity(getSourceUuid());
 		if (sourceEntity == null)
 			return;
+		
+		if (getLivingEntity() == null)
+			return;
 
 		if (!(sourceEntity instanceof LivingEntity))
 			return;
@@ -1408,10 +1411,12 @@ public class SoliniaActiveSpell {
 		LivingEntity sourceLivingEntity = (LivingEntity) sourceEntity;
 		try {
 
+			ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(getLivingEntity());
+
 			ISoliniaLivingEntity sourceSoliniaLivingEntity = SoliniaLivingEntityAdapter.Adapt(sourceLivingEntity);
-			if (sourceSoliniaLivingEntity != null && getLivingEntity() != null) {
+			if (sourceSoliniaLivingEntity != null && getLivingEntity() != null && solLivingEntity != null) {
 				
-				ItemStack itemStack = getLivingEntity().getEquipment().getItemInMainHand();
+				ItemStack itemStack = solLivingEntity.getEquipment().getItemInMainHand();
 				if (itemStack != null)
 				{
 					try
@@ -3010,7 +3015,7 @@ public class SoliniaActiveSpell {
 			int weaponDamage = 0;
 
 			// Offhand item only
-			ItemStack mainitem = sourceLivingEntity.getEquipment().getItemInOffHand();
+			ItemStack mainitem = solSourceEntity.getEquipment().getItemInOffHand();
 
 			if (mainitem != null) {
 				try {

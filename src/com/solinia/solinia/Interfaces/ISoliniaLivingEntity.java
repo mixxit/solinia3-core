@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -583,5 +584,9 @@ public interface ISoliniaLivingEntity  {
 	void setAiLastCast();
 
 	boolean getAiLastCastCheck();
+
+	EntityEquipment getEquipment();
+
+	int getExperiencePercentage();
 
 }

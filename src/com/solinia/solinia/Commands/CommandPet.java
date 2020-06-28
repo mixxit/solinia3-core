@@ -316,9 +316,9 @@ public class CommandPet implements CommandExecutor {
 			{
 				if (!item.getBasename().toUpperCase().contains("SHIELD"))
 				{
-					if (pet.getEquipment().getItemInMainHand() == null)
+					if (livingEntity.getEquipment().getItemInMainHand() == null)
 					{
-						pet.getEquipment().setItemInMainHand(item.asItemStack());
+						livingEntity.getEquipment().setItemInMainHand(item.asItemStack());
 						player.getInventory().setItemInMainHand(null);
 						player.updateInventory();
 						livingEntity.updateMaxHp();
@@ -326,9 +326,9 @@ public class CommandPet implements CommandExecutor {
 						return;
 					}
 	
-					if (pet.getEquipment().getItemInMainHand().getType() == null || pet.getEquipment().getItemInMainHand().getType().equals(Material.AIR))
+					if (livingEntity.getEquipment().getItemInMainHand().getType() == null || pet.getEquipment().getItemInMainHand().getType().equals(Material.AIR))
 					{
-						pet.getEquipment().setItemInMainHand(item.asItemStack());
+						livingEntity.getEquipment().setItemInMainHand(item.asItemStack());
 						player.getInventory().setItemInMainHand(null);
 						player.updateInventory();
 						livingEntity.updateMaxHp();
@@ -337,9 +337,9 @@ public class CommandPet implements CommandExecutor {
 					}
 				}
 				
-				if (pet.getEquipment().getItemInOffHand() == null)
+				if (livingEntity.getEquipment().getItemInOffHand() == null)
 				{
-					pet.getEquipment().setItemInOffHand(item.asItemStack());
+					livingEntity.getEquipment().setItemInOffHand(item.asItemStack());
 					player.getInventory().setItemInMainHand(null);
 					player.updateInventory();
 					livingEntity.updateMaxHp();
@@ -347,9 +347,9 @@ public class CommandPet implements CommandExecutor {
 					return;
 				}
 
-				if (pet.getEquipment().getItemInOffHand().getType() == null || pet.getEquipment().getItemInOffHand().getType().equals(Material.AIR))
+				if (livingEntity.getEquipment().getItemInOffHand().getType() == null || livingEntity.getEquipment().getItemInOffHand().getType().equals(Material.AIR))
 				{
-					pet.getEquipment().setItemInOffHand(item.asItemStack());
+					livingEntity.getEquipment().setItemInOffHand(item.asItemStack());
 					player.getInventory().setItemInMainHand(null);
 					player.updateInventory();
 					livingEntity.updateMaxHp();
@@ -365,9 +365,9 @@ public class CommandPet implements CommandExecutor {
 			{
 				if (item.getBasename().toUpperCase().contains("HELMET"))
 				{
-					if (pet.getEquipment().getHelmet() == null)
+					if (livingEntity.getEquipment().getHelmet() == null)
 					{
-						pet.getEquipment().setHelmet(item.asItemStack());
+						livingEntity.getEquipment().setHelmet(item.asItemStack());
 						player.getInventory().setItemInMainHand(null);
 						player.updateInventory();
 						livingEntity.updateMaxHp();
@@ -375,9 +375,9 @@ public class CommandPet implements CommandExecutor {
 						return;
 					}
 
-					if (pet.getEquipment().getHelmet().getType() == null || pet.getEquipment().getHelmet().getType().equals(Material.AIR))
+					if (livingEntity.getEquipment().getHelmet().getType() == null || livingEntity.getEquipment().getHelmet().getType().equals(Material.AIR))
 					{
-						pet.getEquipment().setHelmet(item.asItemStack());
+						livingEntity.getEquipment().setHelmet(item.asItemStack());
 						player.getInventory().setItemInMainHand(null);
 						player.updateInventory();
 						livingEntity.updateMaxHp();
@@ -390,9 +390,9 @@ public class CommandPet implements CommandExecutor {
 				
 				if (item.getBasename().toUpperCase().contains("CHESTPLATE"))
 				{
-					if (pet.getEquipment().getChestplate() == null)
+					if (livingEntity.getEquipment().getChestplate() == null)
 					{
-						pet.getEquipment().setChestplate(item.asItemStack());
+						livingEntity.getEquipment().setChestplate(item.asItemStack());
 						player.getInventory().setItemInMainHand(null);
 						player.updateInventory();
 						livingEntity.updateMaxHp();
@@ -400,9 +400,9 @@ public class CommandPet implements CommandExecutor {
 						return;
 					}
 
-					if (pet.getEquipment().getChestplate().getType() == null || pet.getEquipment().getChestplate().getType().equals(Material.AIR))
+					if (livingEntity.getEquipment().getChestplate().getType() == null || livingEntity.getEquipment().getChestplate().getType().equals(Material.AIR))
 					{
-						pet.getEquipment().setChestplate(item.asItemStack());
+						livingEntity.getEquipment().setChestplate(item.asItemStack());
 						player.getInventory().setItemInMainHand(null);
 						player.updateInventory();
 						livingEntity.updateMaxHp();
@@ -415,9 +415,9 @@ public class CommandPet implements CommandExecutor {
 				
 				if (item.getBasename().toUpperCase().contains("LEGGINGS"))
 				{
-					if (pet.getEquipment().getLeggings() == null)
+					if (livingEntity.getEquipment().getLeggings() == null)
 					{
-						pet.getEquipment().setLeggings(item.asItemStack());
+						livingEntity.getEquipment().setLeggings(item.asItemStack());
 						player.getInventory().setItemInMainHand(null);
 						player.updateInventory();
 						livingEntity.updateMaxHp();
@@ -425,9 +425,9 @@ public class CommandPet implements CommandExecutor {
 						return;
 					}
 
-					if (pet.getEquipment().getLeggings().getType() == null || pet.getEquipment().getLeggings().getType().equals(Material.AIR))
+					if (livingEntity.getEquipment().getLeggings().getType() == null || pet.getEquipment().getLeggings().getType().equals(Material.AIR))
 					{
-						pet.getEquipment().setLeggings(item.asItemStack());
+						livingEntity.getEquipment().setLeggings(item.asItemStack());
 						player.getInventory().setItemInMainHand(null);
 						player.updateInventory();
 						livingEntity.updateMaxHp();
@@ -440,9 +440,9 @@ public class CommandPet implements CommandExecutor {
 				
 				if (item.getBasename().toUpperCase().contains("BOOTS"))
 				{
-					if (pet.getEquipment().getBoots() == null)
+					if (livingEntity.getEquipment().getBoots() == null)
 					{
-						pet.getEquipment().setBoots(item.asItemStack());
+						livingEntity.getEquipment().setBoots(item.asItemStack());
 						player.getInventory().setItemInMainHand(null);
 						player.updateInventory();
 						livingEntity.updateMaxHp();
@@ -450,9 +450,9 @@ public class CommandPet implements CommandExecutor {
 						return;
 					}
 
-					if (pet.getEquipment().getBoots().getType() == null || pet.getEquipment().getBoots().getType().equals(Material.AIR))
+					if (livingEntity.getEquipment().getBoots().getType() == null || pet.getEquipment().getBoots().getType().equals(Material.AIR))
 					{
-						pet.getEquipment().setBoots(item.asItemStack());
+						livingEntity.getEquipment().setBoots(item.asItemStack());
 						player.getInventory().setItemInMainHand(null);
 						player.updateInventory();
 						livingEntity.updateMaxHp();

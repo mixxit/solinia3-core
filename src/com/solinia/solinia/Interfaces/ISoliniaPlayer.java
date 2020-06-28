@@ -11,6 +11,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -642,4 +643,8 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public int getSoliniaItemByEquipmentSlot(EquipmentSlot equipSlot);
 	void setSoliniaItemInstanceByEquipmentSlot(EquipmentSlot equipSlot, String instance);
 	void setSoliniaItemByEquipmentSlot(EquipmentSlot equipSlot, int soliniaItemId);
+	EntityEquipment getEquipment();
+	public int getExperiencePercentage();
+	int getAAExperiencePercentage();
+	Double getExperienceNeededToLevel();
 }

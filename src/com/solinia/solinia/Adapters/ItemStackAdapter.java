@@ -223,6 +223,26 @@ public class ItemStackAdapter {
 			loretxt.add(ChatColor.AQUA + "/EQUIP : HANDS" + ChatColor.RESET);
 		}
 		
+		if (soliniaItem.getEquipmentSlot().equals(EquipmentSlot.Head))
+		{
+			loretxt.add(ChatColor.AQUA + "/EQUIP : HEAD" + ChatColor.RESET);
+		}
+		
+		if (soliniaItem.getEquipmentSlot().equals(EquipmentSlot.Chest))
+		{
+			loretxt.add(ChatColor.AQUA + "/EQUIP : CHEST" + ChatColor.RESET);
+		}
+		
+		if (soliniaItem.getEquipmentSlot().equals(EquipmentSlot.Legs))
+		{
+			loretxt.add(ChatColor.AQUA + "/EQUIP : LEGS" + ChatColor.RESET);
+		}
+		
+		if (soliniaItem.getEquipmentSlot().equals(EquipmentSlot.Feet))
+		{
+			loretxt.add(ChatColor.AQUA + "/EQUIP : FEET" + ChatColor.RESET);
+		}
+		
 		if (soliniaItem.isAugmentation() == true) {
 				loretxt.add(ChatColor.AQUA + "This looks like it could augment " + ChatColor.RESET);
 				loretxt.add(ChatColor.AQUA + "weapon or armour" + ChatColor.RESET);

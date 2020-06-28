@@ -24,17 +24,10 @@ public class CommandStats implements CommandExecutor {
 	            ISoliniaLivingEntity solentity = SoliniaLivingEntityAdapter.Adapt(player);
 	            solentity.sendStats((LivingEntity)player);
 
-	            Double newlevel = (double) solplayer.getActualLevel();
-	            Double xpneededforcurrentlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 0));
-	    		Double xpneededfornextlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 1));
-	    		Double totalxpneeded = xpneededfornextlevel - xpneededforcurrentlevel;
-	    		Double currentxpprogress = solplayer.getExperience() - xpneededforcurrentlevel;
-	    		
-	            Double percenttolevel = Math.floor((currentxpprogress / totalxpneeded) * 100);
-	            Double percenttoaa = Math.floor((solplayer.getAAExperience() / PlayerUtils.getMaxAAXP()) * 100);
-	    		int ipercenttolevel = percenttolevel.intValue();
-	    		int ipercenttoaa = percenttoaa.intValue();
-	    		player.sendMessage("Level progress: " + ipercenttolevel + "% into level - Have: " + ChatColor.GOLD+ solplayer.getExperience().longValue() + ChatColor.RESET + " Need: " + ChatColor.GOLD+ xpneededfornextlevel.longValue() + ChatColor.RESET);
+	            int ipercenttolevel = solplayer.getExperiencePercentage();
+	            int ipercenttoaa = solplayer.getAAExperiencePercentage();
+	            
+	    		player.sendMessage("Level progress: " + ipercenttolevel + "% into level - Have: " + ChatColor.GOLD+ solplayer.getExperience().longValue() + ChatColor.RESET + " Need: " + ChatColor.GOLD+ solplayer.getExperienceNeededToLevel().longValue() + ChatColor.RESET);
 	    		player.sendMessage("AA points: " + solplayer.getAAPoints());
 	    		player.sendMessage("Next AA progress: " + ipercenttoaa + "% into AA - Have: " + ChatColor.GOLD+solplayer.getAAExperience().longValue() + ChatColor.RESET + " Need: " + ChatColor.GOLD+ PlayerUtils.getMaxAAXP().longValue() + ChatColor.RESET);
 	    		player.sendMessage("From being online you have saved up Attendence Xp every minute: " + ChatColor.GOLD+ solplayer.getPendingXp().longValue() + ChatColor.RESET);

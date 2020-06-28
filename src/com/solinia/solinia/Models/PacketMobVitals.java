@@ -10,6 +10,7 @@ public class PacketMobVitals implements ISoliniaPacket {
 	private int entityId = 0;
 	private String name = "";
 	private int level = 0;
+	private int xp = 0;
 	
 	public PacketMobVitals()
 	{
@@ -41,6 +42,7 @@ public class PacketMobVitals implements ISoliniaPacket {
 		}
 		String name = dataArray[4];
 		int level = Integer.parseInt(dataArray[5]);
+		int xp = Integer.parseInt(dataArray[6]);
 		
 		this.partyMember = partyMember;
 		this.healthPercent = healthPercent;
@@ -48,6 +50,7 @@ public class PacketMobVitals implements ISoliniaPacket {
 		this.entityId = entityId;
 		this.name = name;
 		this.level = level;
+		this.xp = xp;
 	}
 	
 	public int getPartyMember()
@@ -80,6 +83,11 @@ public class PacketMobVitals implements ISoliniaPacket {
 		return this.level;
 	}
 	
+	public int getXP()
+	{
+		return this.xp;
+	}
+	
 	public String toPacketData()
 	{
 		String packetData = "";
@@ -91,16 +99,18 @@ public class PacketMobVitals implements ISoliniaPacket {
 				+ "^" + getManaPercent()
 				+ "^" + uniqueString
 				+ "^" + getName()
-		+ "^" + getLevel();
+		+ "^" + getLevel()
+		+ "^" + getXP();
 		return packetData;
 	}
 
-	public void fromData(int partyMember, float healthPercent, float manaPercent, int entityId, String name, int level) {
+	public void fromData(int partyMember, float healthPercent, float manaPercent, int entityId, String name, int level, int xp) {
 		this.partyMember = partyMember;
 		this.healthPercent = healthPercent;
 		this.manaPercent = manaPercent;
 		this.entityId = entityId;
 		this.name = name.replaceAll("\\^", "").replaceAll("\\|", "");
 		this.level = level;
+		this.xp = xp;
 	}
 }

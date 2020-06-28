@@ -28,6 +28,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sittable;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
@@ -814,6 +815,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public EntityEquipment getEquipment()
+	{
+		return this.getBukkitLivingEntity().getEquipment();
+	}
 
 	@Override
 	public void ClientProcess(boolean wasTriggeredManually) {
@@ -941,7 +948,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 				
 				//if (AutoFireEnabled()) {
-				if (autoAttack.canAutoAttack() && may_use_attacks && ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+				if (autoAttack.canAutoAttack() && may_use_attacks && ItemStackUtils.isRangedWeapon(getEquipment().getItemInMainHand()))
 				{
 					//if (ranged->GetItem() && ranged->GetItem()->ItemType == EQEmu::item::ItemTypeBow) {
 					if (!getSoliniaItemInMainHand().isThrowing())
@@ -984,9 +991,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					}
 				}
 				
-				if (autoAttack.canAutoAttack() && target != null && may_use_attacks && !ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+				if (autoAttack.canAutoAttack() && target != null && may_use_attacks && !ItemStackUtils.isRangedWeapon(getEquipment().getItemInMainHand()))
 				{
-					Tuple<Boolean, String> canUseItem = this.canUseItem(getBukkitLivingEntity().getEquipment().getItemInMainHand());
+					Tuple<Boolean, String> canUseItem = this.canUseItem(getEquipment().getItemInMainHand());
 					
 					if (!combatRange(defender))
 					{
@@ -1000,7 +1007,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 							getBukkitLivingEntity().sendMessage(ChatColor.GRAY + "You cannot use this item ["+canUseItem.b()+"]");
 					} else if (target.getHealth() > 0D)
 					{
-						ItemStack wpn = getBukkitLivingEntity().getEquipment().getItemInMainHand();
+						ItemStack wpn = getEquipment().getItemInMainHand();
 						tryWeaponProc(wpn, defender, InventorySlot.Primary);
 						//TriggerDefensiveProcs(target, InventorySlot.Primary, false);
 	
@@ -1011,7 +1018,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	
 				}
 				
-				if (autoAttack.canAutoAttack() && target != null && may_use_attacks && canThisClassDualWield() && !ItemStackUtils.isRangedWeapon(getBukkitLivingEntity().getEquipment().getItemInMainHand()))
+				if (autoAttack.canAutoAttack() && target != null && may_use_attacks && canThisClassDualWield() && !ItemStackUtils.isRangedWeapon(getEquipment().getItemInMainHand()))
 				{
 					boolean los_status = this.checkLosFN(defender,false);
 					boolean los_status_facing= this.isFacingMob(defender);
@@ -1032,7 +1039,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					else if (target.getHealth() > 0D) {
 						tryIncreaseSkill(SkillType.DualWield, 1);
 						if (checkDualWield()) {
-							ItemStack wpn = getBukkitLivingEntity().getEquipment().getItemInOffHand();
+							ItemStack wpn = getEquipment().getItemInOffHand();
 							tryWeaponProc(wpn, defender, InventorySlot.Secondary);
 	
 							doAttackRounds(defender, InventorySlot.Secondary, false);
@@ -1075,7 +1082,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			//int ammo_slot = EQEmu::invslot::slotRange;
 			//const EQEmu::ItemInstance* RangeWeapon = m_inv[EQEmu::invslot::slotRange];
 			
-			ItemStack RangeWeapon = getBukkitLivingEntity().getEquipment().getItemInMainHand();
+			ItemStack RangeWeapon = getEquipment().getItemInMainHand();
 			if (RangeWeapon == null)
 				return;
 			ISoliniaItem item = null;
@@ -1143,13 +1150,13 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				int newAmount = RangeWeapon.getAmount() - 1;
 	
 				if (newAmount < 1) {
-					player.getEquipment().setItemInMainHand(null);
+					getEquipment().setItemInMainHand(null);
 					player.updateInventory();
 	
 				} else {
 					// To prevent a trap you must cancel event here
 					RangeWeapon.setAmount(newAmount);
-					player.getEquipment().setItemInMainHand(RangeWeapon);
+					getEquipment().setItemInMainHand(RangeWeapon);
 					player.updateInventory();
 				}
 			}
@@ -1438,7 +1445,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		//make sure the attack and ranged timers are up
 		//if the ranged timer is disabled, then they have no ranged weapon and shouldent be attacking anyhow
 		
-		ItemStack rangedItemStack = getBukkitLivingEntity().getEquipment().getItemInMainHand();
+		ItemStack rangedItemStack = getEquipment().getItemInMainHand();
 		try
 		{
 			ISoliniaItem RangeWeapon = null;
@@ -2303,7 +2310,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 	
 			if (Hand == InventorySlot.Secondary) { // Kaiyodo - Pick weapon from the attacking hand
-				weaponItemStack = this.getBukkitLivingEntity().getEquipment().getItemInOffHand();
+				weaponItemStack = this.getEquipment().getItemInOffHand();
 				try
 				{
 					weapon = SoliniaItemAdapter.Adapt(weaponItemStack);
@@ -2313,7 +2320,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				}
 				//todo OffHandAtk(true);
 			} else {
-				weaponItemStack = this.getBukkitLivingEntity().getEquipment().getItemInMainHand();
+				weaponItemStack = this.getEquipment().getItemInMainHand();
 				try
 				{
 					weapon = SoliniaItemAdapter.Adapt(weaponItemStack);
@@ -3298,8 +3305,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	private boolean hasShieldEquiped() {
 		if (this.getBukkitLivingEntity() != null)
 		{
-			if (this.getBukkitLivingEntity().getEquipment().getItemInOffHand() != null)
-				return this.getBukkitLivingEntity().getEquipment().getItemInOffHand().getType().equals(Material.SHIELD) || this.getBukkitLivingEntity().getEquipment().getItemInOffHand().getType().equals(Material.LEGACY_SHIELD);
+			if (this.getEquipment().getItemInOffHand() != null)
+				return this.getEquipment().getItemInOffHand().getType().equals(Material.SHIELD) || this.getEquipment().getItemInOffHand().getType().equals(Material.LEGACY_SHIELD);
 		}
 		
 		return false;
@@ -3478,7 +3485,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			// Is trying to  use a two hand but has item in offhand
 			if (!this.isNPC() && item.getItemType().equals(ItemType.TwoHandBlunt) || item.getItemType().equals(ItemType.TwoHandPiercing) || item.getItemType().equals(ItemType.TwoHandSlashing) )
 			{
-				if (this.getBukkitLivingEntity().getEquipment().getItemInOffHand() != null && !this.getBukkitLivingEntity().getEquipment().getItemInOffHand().getType().equals(Material.AIR))
+				if (this.getEquipment().getItemInOffHand() != null && !this.getBukkitLivingEntity().getEquipment().getItemInOffHand().getType().equals(Material.AIR))
 					return new Tuple<Boolean,String>(false,"Two hander with offhand");
 			}
 			
@@ -4904,10 +4911,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.isCurrentlyNPCPet() || this.isNPC())
 			return true;
 
-		if (ItemStackUtils.IsSoliniaItem(getBukkitLivingEntity().getEquipment().getItemInMainHand())) {
+		if (ItemStackUtils.IsSoliniaItem(getEquipment().getItemInMainHand())) {
 			try {
 				ISoliniaItem soliniaitem = StateManager.getInstance().getConfigurationManager()
-						.getItem(getBukkitLivingEntity().getEquipment().getItemInMainHand());
+						.getItem(getEquipment().getItemInMainHand());
 				if (soliniaitem != null) {
 					if (soliniaitem.isThrowing()) {
 						getBukkitLivingEntity().sendMessage(
@@ -5027,7 +5034,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public ISoliniaItem getSoliniaItemInMainHand()
 	{
-		ItemStack main = getBukkitLivingEntity().getEquipment().getItemInMainHand();
+		ItemStack main = getEquipment().getItemInMainHand();
 		if (main == null)
 			return null;
 		
@@ -5044,7 +5051,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 	@Override
 	public ISoliniaItem getSoliniaItemInOffHand()
 	{
-		ItemStack main = getBukkitLivingEntity().getEquipment().getItemInOffHand();
+		ItemStack main = getEquipment().getItemInOffHand();
 		if (main == null)
 			return null;
 		
@@ -5201,7 +5208,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			if (ca_target!=this) {
 				//DoAnim(animTailRake, 0, false);
 
-				if (getWeaponDamage(ca_target, getBukkitLivingEntity().getEquipment().getItemInOffHand(), 0) <= 0 
+				if (getWeaponDamage(ca_target, getEquipment().getItemInOffHand(), 0) <= 0 
 						//&& getWeaponDamage(ca_target, GetInv().GetItem(EQEmu::invslot::slotShoulders)) <= 0
 						)
 					dmg = Utils.DMG_INVULNERABLE;
@@ -5253,7 +5260,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					&& getBukkitLivingEntity() != null){
 				//DoAnim(animKick, 0, false);
 
-				if (getWeaponDamage(ca_target, getBukkitLivingEntity().getEquipment().getBoots(), 0) <= 0)
+				if (getWeaponDamage(ca_target, getEquipment().getBoots(), 0) <= 0)
 					dmg = Utils.DMG_INVULNERABLE;
 
 				// TODO - REUSE TIME
@@ -5396,7 +5403,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		{
 		case InventorySlot.Charm: return null;
 		case InventorySlot.Ear1: return null;
-		case InventorySlot.Head: return this.getBukkitLivingEntity().getEquipment().getHelmet();
+		case InventorySlot.Head: return this.getEquipment().getHelmet();
 		case InventorySlot.Face: return null;
 		case InventorySlot.Ear2: return null;
 		case InventorySlot.Neck: return null;
@@ -5405,15 +5412,15 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		case InventorySlot.Back: return null;
 		case InventorySlot.Wrist1: return null;
 		case InventorySlot.Wrist2: return null;
-		case InventorySlot.Range: return this.getBukkitLivingEntity().getEquipment().getItemInOffHand();
+		case InventorySlot.Range: return this.getEquipment().getItemInOffHand();
 		case InventorySlot.Hands: return null;
-		case InventorySlot.Primary: return this.getBukkitLivingEntity().getEquipment().getItemInMainHand();
-		case InventorySlot.Secondary: return this.getBukkitLivingEntity().getEquipment().getItemInOffHand();
+		case InventorySlot.Primary: return this.getEquipment().getItemInMainHand();
+		case InventorySlot.Secondary: return this.getEquipment().getItemInOffHand();
 		case InventorySlot.Finger1: return null;
 		case InventorySlot.Finger2: return null;
-		case InventorySlot.Chest: return this.getBukkitLivingEntity().getEquipment().getChestplate();
-		case InventorySlot.Legs: return this.getBukkitLivingEntity().getEquipment().getLeggings();
-		case InventorySlot.Feet: return this.getBukkitLivingEntity().getEquipment().getBoots();
+		case InventorySlot.Chest: return this.getEquipment().getChestplate();
+		case InventorySlot.Legs: return this.getEquipment().getLeggings();
+		case InventorySlot.Feet: return this.getEquipment().getBoots();
 		case InventorySlot.Waist: return null;
 		case InventorySlot.Ammo: return null;
 		case InventorySlot.General1: return null;
@@ -5469,11 +5476,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (isPlayer()) {
 					if (hasShieldEquiped())
 					{
-						item = this.getBukkitLivingEntity().getEquipment().getItemInOffHand();
+						item = this.getEquipment().getItemInOffHand();
 					}
 					else if (hasTwoHanderEquipped())
 					{
-						item = this.getBukkitLivingEntity().getEquipment().getItemInMainHand();
+						item = this.getEquipment().getItemInMainHand();
 					}
 				}
 				if (item != null)
@@ -5589,7 +5596,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 					base++;
 				return base;
 			case Frenzy:
-				if (isPlayer() && this.getBukkitLivingEntity().getEquipment().getItemInMainHand() != null) {
+				if (isPlayer() && getEquipment().getItemInMainHand() != null) {
 					if (getMentorLevel() > 15)
 						base += getMentorLevel() - 15;
 					if (base > 23)
@@ -5606,7 +5613,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				float skill_bonus = skill_level / 9.0f;
 				float ac_bonus = 0.0f;
 				if (isPlayer()) {
-					ItemStack inst = this.getBukkitLivingEntity().getEquipment().getBoots();
+					ItemStack inst = getEquipment().getBoots();
 					if (inst != null)
 					{
 						try
@@ -5630,11 +5637,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				float ac_bonus = 0.0f;
 				if (isPlayer()) {
 					
-					if (getBukkitLivingEntity().getEquipment().getBoots() != null)
+					if (getEquipment().getBoots() != null)
 					{
 						try
 						{
-							ISoliniaItem item = SoliniaItemAdapter.Adapt(getBukkitLivingEntity().getEquipment().getBoots());
+							ISoliniaItem item = SoliniaItemAdapter.Adapt(getEquipment().getBoots());
 							if (item != null)
 								ac_bonus = item.getAC() / 25.0f;
 						} catch (CoreStateInitException e)
@@ -5656,11 +5663,11 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (isPlayer()) {
 					if (hasShieldEquiped())
 					{
-						inst = this.getBukkitLivingEntity().getEquipment().getItemInOffHand();
+						inst = this.getEquipment().getItemInOffHand();
 					}
 					else if (hasTwoHanderEquipped())
 					{
-						inst = this.getBukkitLivingEntity().getEquipment().getItemInMainHand();
+						inst = this.getEquipment().getItemInMainHand();
 					}
 				}
 				if (inst != null)
@@ -6642,7 +6649,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.getBukkitLivingEntity() == null)
 			return 0;
 		
-		SkillReward skill = ItemStackUtils.getMeleeSkillForItemStack(this.getBukkitLivingEntity().getEquipment().getItemInMainHand());
+		SkillReward skill = ItemStackUtils.getMeleeSkillForItemStack(this.getEquipment().getItemInMainHand());
 		return getSkill(skill.getSkillType());
 	}
 
@@ -7747,7 +7754,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (this.isNPC())
 		System.out.println("NPCEMOTE|"+message);
 		StateManager.getInstance().getChannelManager().sendToLocalChannel(this, ChatColor.AQUA + "<LC> * " + message,
-				getBukkitLivingEntity().getEquipment().getItemInMainHand());
+				getEquipment().getItemInMainHand());
 	}
 
 	@Override
@@ -7787,7 +7794,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		System.out.println("NPCSAY|"+npc.getName() + " says '" + message);
 		String decoratedMessage = ChatColor.AQUA + npc.getName() + " says '" + message + "'" + ChatColor.RESET;
 		StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage,
-				true, message, getBukkitLivingEntity().getEquipment().getItemInMainHand());
+				true, message, getEquipment().getItemInMainHand());
 	}
 
 	@Override
@@ -7897,7 +7904,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			String decoratedMessage = ChatColor.AQUA + npc.getName() + " says to " + name + " '"
 					+ message + "'" + ChatColor.RESET;
 			StateManager.getInstance().getChannelManager().sendToLocalChannelLivingEntityChat(this, decoratedMessage,
-					allowlanguagelearn, message, getBukkitLivingEntity().getEquipment().getItemInMainHand());
+					allowlanguagelearn, message, getEquipment().getItemInMainHand());
 		} catch (CoreStateInitException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -8979,7 +8986,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 
 		if (isNPC()) {
 			ISoliniaNPC npc = getNPC();
-			return npc.getEquippedSoliniaItems(getBukkitLivingEntity(), ignoreMainhand);
+			return npc.getEquippedSoliniaItems(this, ignoreMainhand);
 		}
 
 		return new ArrayList<ISoliniaItem>();
@@ -10610,7 +10617,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 				if (skillinuse == SkillType.Bash) 
 					if (isPlayer()) 
 					{
-						ItemStack item = this.getBukkitLivingEntity().getEquipment().getItemInOffHand();
+						ItemStack item = this.getEquipment().getItemInOffHand();
 						if (item != null) 
 						{ 
 							try { 
@@ -11947,8 +11954,20 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 		}
 		
-		vitals.fromData(partyMember, ((float)getHPRatio())/100F, manaPercent, this.getBukkitLivingEntity().getEntityId(), this.getName().replaceAll("\\^", "").replaceAll("\\|",""),this.getMentorLevel());
+		vitals.fromData(partyMember, ((float)getHPRatio())/100F, manaPercent, this.getBukkitLivingEntity().getEntityId(), this.getName().replaceAll("\\^", "").replaceAll("\\|",""),this.getMentorLevel(),this.getExperiencePercentage());
 		return vitals;
+	}
+
+	@Override
+	public int getExperiencePercentage() {
+		if (!this.isPlayer())
+			return 0;
+		
+		ISoliniaPlayer player = this.getPlayer();
+		if (player == null)
+			return 0;
+		
+		return player.getExperiencePercentage();
 	}
 
 	@Override
@@ -12292,8 +12311,8 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		if (disarmer.getBukkitLivingEntity().isDead())
 			return;
 
-		ItemStack mainHandItemStack = this.getBukkitLivingEntity().getEquipment().getItemInMainHand();
-		ItemStack offHandItemStack = this.getBukkitLivingEntity().getEquipment().getItemInOffHand();
+		ItemStack mainHandItemStack = this.getEquipment().getItemInMainHand();
+		ItemStack offHandItemStack = this.getEquipment().getItemInOffHand();
 
 		
 		ISoliniaItem mainHandItem = getSoliniaItemInMainHand();
@@ -12360,9 +12379,9 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			}
 			
 			if (primary == true)
-				this.getBukkitLivingEntity().getEquipment().setItemInMainHand(null);
+				this.getEquipment().setItemInMainHand(null);
 			else
-				this.getBukkitLivingEntity().getEquipment().setItemInOffHand(null);
+				this.getEquipment().setItemInOffHand(null);
 			if (this.isPlayer())
 			{
 				Player player = (Player)this.getBukkitLivingEntity();
@@ -12499,7 +12518,7 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		String strmitigationac = "MitigationAC: " + ChatColor.GOLD + getMitigationAC() + ChatColor.RESET;
 		String strtotalatk = "TotalATK: " + ChatColor.GOLD+ getTotalAtk() + ChatColor.RESET;
         String runestr = "Rune: " + ChatColor.GOLD + getRune() + ChatColor.RESET;
-        ItemStack weapon = this.getBukkitLivingEntity().getEquipment().getItemInMainHand();
+        ItemStack weapon = this.getEquipment().getItemInMainHand();
         String skill = ItemStackUtils.getMeleeSkillForItemStack(weapon).getSkillType().name();
         String strmainweaponskill = "MainWeapSkill: " + skill;
 		targetMessage.sendMessage(runestr + " " + strmitigationac + " " + strtotalatk + " " + strmainweaponskill);

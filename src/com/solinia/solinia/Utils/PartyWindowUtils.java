@@ -127,7 +127,7 @@ public class PartyWindowUtils {
 	public static void SendEmptyVital(Player player, int partyMember, boolean sendPacketImmediately)
 	{
 		PacketMobVitals vitals = new PacketMobVitals();
-		vitals.fromData(partyMember, 0F, 0F, 0, "", 0);
+		vitals.fromData(partyMember, 0F, 0F, 0, "", 0,0);
 		try {
 			if (!sendPacketImmediately)
 			ForgeUtils.QueueSendForgeMessage(player,Solinia3UIChannelNames.Outgoing,Solinia3UIPacketDiscriminators.VITALS,vitals.toPacketData(),partyMember);

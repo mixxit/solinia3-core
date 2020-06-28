@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -1622,7 +1623,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 	@Override
 	public void tryThrowItemInMainHand(Cancellable cancellableEvent) {
 		try {
-			ItemStack itemstack = this.getBukkitPlayer().getEquipment().getItemInMainHand();
+			ItemStack itemstack = getEquipment().getItemInMainHand();
 			if ((!ItemStackUtils.IsSoliniaItem(itemstack)))
 				return;
 
@@ -1672,7 +1673,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 					if (newAmount < 1) {
 						// To prevent a trap you must cancel event here
 						EntityUtils.CancelEvent(cancellableEvent);
-						getBukkitPlayer().getEquipment().setItemInMainHand(null);
+						getEquipment().setItemInMainHand(null);
 						getBukkitPlayer().updateInventory();
 						autoAttack.setLastUpdatedTimeNow(this.getSoliniaLivingEntity());
 
@@ -1680,7 +1681,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 						// To prevent a trap you must cancel event here
 						EntityUtils.CancelEvent(cancellableEvent);
 						itemstack.setAmount(newAmount);
-						getBukkitPlayer().getEquipment().setItemInMainHand(itemstack);
+						getEquipment().setItemInMainHand(itemstack);
 						getBukkitPlayer().updateInventory();
 						autoAttack.setLastUpdatedTimeNow(this.getSoliniaLivingEntity());
 
@@ -1693,6 +1694,56 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		} catch (CoreStateInitException e) {
 
 		}
+	}
+	
+	@Override
+	public int getExperiencePercentage()
+	{
+		Double newlevel = (double) getActualLevel();
+        Double xpneededforcurrentlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 0));
+		Double xpneededfornextlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 1));
+		Double totalxpneeded = xpneededfornextlevel - xpneededforcurrentlevel;
+		Double currentxpprogress = getExperience() - xpneededforcurrentlevel;
+		
+        Double percenttolevel = Math.floor((currentxpprogress / totalxpneeded) * 100);
+        Double percenttoaa = Math.floor((getAAExperience() / PlayerUtils.getMaxAAXP()) * 100);
+		int ipercenttolevel = percenttolevel.intValue();
+		int ipercenttoaa = percenttoaa.intValue();
+		
+		return ipercenttolevel;
+	}
+	
+	@Override
+	public Double getExperienceNeededToLevel()
+	{
+		Double newlevel = (double) getActualLevel();
+        Double xpneededforcurrentlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 0));
+		Double xpneededfornextlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 1));
+		
+		return xpneededfornextlevel;
+	}
+	
+	@Override
+	public int getAAExperiencePercentage()
+	{
+		Double newlevel = (double) getActualLevel();
+        Double xpneededforcurrentlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 0));
+		Double xpneededfornextlevel = PlayerUtils.getExperienceRequirementForLevel((int) (newlevel + 1));
+		Double totalxpneeded = xpneededfornextlevel - xpneededforcurrentlevel;
+		Double currentxpprogress = getExperience() - xpneededforcurrentlevel;
+		
+        Double percenttolevel = Math.floor((currentxpprogress / totalxpneeded) * 100);
+        Double percenttoaa = Math.floor((getAAExperience() / PlayerUtils.getMaxAAXP()) * 100);
+		int ipercenttolevel = percenttolevel.intValue();
+		int ipercenttoaa = percenttoaa.intValue();
+		
+		return ipercenttoaa;
+	}
+	
+	@Override
+	public EntityEquipment getEquipment()
+	{
+		return this.getBukkitPlayer().getEquipment();
 	}
 
 	@Override
@@ -5597,13 +5648,13 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		if (this.getBukkitPlayer() == null)
 			return;
 		
-		if (this.getBukkitPlayer().getEquipment().getItemInOffHand() == null || this.getBukkitPlayer().getEquipment().getItemInOffHand().getType().equals(Material.AIR))
+		if (this.getEquipment().getItemInOffHand() == null || this.getEquipment().getItemInOffHand().getType().equals(Material.AIR))
 		{
 			this.getBukkitPlayer().sendMessage("You soak the liquid on your empty offhand but nothing seems to happen");
 			return;
 		}
 		
-		if (!ItemStackUtils.IsSoliniaItem(this.getBukkitPlayer().getEquipment().getItemInOffHand()))
+		if (!ItemStackUtils.IsSoliniaItem(this.getEquipment().getItemInOffHand()))
 		{
 			this.getBukkitPlayer().sendMessage("You soak the liquid on the item in your offhand but nothing seems to happen");
 			return;
