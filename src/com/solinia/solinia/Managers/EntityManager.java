@@ -1053,8 +1053,11 @@ public class EntityManager implements IEntityManager {
 			LivingEntity pet = StateManager.getInstance().getEntityManager().getPet(owner.getUniqueId());
 			if (pet != null)
 			{
-				ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
-				StateManager.getInstance().getEntityManager().removePet(owner.getUniqueId(), !solLivingEntity.isCharmed());
+				// insta kill old pet
+				pet.damage(10000000);
+				//ISoliniaLivingEntity solLivingEntity = SoliniaLivingEntityAdapter.Adapt(pet);
+				//solLivingEntity.get
+				//StateManager.getInstance().getEntityManager().removePet(owner.getUniqueId(), !solLivingEntity.isCharmed());
 			}
 			
 			ISoliniaNPC npc = StateManager.getInstance().getConfigurationManager().getPetNPCByName(spell.getTeleportZone());
@@ -1071,6 +1074,7 @@ public class EntityManager implements IEntityManager {
 			// part of this focus
 			
 			LivingEntity spawnedMob = (LivingEntity)MythicMobs.inst().getAPIHelper().spawnMythicMob("NPCID_" + npc.getId(), owner.getLocation());
+			spawnedMob.setCollidable(false);
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(owner);
 
 			int petFocus = solplayer.getPetFocus(npc);

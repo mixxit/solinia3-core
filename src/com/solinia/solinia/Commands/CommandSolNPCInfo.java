@@ -145,6 +145,9 @@ public class CommandSolNPCInfo implements CommandExecutor {
 			}
 			
 			player.sendMessage(attackTarget);
+			if (player.isOp())
+			player.sendMessage("isCollidable: " + targetmob.isCollidable());
+
 			
 		} catch (CoreStateInitException e)
 		{
