@@ -1,11 +1,15 @@
 package com.solinia.solinia.Utils;
 
 import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftLightningStrike;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
+import org.bukkit.inventory.meta.FireworkMeta;
 
 import com.solinia.solinia.Managers.StateManager;
 import de.slikey.effectlib.Effect;
@@ -262,6 +266,31 @@ public class SpecialEffectUtils {
 		if (color != null)
 			effect.color = color;
 		effect.start();
+	}
+	
+	public static void playFireworks(Entity entity) {
+		try
+		{
+			int amount = 5;
+			
+			Location loc = entity.getLocation();
+	        Firework fw = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK);
+	        FireworkMeta fwm = fw.getFireworkMeta();
+	       
+	        fwm.setPower(2);
+	        fwm.addEffect(FireworkEffect.builder().withColor(Color.LIME).flicker(true).build());
+	       
+	        fw.setFireworkMeta(fwm);
+	        fw.detonate();
+	       
+	        for(int i = 0;i<amount; i++){
+	            Firework fw2 = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK);
+	            fw2.setFireworkMeta(fwm);
+	        };
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	public static void playLightningStrike(Entity entity) {

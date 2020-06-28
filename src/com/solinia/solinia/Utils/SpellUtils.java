@@ -194,10 +194,10 @@ public class SpellUtils {
 			SpecialEffectUtils.playCustomMusicEffect(entity, Color.BLUE);
 			break;
 		case Firework:
-			SpecialEffectUtils.playLegacy(entity);
+			SpecialEffectUtils.playFireworks(entity);
 			break;
 		case Firework_AE:
-			SpecialEffectUtils.playLegacy(entity);
+			SpecialEffectUtils.playFireworks(entity);
 			break;
 		case Weather_Rocket:
 			SpecialEffectUtils.playLegacy(entity);

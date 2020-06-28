@@ -67,6 +67,7 @@ import io.lumine.xikage.mythicmobs.spawning.spawners.MythicSpawner;
 import net.md_5.bungee.api.ChatMessageType;
 import net.minecraft.server.v1_15_R1.Tuple;
 import com.solinia.solinia.Utils.SkillUtils;
+import com.solinia.solinia.Utils.SpecialEffectUtils;
 import com.solinia.solinia.Utils.SpellUtils;
 public class SoliniaPlayer implements ISoliniaPlayer {
 
@@ -860,7 +861,7 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				getBukkitPlayer().sendMessage(ChatColor.GRAY
 						+ "[Hint] Bored of this class? You rename this player and create a new class with the /character command");
 
-			getBukkitPlayer().getWorld().playEffect(getBukkitPlayer().getLocation(), Effect.FIREWORK_SHOOT, 1);
+			SpecialEffectUtils.playFireworks(getBukkitPlayer());
 
 			// Title rewards
 			if (newlevel >= 10) {
