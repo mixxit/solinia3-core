@@ -357,10 +357,13 @@ public class Solinia3CoreEntityListener implements Listener {
 
 	@EventHandler
 	public void onCreatureSpawn(CreatureSpawnEvent event) {
-		if (!(event.getEntity() instanceof LivingEntity))
+		if (event.isCancelled())
 			return;
 
-		if (event.isCancelled())
+		if (event.getEntity() != null)
+			event.getEntity().setCollidable(false);
+
+		if (!(event.getEntity() instanceof LivingEntity))
 			return;
 
 		final UUID entityUUID = event.getEntity().getUniqueId();

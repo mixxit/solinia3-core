@@ -1960,6 +1960,9 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		if (event.getPlayer() != null)
+			event.getPlayer().setCollidable(false);
+		
 		try {
 			ISoliniaPlayer solplayer = SoliniaPlayerAdapter.Adapt(event.getPlayer());
 			if (solplayer != null) {
@@ -2002,6 +2005,9 @@ public class Solinia3CorePlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
+		if (event.getPlayer() != null)
+			event.getPlayer().setCollidable(false);
+		
 		for (PotionEffect effect : event.getPlayer().getActivePotionEffects())
 	        event.getPlayer().removePotionEffect(effect.getType());
 		
