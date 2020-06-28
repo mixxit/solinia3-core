@@ -677,6 +677,8 @@ public class MythicMobsNPCEntityProvider implements INPCEntityProvider {
 		if (npc.isInvisible() == true) {
 			mob = mob + "  - potion{t=INVISIBILITY;d=2147483647;l=1} @self ~onSpawn\r" + System.lineSeparator();
 		}
+		mob = mob + "  - command{c=\"Scoreboard teams join Uncollidable <mob.uuid>\"} @self ~onSpawn\r" + System.lineSeparator();
+		
 		return mob;
 	}
 
