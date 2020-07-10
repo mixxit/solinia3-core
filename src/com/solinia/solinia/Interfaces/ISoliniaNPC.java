@@ -364,4 +364,28 @@ public interface ISoliniaNPC extends IPersistable {
 	boolean isRacialPet();
 
 	void setRacialPet(boolean isRacialPet);
+
+	boolean canAreaRampage();
+
+	void setCanAreaRampage(boolean canAreaRampage);
+
+	boolean canEnrage();
+
+	void setCanEnrage(boolean canEnrage);
+
+	boolean canFlurry();
+
+	boolean canTriple();
+
+	boolean canRampage();
+
+	boolean canQuad();
+
+	void setCanFlurry(boolean canFlurry);
+
+	void setCanQuad(boolean canQuad);
+
+	void setCanRampage(boolean canRampage);
+
+	void setCanTriple(boolean canTriple);
 }

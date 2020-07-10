@@ -7066,8 +7066,126 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			return 0;
 		}
 		
+		if (!this.isNPC())
+			return 0;
+		
+		ISoliniaNPC npc = this.getNPC();
+		if (npc == null)
+			return 0;
+		
 		// TOOD, store special abiltiyies
 		//return SpecialAbilities[ability].level;
+		switch (ability)
+		{
+		case SpecialAbility.SPECATK_SUMMON:
+			if (npc.isSummoner())
+				return 1;
+			break;
+		case SpecialAbility.SPECATK_ENRAGE:
+			if (npc.canEnrage())
+				return 1;
+			break;
+		case SpecialAbility.SPECATK_RAMPAGE:
+			if (npc.canRampage())
+				return 1;
+			break;
+		case SpecialAbility.SPECATK_AREA_RAMPAGE:
+			if (npc.canAreaRampage())
+				return 1;
+			break;
+		case SpecialAbility.SPECATK_FLURRY:
+			if (npc.canFlurry())
+				return 1;
+			break;
+		case SpecialAbility.SPECATK_TRIPLE:
+			if (npc.canTriple())
+				return 1;
+			break;
+		case SpecialAbility.SPECATK_QUAD:
+			if (npc.canQuad())
+				return 1;
+			break;
+		case SpecialAbility.SPECATK_INNATE_DW:
+			break;
+		case SpecialAbility.SPECATK_BANE:
+			break;
+		case SpecialAbility.SPECATK_MAGICAL:
+			break;
+		case SpecialAbility.SPECATK_RANGED_ATK:
+			break;
+		case SpecialAbility.UNSLOWABLE:
+			break;
+		case SpecialAbility.UNMEZABLE:
+			break;
+		case SpecialAbility.UNCHARMABLE:
+			break;
+		case SpecialAbility.UNSTUNABLE:
+			break;
+		case SpecialAbility.UNSNAREABLE:
+			break;
+		case SpecialAbility.UNFEARABLE:
+			break;
+		case SpecialAbility.UNDISPELLABLE:
+			break;
+		case SpecialAbility.IMMUNE_MELEE:
+			break;
+		case SpecialAbility.IMMUNE_MAGIC:
+			break;
+		case SpecialAbility.IMMUNE_FLEEING:
+			break;
+		case SpecialAbility.IMMUNE_MELEE_EXCEPT_BANE:
+			break;
+		case SpecialAbility.IMMUNE_MELEE_NONMAGICAL:
+			break;
+		case SpecialAbility.IMMUNE_AGGRO:
+			break;
+		case SpecialAbility.IMMUNE_AGGRO_ON:
+			break;
+		case SpecialAbility.IMMUNE_CASTING_FROM_RANGE:
+			break;
+		case SpecialAbility.IMMUNE_FEIGN_DEATH:
+			break;
+		case SpecialAbility.IMMUNE_TAUNT:
+			break;
+		case SpecialAbility.NPC_TUNNELVISION:
+			break;
+		case SpecialAbility.NPC_NO_BUFFHEAL_FRIENDS:
+			break;
+		case SpecialAbility.IMMUNE_PACIFY:
+			break;
+		case SpecialAbility.LEASH:
+			break;
+		case SpecialAbility.TETHER:
+			break;
+		case SpecialAbility.DESTRUCTIBLE_OBJECT:
+			break;
+		case SpecialAbility.NO_HARM_FROM_CLIENT:
+			break;
+		case SpecialAbility.ALWAYS_FLEE:
+			break;
+		case SpecialAbility.FLEE_PERCENT:
+			break;
+		case SpecialAbility.ALLOW_BENEFICIAL:
+			break;
+		case SpecialAbility.DISABLE_MELEE:
+			break;
+		case SpecialAbility.NPC_CHASE_DISTANCE:
+			break;
+		case SpecialAbility.ALLOW_TO_TANK:
+			break;
+		case SpecialAbility.IGNORE_ROOT_AGGRO_RULES:
+			break;
+		case SpecialAbility.CASTING_RESIST_DIFF:
+			break;
+		case SpecialAbility.COUNTER_AVOID_DAMAGE:
+			break;
+		case SpecialAbility.PROX_AGGRO:
+			break;
+		case SpecialAbility.IMMUNE_RANGED_ATTACKS:
+			break;
+		case SpecialAbility.MAX_SPECIAL_ATTACK:
+			break;
+		}
 		return 0;
 	}
 

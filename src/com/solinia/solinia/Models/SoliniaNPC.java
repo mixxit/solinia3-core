@@ -121,6 +121,13 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	
 	private int disguiseId = 0;
 
+	private boolean canAreaRampage = false;
+	private boolean canEnrage = false;
+	private boolean canFlurry = false;
+	private boolean canQuad = false;
+	private boolean canRampage = false;
+	private boolean canTriple = false;
+	
 	@Override
 	public int getId() {
 		return id;
@@ -423,6 +430,12 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	    		" poisonresist: " + ChatColor.GOLD + getInternalPoisonresist() + ChatColor.RESET + 
 	    		" diseaseresist: " + ChatColor.GOLD + getInternalDiseaseresist() + ChatColor.RESET)
 	    		;
+		sender.sendMessage("- canarearampage: " + ChatColor.GOLD + canAreaRampage() + ChatColor.RESET);
+		sender.sendMessage("- canenrage: " + ChatColor.GOLD + canEnrage() + ChatColor.RESET);
+		sender.sendMessage("- canflurry: " + ChatColor.GOLD + canFlurry() + ChatColor.RESET);
+		sender.sendMessage("- canquad: " + ChatColor.GOLD + canQuad() + ChatColor.RESET);
+		sender.sendMessage("- canrampage: " + ChatColor.GOLD + canRampage() + ChatColor.RESET);
+		sender.sendMessage("- cantriple: " + ChatColor.GOLD + canTriple() + ChatColor.RESET);
 		sender.sendMessage("----------------------------");
 		sender.sendMessage(ChatColor.RED + "SPAWNING" + ChatColor.RESET);
 		sender.sendMessage("- eventusable: " + ChatColor.GOLD + isEventUsable() + ChatColor.RESET);
@@ -875,6 +888,30 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 			setPetControllable(Boolean.parseBoolean(value));
 			requiresreload = false;
 			break;
+		case "canarearampage":
+			setCanAreaRampage(Boolean.parseBoolean(value));
+			requiresreload = false;
+			break;
+		case "canenrage":
+			setCanEnrage(Boolean.parseBoolean(value));
+			requiresreload = false;
+			break;
+		case "canflurry":
+			setCanFlurry(Boolean.parseBoolean(value));
+			requiresreload = false;
+			break;
+		case "canquad":
+			setCanQuad(Boolean.parseBoolean(value));
+			requiresreload = false;
+			break;
+		case "canrampage":
+			setCanRampage(Boolean.parseBoolean(value));
+			requiresreload = false;
+			break;
+		case "cantriple":
+			setCanTriple(Boolean.parseBoolean(value));
+			requiresreload = false;
+			break;			
 		default:
 			throw new InvalidNpcSettingException(
 					"Invalid NPC setting. Valid Options are: name,mctype,health,damage,factionid,usedisguise,disguisetype,headitem,chestitem,legsitem,feetitem,handitem,offhanditem,boss,burning,invisible,customhead,customheaddata,merchantid,upsidedown,loottableid,randomspawn,killtriggertext,randomchattriggertext,guard,roamer,undead,customheaddatafromnpc,summoner,disablespawners,animal,speaksalllanguages,mounted,clearrandomchattriggertext");
@@ -2300,5 +2337,65 @@ public class SoliniaNPC implements ISoliniaNPC,IPersistable {
 	@Override
 	public void setRacialPet(boolean isRacialPet) {
 		this.isRacialPet = isRacialPet;
+	}
+
+	@Override
+	public boolean canAreaRampage() {
+		return canAreaRampage;
+	}
+
+	@Override
+	public void setCanAreaRampage(boolean canAreaRampage) {
+		this.canAreaRampage = canAreaRampage;
+	}
+
+	@Override
+	public boolean canEnrage() {
+		return canEnrage;
+	}
+
+	@Override
+	public void setCanEnrage(boolean canEnrage) {
+		this.canEnrage = canEnrage;
+	}
+
+	@Override
+	public boolean canFlurry() {
+		return canFlurry;
+	}
+
+	@Override
+	public void setCanFlurry(boolean canFlurry) {
+		this.canFlurry = canFlurry;
+	}
+
+	@Override
+	public boolean canQuad() {
+		return canQuad;
+	}
+
+	@Override
+	public void setCanQuad(boolean canQuad) {
+		this.canQuad = canQuad;
+	}
+
+	@Override
+	public boolean canRampage() {
+		return canRampage;
+	}
+
+	@Override
+	public void setCanRampage(boolean canRampage) {
+		this.canRampage = canRampage;
+	}
+
+	@Override
+	public boolean canTriple() {
+		return canTriple;
+	}
+
+	@Override
+	public void setCanTriple(boolean canTriple) {
+		this.canTriple = canTriple;
 	}
 }
