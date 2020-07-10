@@ -589,4 +589,6 @@ public interface ISoliniaLivingEntity  {
 
 	int getExperiencePercentage();
 
+	boolean isSilenced();
+
 }

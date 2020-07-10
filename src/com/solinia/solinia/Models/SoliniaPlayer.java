@@ -1293,6 +1293,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 				return;
 			}
 			
+			if (this.isSilenced())
+			{
+				getBukkitPlayer().sendMessage("* You cannot use an ability while silenced!");
+				return;
+			}
+			
 			if (this.isMezzed())
 			{
 				getBukkitPlayer().sendMessage("* You cannot use an ability while mezzed!");
@@ -1383,11 +1389,25 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 		}
 	}
 	
+	private boolean isSilenced() {
+		ISoliniaLivingEntity soliniaLivingEntity = this.getSoliniaLivingEntity();
+		if (soliniaLivingEntity == null)
+			return true;
+		
+		return soliniaLivingEntity.isSilenced();
+	}
+
 	@Override
 	public void tryCastFromMemorySlot(int slotId) {
 		try {
 			int spellId = this.getMemorisedSpellSlot(slotId);
 			if (spellId < 1) {
+				return;
+			}
+			
+			if (this.isSilenced())
+			{
+				getBukkitPlayer().sendMessage("* You cannot use an ability while silenced!");
 				return;
 			}
 			
@@ -1540,6 +1560,12 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 								+ " (Wait: " + ((expiretimestamp.getTime() - nowtimestamp.getTime()) / 1000) + "s");
 						return;
 					}
+			}
+			
+			if (this.isSilenced())
+			{
+				getBukkitPlayer().sendMessage("* You cannot use an ability while silenced!");
+				return;
 			}
 			
 			if (this.isMezzed())

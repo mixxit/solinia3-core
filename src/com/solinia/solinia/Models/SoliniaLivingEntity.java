@@ -8569,8 +8569,10 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 			!this.IsValidSpell(spell.getId()) ||
 			isStunned() ||
 			isFeared() ||
-			isMezzed() //||
-//			(IsSilenced() && !IsDiscipline(spell_id)) ||
+			isMezzed() ||
+			isSilenced()
+			
+			//			(IsSilenced() && !IsDiscipline(spell_id)) ||
 //			(IsAmnesiad() && IsDiscipline(spell_id))
 		)
 			return false;
@@ -8583,6 +8585,12 @@ public class SoliniaLivingEntity implements ISoliniaLivingEntity {
 		} catch (CoreStateInitException e) {
 			return false;
 		}
+	}
+	
+	@Override
+	public boolean isSilenced()
+	{
+		return this.hasSpellEffectType(SpellEffectType.Silence);
 	}
 
 	@Override
