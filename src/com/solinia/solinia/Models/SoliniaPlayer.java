@@ -6030,4 +6030,21 @@ public class SoliniaPlayer implements ISoliniaPlayer {
 			return 0;
 		}
 	}
+
+	@Override
+	public int getAAPointsSpent() {
+		int points = 0;
+		try {
+			for (int rankId : ranks) {
+				ISoliniaAARank rank = StateManager.getInstance().getConfigurationManager().getAARankCache(rankId);
+				if (rank == null)
+					continue;
+
+				points+= rank.getCost();
+			}
+		} catch (CoreStateInitException e) {
+			//
+		}
+		return points;
+	}
 }

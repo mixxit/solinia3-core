@@ -41,6 +41,7 @@ import com.solinia.solinia.Models.SpellResistType;
 import com.solinia.solinia.Models.SpellbookPage;
 import com.solinia.solinia.Models.TrackingChoice;
 
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.minecraft.server.v1_15_R1.Tuple;
 
@@ -647,4 +648,5 @@ public interface ISoliniaPlayer extends Serializable,IPersistable {
 	public int getExperiencePercentage();
 	int getAAExperiencePercentage();
 	Double getExperienceNeededToLevel();
+	public int getAAPointsSpent();
 }
