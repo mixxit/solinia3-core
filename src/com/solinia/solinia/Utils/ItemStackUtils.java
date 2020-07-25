@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
@@ -18,6 +19,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.bukkit.inventory.meta.tags.ItemTagType;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import com.earth2me.essentials.Essentials;
 import com.google.common.collect.Iterables;
@@ -86,6 +89,53 @@ public class ItemStackUtils {
 			return ess.getWorth().getPrice(ess, itemStack).doubleValue();
 
 		return 1D;
+	}
+	
+	public static boolean trySendPlayerHead(CommandSender sender, Document doc, String playerName) {
+		try
+		{
+			Element link = doc.select("textarea[id=ACC-Code-1-13]").first();
+			if (link != null)
+			{
+				String data = link.html();
+				data = data.replaceAll("/give", "minecraft:give");
+				data = data.replaceAll("@p", playerName);
+				BukkitUtils.dispatchCommandLater(StateManager.getInstance().getPlugin(), data);
+				sender.sendMessage("Debug: " + data);
+				sender.sendMessage("Head sent to " + playerName);
+				return true;
+			} else {
+				
+			}
+		} catch (Exception e)
+		{
+			
+		}
+		return false;
+	}
+
+	public static boolean trySendCustomHead(CommandSender sender, Document doc, String playerName) {
+		try
+		{
+			Element link = doc.select("textarea[id=UUID-Code-MC1-13]").first();
+			if (link != null)
+			{
+				String data = link.html();
+				data = data.replaceAll("/give", "minecraft:give");
+				data = data.replaceAll("@p", playerName);
+				BukkitUtils.dispatchCommandLater(StateManager.getInstance().getPlugin(), data);
+				sender.sendMessage("Debug: " + data);
+				sender.sendMessage("Head sent to " + playerName);
+				return true;
+			} else {
+				
+			}
+		} catch (Exception e)
+		{
+			
+		}
+		return false;
+
 	}
 	
 	public static AugmentationSlotType getItemStackAugSlotType(String basename, boolean isAugmentation) {

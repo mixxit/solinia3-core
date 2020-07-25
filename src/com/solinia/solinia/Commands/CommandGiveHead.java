@@ -12,6 +12,7 @@ import org.jsoup.nodes.Element;
 
 import com.solinia.solinia.Solinia3CorePlugin;
 import com.solinia.solinia.Utils.BukkitUtils;
+import com.solinia.solinia.Utils.ItemStackUtils;
 import com.solinia.solinia.Utils.Utils;
 
 public class CommandGiveHead implements CommandExecutor {
@@ -63,59 +64,12 @@ public class CommandGiveHead implements CommandExecutor {
 		
 		Document doc = Jsoup.parse(httpSite);
 		
-		if (!trySendCustomHead(sender, doc,args[0]))
-			if (!trySendPlayerHead(sender, doc, args[0]))
+		if (!ItemStackUtils.trySendCustomHead(sender, doc,args[0]))
+			if (!ItemStackUtils.trySendPlayerHead(sender, doc, args[0]))
 			{
 				sender.sendMessage("Could not send head, element not found");
 			}
 		
 		return true;
-	}
-
-	private boolean trySendPlayerHead(CommandSender sender, Document doc, String playerName) {
-		try
-		{
-			Element link = doc.select("textarea[id=ACC-Code-1-13]").first();
-			if (link != null)
-			{
-				String data = link.html();
-				data = data.replaceAll("/give", "minecraft:give");
-				data = data.replaceAll("@p", playerName);
-				BukkitUtils.dispatchCommandLater(plugin, data);
-				sender.sendMessage("Debug: " + data);
-				sender.sendMessage("Head sent to " + playerName);
-				return true;
-			} else {
-				
-			}
-		} catch (Exception e)
-		{
-			
-		}
-		return false;
-	}
-
-	private boolean trySendCustomHead(CommandSender sender, Document doc, String playerName) {
-		try
-		{
-			Element link = doc.select("textarea[id=UUID-Code-MC1-13]").first();
-			if (link != null)
-			{
-				String data = link.html();
-				data = data.replaceAll("/give", "minecraft:give");
-				data = data.replaceAll("@p", playerName);
-				BukkitUtils.dispatchCommandLater(plugin, data);
-				sender.sendMessage("Debug: " + data);
-				sender.sendMessage("Head sent to " + playerName);
-				return true;
-			} else {
-				
-			}
-		} catch (Exception e)
-		{
-			
-		}
-		return false;
-
 	}
 }

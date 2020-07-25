@@ -3,13 +3,22 @@ package com.solinia.solinia.Commands;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.utils.MaterialUtil;
 import com.solinia.solinia.Adapters.SoliniaLivingEntityAdapter;
 import com.solinia.solinia.Adapters.SoliniaPlayerAdapter;
 import com.solinia.solinia.Exceptions.CoreStateInitException;
@@ -17,6 +26,8 @@ import com.solinia.solinia.Interfaces.ISoliniaLivingEntity;
 import com.solinia.solinia.Interfaces.ISoliniaNPC;
 import com.solinia.solinia.Interfaces.ISoliniaPlayer;
 import com.solinia.solinia.Managers.StateManager;
+import com.solinia.solinia.Utils.ItemStackUtils;
+import com.solinia.solinia.Utils.Utils;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -51,6 +62,7 @@ public class CommandEvent implements CommandExecutor {
 			player.sendMessage(ChatColor.GOLD + "/event BROADCAST <msg>"+ChatColor.RESET+" - Sends a GM event broadcast");
 			player.sendMessage(ChatColor.GOLD + "/event SPAWN <ID>"+ChatColor.RESET+" - Spawns an event usable npc id");
 			player.sendMessage(ChatColor.GOLD + "/event INSPIRATION"+ChatColor.RESET+" - Grants you 5 inspiration");
+			player.sendMessage(ChatColor.GOLD + "/event GIVEHEAD IDENTIFIER NAME"+ChatColor.RESET+" - Gives you a head from https://minecraft-heads.com/ Essentials-Code");
 			return true;
 		}
 		
@@ -87,6 +99,8 @@ public class CommandEvent implements CommandExecutor {
 					return say(player, text);
 				case "LISTNPCS":
 					return listnpcs(player);
+				case "GIVEHEAD":
+					return givehead(player,args[1],args[2]);
 				case "BROADCAST":
 					Bukkit.broadcastMessage(ChatColor.YELLOW+"<GMEvent-"+player.getName().toUpperCase() + ">: " + text.toUpperCase()+ChatColor.RESET);
 					break;
@@ -101,6 +115,35 @@ public class CommandEvent implements CommandExecutor {
 		{
 			player.sendMessage("Plugin not initialised");
 		}
+		return true;
+	}
+
+	private boolean givehead(Player player, String url, String name) {
+		Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+		if (ess != null)
+		{
+			final Material SKULL_ITEM = Material.PLAYER_HEAD;
+			String owner = url;
+			
+			ItemStack itemSkull = player.getItemInHand();
+	        SkullMeta metaSkull = null;
+	        boolean spawn = false;
+
+	        if (itemSkull != null && MaterialUtil.isPlayerHead(itemSkull.getType(), itemSkull.getDurability())) {
+	            metaSkull = (SkullMeta) itemSkull.getItemMeta();
+	        } else {
+	            itemSkull = new ItemStack(SKULL_ITEM, 1, (byte) 3);
+	            metaSkull = (SkullMeta) itemSkull.getItemMeta();
+	            spawn = true;
+	        }
+
+	        metaSkull.setDisplayName(name);
+	        metaSkull.setOwner(url);
+
+	        itemSkull.setItemMeta(metaSkull);
+	        InventoryWorkaround.addItems(player.getInventory(), itemSkull);
+		}
+		
 		return true;
 	}
 
